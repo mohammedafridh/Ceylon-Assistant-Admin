@@ -1,0 +1,10 @@
+.charts{
+    margin: 20px;
+    padding: 20px;
+    background-color: var(--cardColor);
+    border-radius: 10px;
+}
+
+.chartTitle{
+    margin-bottom: 20px;
+}

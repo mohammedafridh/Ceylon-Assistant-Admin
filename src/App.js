@@ -1,25 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import TopBar from './Components/Layouts/TopBar';
+import SideBar from './Components/Layouts/SideBar';
+import Homepage from './Components/Pages/Homepage/Homepage';
+import {Routes,Route} from 'react-router-dom';
+import Users from './Components/Pages/Users/Users';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return(
+        <div className = 'adminPanel'>
+            <div className = "blur" style = {{top:'36%', left:'-8rem'}}></div>
+            <TopBar />
+                <div className = 'containers'>
+                    <div className = 'sideBarContainer'>
+                        <SideBar />
+                    </div>
+                    
+                    <div className='allPageContainer'>
+                        <Routes>
+                            <Route exact path = '/' element = {<Homepage />} />
+                            <Route exact path = '/users' element = {<Users />} />
+                        </Routes>
+                    </div>
+                                 
+                </div>    
+        </div>
+        )
+    
 }
 
 export default App;

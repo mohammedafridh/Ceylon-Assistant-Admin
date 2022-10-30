@@ -1,0 +1,55 @@
+.featured{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0rem 1rem;
+    
+}
+
+.featuredItem{
+    background-color: var(--cardColor);
+    flex: 1;
+    margin: 0 20px;
+    padding: 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    -webkit-box-shadow: 8px 8px 31px -3px rgba(0,0,0,0.79); 
+    box-shadow: 3px 3px 5px 6px rgb(221, 220, 220);
+}
+
+.featuredTitle{
+    font-size: 20px;
+}
+
+.featuredMoneyContainer{
+    margin: 10px 0px;
+    display: flex;
+    align-items: center;
+}
+
+.featuredMoney{
+    font-size: 30px;
+    font-weight: 600;
+    
+}
+
+.featuredMoneyRate{
+    align-items: center;
+    margin-left: 20px;
+    display: flex;
+}
+
+.featuringIcon{
+    font-size: 14px;
+    margin-left: 5px;
+    color: red;
+}
+
+.featuringIcon.positive{
+    color: green;
+}
+
+.featuredSub{
+    font-size: 15px;
+    color: gray;
+}

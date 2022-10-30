@@ -1,0 +1,53 @@
+.sideBar{
+    flex: 1;
+    height: calc(100vh-50px);
+    background-color: var(--cardColor);
+    position: sticky;
+    top: 50px;
+    z-index: 2;
+}
+
+.sideBarWrapper{
+    padding: 1rem;
+    color: rgb(121, 119, 119);
+    position: sticky;
+    top: 50px;
+}
+
+.sideBarMenu{
+    margin-bottom: 5px;
+}
+
+.sideBarMenu>h3{
+    font-size: 18px;
+    color: rgb(189, 186, 186);
+}
+
+.sideBarList{
+    list-style: none;
+    padding: 5px;
+}
+
+.sideBarListItem{
+    display: flex;
+    gap: 5px;
+    padding: 5px 10px;
+    margin-bottom: 0.7rem;
+    cursor: pointer;
+    align-items: center;
+    border-radius: 10px;
+
+}
+
+.sideBarListItem.active,
+.sideBarListItem:hover{
+    background-color: rgba(219, 217, 217, 0.64);
+    color: orangered;
+}
+
+.sideBar a{
+    text-decoration: none;
+    font-size: 14px;
+    color: rgb(121, 119, 119);
+    width: 100%;
+}

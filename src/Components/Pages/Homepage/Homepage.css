@@ -1,0 +1,10 @@
+.Homepage{
+    flex: 4;
+}
+
+.homeWidget{
+    display: flex;
+    margin: 20px;
+    padding: 1rem;
+    background-color: var(--cardColor);
+}
