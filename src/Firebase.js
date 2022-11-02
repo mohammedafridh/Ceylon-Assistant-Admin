@@ -12,11 +12,11 @@ const firebaseConfig = {
   // appId: process.env.CEYLON_ASSISTANT_FIREBASE_APP_ID
 
   apiKey: "AIzaSyD6wDMvKeUmt5nzf75baXlTSnQszVgGmMI",
-  authDomain:"ceylon-assistant.firebaseapp.com",
+  authDomain: "ceylon-assistant.firebaseapp.com",
   projectId: "ceylon-assistant",
   storageBucket: "ceylon-assistant.appspot.com",
   messagingSenderId: "1085508934061",
-  appId: "1:1085508934061:web:0c961e457e54157ceb2924"
+  appId: "1:1085508934061:web:4ba2b3ee816ceabceb2924"
 
 };
 

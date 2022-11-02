@@ -1,6 +1,6 @@
 import React from 'react'
 import './SideBar.css'
-import {HelpCenter, People, PlaylistAddCheck, TimeToLeave,TravelExplore,Collections, Mail, Home} from '@mui/icons-material';
+import {HelpCenter, People, PlaylistAddCheck, TimeToLeave,TravelExplore,Collections, Mail, Home, BookOnline} from '@mui/icons-material';
 import {Link} from 'react-router-dom'
 
 const SideBar = () => {
@@ -21,22 +21,22 @@ const SideBar = () => {
                 <ul className="sideBarList">
 
                     <li className="sideBarListItem">
-                        <Link to = '/users'> <People/>Users </Link>
+                        <Link to = '/users'> <People/> Users </Link>
                     </li>
                     <li className="sideBarListItem">
-                        <TimeToLeave/>Tours
+                    <Link to = '/bookings'> <BookOnline/> Bookings </Link>
                     </li>
                     <li className="sideBarListItem">
-                        <TravelExplore/>Discover Gallery
+                    <Link to = '/discover'><TravelExplore/> Discover Gallery </Link>
                     </li>
                     <li className="sideBarListItem">
-                        <PlaylistAddCheck/>Things To Do Gallery
+                    <Link to = '/addThingsToDo'><PlaylistAddCheck/> Things To Do Gallery</Link>
                     </li>
                     <li className="sideBarListItem">
-                        <Collections/>Tours Gallery
+                    <Link to = '/toursGallery'><Collections/> Tours Gallery </Link>
                     </li>
                     <li className="sideBarListItem">
-                        <HelpCenter/>FAQ
+                        <HelpCenter/> FAQ
                     </li>
                 </ul>
             </div>
@@ -46,15 +46,15 @@ const SideBar = () => {
                 <ul className="sideBarList">
                     
                     <li className="sideBarListItem">
-                        <Mail/>Messages
+                        <Mail/> Messages
                     </li>
 
                     <li className="sideBarListItem">
-                        <Mail/>Guide Requests
+                        <Mail/> Guide Requests
                     </li>
 
                     <li className="sideBarListItem">
-                        <Mail/>Mail Subscription
+                        <Mail/> Mail Subscription
                     </li>
                 </ul>
             </div>

@@ -1,4 +1,4 @@
-.allUsers{
+.allDiscoveries{
     background-color: var(--cardColor);
     padding: 2rem 1.5rem 1rem;
     border-radius: 1rem;
@@ -6,7 +6,7 @@
     box-shadow: 3px 3px 5px 6px #ccc;
 }
 
-.allUsers>h3{
+.allDiscoveries>h3{
     text-align: center;
     align-items: center;
     justify-content: center;

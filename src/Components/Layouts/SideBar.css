@@ -42,7 +42,7 @@
 .sideBarListItem.active,
 .sideBarListItem:hover{
     background-color: rgba(219, 217, 217, 0.64);
-    color: orangered;
+    color: rgb(29, 16, 145);
 }
 
 .sideBar a{
@@ -50,4 +50,10 @@
     font-size: 14px;
     color: rgb(121, 119, 119);
     width: 100%;
+}
+
+.sideBar a.active,
+.sideBar a:hover{
+    background-color: rgba(219, 217, 217, 0.64);
+    color: rgb(29, 16, 145);
 }

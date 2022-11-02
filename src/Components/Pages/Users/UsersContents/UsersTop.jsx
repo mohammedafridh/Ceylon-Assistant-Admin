@@ -1,14 +1,40 @@
 import React, {useState} from 'react'
 import './UsersTop.css'
 import {Select, MultiSelect } from '@mantine/core';
-import AllUsers from './AllUsers';
+import { useUserAuth } from '../../../../Context/Context';
+import {auth} from '../../../../Firebase'
 
 const UsersTop = () => {
 
     const [admin,setAdmin] = useState(true)
     const [guide,setGuide] = useState(false)
     const [tourist,setTourist] = useState(false)
-    const [openDropdown, setOpenDropdown] = useState(true)
+    const [fName, setFName] = useState('')
+    const [lName, setLName] = useState('')
+    const [conactNumber, setConactNumber] = useState('')
+    const [passportNumber, setPassportNumber] = useState('')
+    const [nicNumber, setNicNumber] = useState('')
+    const [address, setAddress] = useState('')
+    const [district, setDistrict] = useState('')
+    const [type, setType] = useState('')
+    const [languages, setLanguages] = useState([])
+    const [guideRate, setGuideRate] = useState('')
+    const [vehicleType, setVehicleType] = useState('')
+    const [model, setModel] = useState('')
+    const [maxPassengers, setMaxPassengers] = useState('')
+    const [perKM, setPerKm] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [password2, setPassword2] = useState('')
+    const [profileImage, setProfileImage] = useState('')
+    const [idImage, setNicImage] = useState('')
+    const [passportImage, setPassportImage] = useState('')
+    const [date, setDate] = useState('')
+    const [status, setStatus] = useState('Active')
+    const [error, setError] = useState('')
+    const[url,setUrl] = useState(null)
+    const {signUp} = useUserAuth();
+
 
     const data = [
         { value: 'Sinhala', label: 'Sinhala' },
@@ -26,102 +52,99 @@ const UsersTop = () => {
         { value: 'Korean', label: 'Korean' },
       ];
 
-      function adminHandler(){
+      const adminHandler = async (e) => {
+        e.preventDefault()
         setAdmin(true)
         setGuide(false)
         setTourist(false)
-
+        setError("")
+        try{
+            signUp(auth, email, password)
+        }catch (err) {
+            setError(err.message);
+          } 
+        
+        
       }
 
-      function guideHandler(){
+      const guideHandler = async (e) => {
+        e.preventDefault()
         setAdmin(false)
         setGuide(true)
         setTourist(false)
+
     }
 
-    function touristHandler(){
+    const touristHandler = async (e) => {
+        e.preventDefault()
         setAdmin(false)
         setGuide(false)
         setTourist(true)
+
     }
 
 
   return (
-    <div className='UsersTop'>
+    <div className='UsersContainer'>
+        <div className="addUser">
         <div className="userTypeButtons">
             <button onClick = {adminHandler}>Admin</button>
             <button onClick = {guideHandler}>Tour Guides</button>
             <button onClick = {touristHandler}>Tourists</button>
         </div>
 
-        <form className = 'infoForm'>
-            <h3>Update Profile</h3>
-
-            <div>
-                {(tourist || guide) &&
+        <form className = 'addUserForm'>
                 
+            <h3>{tourist? 'Add Tourist' : guide? 'Add Guide' : 'Add Admin'}</h3>
+            
+            {(tourist || guide) &&
+            <div>
                     <input 
                         type="text" 
-                        className='infoInput' 
-                        onChange = ''
+                        className='userInput' 
+                        onChange = {(e)=> setFName(e.target.value)}
                         placeholder='First Name'
                     />
-                
-                }
-
-                {(tourist || guide) &&
-                    
-                        <input 
-                            type="text" 
-                            className='infoInput' 
-                            onChange = ''
-                            placeholder='Last Name'
-                        />
-                     
-                }
-                
-            </div>
-
-            <div>
-                {tourist || guide?
-                
                     <input 
                         type="text" 
-                        className='infoInput' 
-                        onChange = ''
+                        className='userInput' 
+                        onChange = {(e)=> setLName(e.target.value)}
+                        placeholder='Last Name'
+                    />
+            </div>
+            }
+
+            {(tourist || guide) &&
+            <div>
+                    <input 
+                        type="text" 
+                        className='userInput' 
+                        onChange = {(e)=> setConactNumber(e.target.value)}
                         placeholder='Contact Number'
                     />
-                : '' 
-                }
-
-                {tourist || guide?
-                    
-                        <input 
-                            type="text" 
-                            className='infoInput' 
-                            onChange = ''
-                            placeholder='NIC Number'
-                        />
-                     : ''
-                }
-                
-            </div>
-
-            <div>
-                {tourist || guide?
+               
                     <input 
                         type="text" 
-                        className='infoInput' 
-                        onChange = ''
-                        placeholder='Address'
-                    /> : ''
-                }
+                        className='userInput' 
+                        onChange = {tourist? (e)=>setPassportNumber(e.target.value): (e)=>setNicNumber(e.target.value)}
+                        placeholder={tourist? 'Passport Number' : 'NIC Number'}
+                    />
             </div>
+            }
+
+        {guide &&
 
             <div>
+                <input 
+                    type="text" 
+                    className='userInput' 
+                    onChange = {(e)=> setAddress(e.target.value)}
+                    placeholder='Address'
+                /> 
+
                 <Select 
-                    style = {{width:"21rem", outline:"none"}} 
-                    onChange = '' 
+                    // style = {{width:"21rem", outline:"none"}} 
+                    onChange = {(e)=> setDistrict(e.target.value)} 
                     placeholder='District'
 
                     data={[
@@ -152,37 +175,43 @@ const UsersTop = () => {
                         { value: 'Vavuniya', label: 'Vavuniya' },
                     ]}
                 />
+            </div>
+        }
+
+        {guide &&
+            <div>
+                <Select 
+                    style = {{width:"15rem", outline:"none"}} 
+                    onChange = {(e)=> setType(e.target.value)} 
+                    placeholder='Guide Type'
+
+                    data={[
+                        { value: 'National', label: 'National' },
+                        { value: 'Site', label: 'Site' },
+                    ]}
+                />
 
                 <MultiSelect
                     data={data}
-                    style = {{width:"21rem", outline:"none"}}
+                    style = {{width:"19.5rem", outline:"none"}}
                     placeholder="Select Known Languages"
+                    onChange = {(e)=> setLanguages([e.target.value])} 
                 />
-            </div>
 
-            <div>
                 <input 
                     type="number" 
                     className='infoInput' 
-                    onChange = '' 
+                    onChange = {(e)=> setGuideRate(e.target.value)} 
                     placeholder='Guide Rate Per Day'
                 />
-                <div className = 'perKm'>
-                    <input 
-                        type="number" 
-                        className='infoInput' 
-                        onChange = '' 
-                        placeholder='Per Km Rate for Tour'
-                    />
-                    <span>*Rate for own vehicle charges</span>
-                </div>
-                
             </div>
+        }
 
+        {guide &&
             <div>
                 <Select 
-                style = {{width:"19.5rem", outline:"none"}} 
-                onChange = '' 
+                style = {{width:"10rem", outline:"none"}} 
+                onChange = {(e)=> setVehicleType(e.target.value)} 
                 placeholder='Vehicle Type'
 
                 data={[
@@ -194,38 +223,35 @@ const UsersTop = () => {
 
                 <input 
                     type="text" 
-                    className='infoInput' 
-                    onChange = '' 
+                    className='userInput' 
+                    onChange = {(e)=> setModel(e.target.value)} 
                     placeholder='Vehicle Model'
                 />
-            </div>
 
-            <div>
                 <input 
                     type="number" 
-                    className='infoInput' 
-                    onChange = '' 
+                    className='userInput' 
+                    onChange = {(e)=> setMaxPassengers(e.target.value)} 
                     placeholder='Maximum Passengers'
                 />
 
-                <Select 
-                style = {{width:"19.5rem", outline:"none"}} 
-                onChange = '' 
-                placeholder='Guide Type'
-
-                data={[
-                    { value: 'National', label: 'National' },
-                    { value: 'Site', label: 'Site' },
-                  ]}
-                />
-                
+                <div className = 'perKm'>
+                    <input 
+                        type="number" 
+                        className='userInput' 
+                        onChange = {(e)=> setPerKm(e.target.value)} 
+                        placeholder='Per Km Rate'
+                    />
+                    <span>*Rate for own vehicle charges</span>
+                </div>
             </div>
+        }
 
             <div>
                 <input 
                     type="text" 
-                    className='infoInput' 
-                    onChange = ''
+                    className='userInput' 
+                    onChange = {(e)=> setEmail(e.target.value)}
                     placeholder='Email Address'
                 />    
             </div>
@@ -233,36 +259,50 @@ const UsersTop = () => {
             <div>
                 <input 
                     type="password" 
-                    className='infoInput' 
-                    onChange = ''
+                    className='userInput' 
+                    onChange = {(e)=> setPassword(e.target.value)}
                     placeholder='Password'
                 />
 
-                <input 
+                {/* <input 
                     type="password" 
                     className='infoInput' 
-                    onChange = ''
+                    onChange = {(e)=> setPassword2(e.target.value)}
                     placeholder='Confirm Password'
-                />
+                /> */}
             </div>
 
-            <div>
-                Profile Image
-                <input 
-                    type="file" 
-                    name = 'profileImg' 
-                />
-                Vehicle Image
-                <input 
-                    type="file" 
-                    name = 'coverImg' 
-                />
+            <div className='userAuthImageContainer'>
+            {(tourist || guide) &&
+                <div className="authProfile">
+                    Profile Image
+                    <input 
+                        type="file" 
+                        name = 'profileImg' 
+                        onChange = {(e) => setProfileImage(e.target.files[0])}
+                    />
+                </div>
+            }
+            
+            {(tourist || guide) &&
+                <div className="authProfile">
+                    {tourist? 'Passport Image' : 'Identity Image'}
+                    <input 
+                        type="file" 
+                        name = 'coverImg' 
+                        onChange = {tourist? (e)=>setPassportImage(e.target.files[0]): (e)=>setNicImage(e.target.files[0])}
+                    />
+                </div>
+            }
             </div>
-            <button className="button infoButton">Update</button>
+            <button className="button infoButton" 
+                onClick={()=> tourist?{touristHandler} : guide?{guideHandler} : {adminHandler}}>
+                {tourist?'Add Tourist' : guide? 'Add Guide' : 'Add Admin'}
+            </button>
         </form>
-
-        <AllUsers />
+        
         </div>
+     </div>
 
   )
 }
