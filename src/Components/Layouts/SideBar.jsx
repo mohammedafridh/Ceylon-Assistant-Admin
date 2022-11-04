@@ -36,7 +36,7 @@ const SideBar = () => {
                     <Link to = '/toursGallery'><Collections/> Tours Gallery </Link>
                     </li>
                     <li className="sideBarListItem">
-                        <HelpCenter/> FAQ
+                    <Link to = '/faq'><HelpCenter/> FAQ</Link>
                     </li>
                 </ul>
             </div>

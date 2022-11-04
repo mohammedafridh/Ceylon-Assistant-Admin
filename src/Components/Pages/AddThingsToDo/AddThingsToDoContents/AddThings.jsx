@@ -9,11 +9,13 @@ const AddThings = () => {
   const [description,setDescription] = useState('')
   const [imageUrl,setImageUrl] = useState('')
   const [status,setStatus] = useState('active')
+  const current = new Date();
+  const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
 
   const addThingsHandler = async(e)=>{
       e.preventDefault();
       const addDetails = collection(db, 'ThingsToDo')
-        addDoc(addDetails,{Activity:activityName, image: imageUrl, description:description, status:status})
+        addDoc(addDetails,{Activity:activityName, image: imageUrl, description:description, date: date, status:status})
         .then(()=>{
             setActivityName('')
             setImageUrl('')

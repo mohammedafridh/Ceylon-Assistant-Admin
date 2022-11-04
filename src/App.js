@@ -8,6 +8,7 @@ import Bookings from './Components/Pages/Bookings/Bookings';
 import DiscoverGallery from './Components/Pages/DiscoverGallery/DiscoverGallery';
 import AddThingsToDo from './Components/Pages/AddThingsToDo/AddThingsToDo';
 import ToursGallery from './Components/Pages/ToursGallery/ToursGallery';
+import Faq from './Components/Pages/FAQ/Faq';
 
 function App() {
     return(
@@ -27,6 +28,7 @@ function App() {
                             <Route path = '/discover' element = {<DiscoverGallery />} />
                             <Route path = '/addThingsToDo' element = {<AddThingsToDo />} />
                             <Route path = '/toursGallery' element = {<ToursGallery />} />
+                            <Route path = '/faq' element = {<Faq />} />
                         </Routes>
                     </div>
                                  

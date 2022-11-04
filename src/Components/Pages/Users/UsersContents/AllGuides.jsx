@@ -12,6 +12,18 @@ const AllGuides = () => {
         width: 250
       },
       {
+        label: 'Guide image',
+        field: 'profile',
+        sort: 'asc',
+        width: 250
+      },
+      {
+        label: 'NIC image',
+        field: 'nicImage',
+        sort: 'asc',
+        width: 250
+      },
+      {
         label: 'First Name',
         field: 'firstName',
         sort: 'asc',
@@ -117,6 +129,8 @@ const AllGuides = () => {
     rows: [
       {
         id: 'Tiger',
+        profile: <img src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcOPp23EQaDtQApexyIVNHGNST2LcHkLQ0mQ&usqp=CAU' alt = '' style={{width:180, height:180, marginLeft:20}} />,
+        nicImage: <img src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcOPp23EQaDtQApexyIVNHGNST2LcHkLQ0mQ&usqp=CAU' alt = '' style={{width:160, height:180, marginLeft:30}} />,
         firstName: 'Nixon',
         lastName: 'System Architect',
         contactNumber: 'Edinburgh',
