@@ -2,7 +2,7 @@
     background-color: var(--cardColor);
     padding: 2rem 1.5rem 1rem;
     border-radius: 1rem;
-    width: 165vh;
+    width: 150vh;
     box-shadow: 3px 3px 5px 6px #ccc;
 }
 
@@ -11,4 +11,13 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
+}
+
+.dltBtn{
+    background-color: red;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
 }

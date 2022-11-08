@@ -1,8 +1,12 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import './UsersTop.css'
 import {Select, MultiSelect } from '@mantine/core';
 import { useUserAuth } from '../../../../Context/Context';
-import {auth} from '../../../../Firebase'
+import {db,storage} from '../../../../Firebase'
+import {doc, setDoc } from "firebase/firestore";
+import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+import {v4} from 'uuid'
+
 
 const UsersTop = () => {
 
@@ -11,7 +15,7 @@ const UsersTop = () => {
     const [tourist,setTourist] = useState(false)
     const [fName, setFName] = useState('')
     const [lName, setLName] = useState('')
-    const [conactNumber, setConactNumber] = useState('')
+    const [contactNumber, setContactNumber] = useState('')
     const [passportNumber, setPassportNumber] = useState('')
     const [nicNumber, setNicNumber] = useState('')
     const [address, setAddress] = useState('')
@@ -34,6 +38,8 @@ const UsersTop = () => {
     const [error, setError] = useState('')
     const[url,setUrl] = useState(null)
     const {signUp} = useUserAuth();
+    const current = new Date();
+    const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
 
 
     const data = [
@@ -52,26 +58,103 @@ const UsersTop = () => {
         { value: 'Korean', label: 'Korean' },
       ];
 
+      useEffect(() => {
+        const getImageUrl = async () => {
+            const guideProfileRef = ref(storage, `GuideProfile/${profileImage.name + v4()}`);
+            uploadBytes(guideProfileRef, profileImage)
+              .then(() => {
+                getDownloadURL(guideProfileRef)
+                  .then((url) => {
+                    console.log({ url });
+                    setUrl(url);
+                    //add details part
+                    console.log("I'm here");
+                    // const addDetails = doc(db, "Tourists")
+                    // setDoc(addDetails,{name:newName, image:url, email:newEmail, gender:newGender,
+                    //          contact_Number:newContactNumber})
+                  })
+                  .catch((err) => {
+                    setError(err.message, "error getting the image");
+                  });
+              })
+              .catch((err) => {
+                setError(err);
+              });
+          };
+        const imageUrl = async () => {
+          await getImageUrl();
+        };
+        imageUrl();
+      }, [profileImage]);
+
       const adminHandler = async (e) => {
         e.preventDefault()
         setAdmin(true)
         setGuide(false)
         setTourist(false)
         setError("")
-        try{
-            signUp(auth, email, password)
-        }catch (err) {
-            setError(err.message);
-          } 
-        
-        
-      }
+            try {
+              signUp(email, password)
+                .then((data) => {
+                  const addDetails = doc(db, "Admin", data.user.uid);
+                  const details = {
+                    email: email,
+                    publishDate:addDate,
+                    status:status
+                  };
+                  setDoc(addDetails, details);
+                  setEmail('')
+                setPassword('')
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            } catch (err) {
+              setError(err.message);
+              console.log(err);
+            }
+          };
 
       const guideHandler = async (e) => {
         e.preventDefault()
         setAdmin(false)
         setGuide(true)
         setTourist(false)
+        try {
+            signUp(email, password)
+              .then((data) => {
+                const addDetails = doc(db, "Guide", data.user.uid);
+                const details = {
+                    firstName:fName,
+                    lastName:lName,
+                    contactNumber: contactNumber,
+                    nicNumber: nicNumber,
+                    address: address,
+                    district: district,
+                    guideType : type,
+                    languages: languages,
+                    guideRate:guideRate,
+                    vehicleType:vehicleType,
+                    model: model,
+                    maxPassengers:maxPassengers,
+                    perKmRate: perKM,
+                    image: url,
+                    email: email,
+                    password:password,
+                    publishedDate:addDate,
+                    status:status
+                };
+                setDoc(addDetails, details);
+                setEmail('')
+              setPassword('')
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } catch (err) {
+            setError(err.message);
+            console.log(err);
+          }
 
     }
 
@@ -93,7 +176,7 @@ const UsersTop = () => {
             <button onClick = {touristHandler}>Tourists</button>
         </div>
 
-        <form className = 'addUserForm'>
+        <div className = 'addUserForm'>
                 
             <h3>{tourist? 'Add Tourist' : guide? 'Add Guide' : 'Add Admin'}</h3>
             
@@ -104,12 +187,14 @@ const UsersTop = () => {
                         className='userInput' 
                         onChange = {(e)=> setFName(e.target.value)}
                         placeholder='First Name'
+                        value = {fName}
                     />
                     <input 
                         type="text" 
                         className='userInput' 
                         onChange = {(e)=> setLName(e.target.value)}
                         placeholder='Last Name'
+                        value = {lName}
                     />
             </div>
             }
@@ -117,10 +202,11 @@ const UsersTop = () => {
             {(tourist || guide) &&
             <div>
                     <input 
-                        type="text" 
+                        type="number" 
                         className='userInput' 
-                        onChange = {(e)=> setConactNumber(e.target.value)}
+                        onChange = {(e)=> setContactNumber(e.target.value)}
                         placeholder='Contact Number'
+                        value = {contactNumber}
                     />
                
                     <input 
@@ -128,6 +214,7 @@ const UsersTop = () => {
                         className='userInput' 
                         onChange = {tourist? (e)=>setPassportNumber(e.target.value): (e)=>setNicNumber(e.target.value)}
                         placeholder={tourist? 'Passport Number' : 'NIC Number'}
+                        value = {tourist? passportNumber : nicNumber}
                     />
             </div>
             }
@@ -140,6 +227,7 @@ const UsersTop = () => {
                     className='userInput' 
                     onChange = {(e)=> setAddress(e.target.value)}
                     placeholder='Address'
+                    value = {address}
                 /> 
 
                 <Select 
@@ -203,6 +291,7 @@ const UsersTop = () => {
                     className='infoInput' 
                     onChange = {(e)=> setGuideRate(e.target.value)} 
                     placeholder='Guide Rate Per Day'
+                    value = {guideRate}
                 />
             </div>
         }
@@ -226,6 +315,7 @@ const UsersTop = () => {
                     className='userInput' 
                     onChange = {(e)=> setModel(e.target.value)} 
                     placeholder='Vehicle Model'
+                    value = {model}
                 />
 
                 <input 
@@ -233,6 +323,7 @@ const UsersTop = () => {
                     className='userInput' 
                     onChange = {(e)=> setMaxPassengers(e.target.value)} 
                     placeholder='Maximum Passengers'
+                    value = {maxPassengers}
                 />
 
                 <div className = 'perKm'>
@@ -241,6 +332,7 @@ const UsersTop = () => {
                         className='userInput' 
                         onChange = {(e)=> setPerKm(e.target.value)} 
                         placeholder='Per Km Rate'
+                        value = {perKM}
                     />
                     <span>*Rate for own vehicle charges</span>
                 </div>
@@ -253,6 +345,7 @@ const UsersTop = () => {
                     className='userInput' 
                     onChange = {(e)=> setEmail(e.target.value)}
                     placeholder='Email Address'
+                    value = {email}
                 />    
             </div>
 
@@ -262,6 +355,7 @@ const UsersTop = () => {
                     className='userInput' 
                     onChange = {(e)=> setPassword(e.target.value)}
                     placeholder='Password'
+                    value = {password}
                 />
 
                 {/* <input 
@@ -296,10 +390,10 @@ const UsersTop = () => {
             }
             </div>
             <button className="button infoButton" 
-                onClick={()=> tourist?{touristHandler} : guide?{guideHandler} : {adminHandler}}>
+                onClick={guideHandler}>
                 {tourist?'Add Tourist' : guide? 'Add Guide' : 'Add Admin'}
             </button>
-        </form>
+        </div>
         
         </div>
      </div>

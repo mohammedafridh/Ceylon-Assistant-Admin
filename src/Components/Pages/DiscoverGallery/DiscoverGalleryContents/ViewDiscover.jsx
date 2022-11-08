@@ -1,38 +1,17 @@
 import React, { useEffect,useState } from 'react'
 import './ViewDiscover.css'
-import { MDBDataTable } from 'mdbreact';
+import { MDBTable, MDBTableBody, MDBTableHead } from 'mdbreact';
 import {db} from '../../../../Firebase'
 import {collection, onSnapshot} from 'firebase/firestore'
 
 const AllAdmins = () => {
 
   const [loading,setLoading] = useState(false)
-  const [discovery,setDiscovery] = useState([])
+  const [rowData,setRowData] = useState([])
   const [error,setError] = useState('')
 
-  useEffect(()=>{
-    setLoading(true)
-    const allData = onSnapshot(collection(db,'Discover_Srilanka'),(snapshot)=>{
-      let list = []
-      snapshot.docs.forEach((doc)=>{
-        list.push({
-          id:doc.id,
-          ...doc.data()
-        })
-      })
-      console.log(list)
-      setDiscovery(list)
-      setLoading(false)
-    },(error)=>{
-      setError(error.message)
-    });
-    return ()=>{
-      allData()
-    };
-  },[]);
-
-  const data = {
-    columns: [
+  const columns = [
+    
       {
         label: 'Discovery Id',
         field: 'id',
@@ -69,38 +48,63 @@ const AllAdmins = () => {
         sort: 'asc',
         width: 130
       }
-    ],
-    rows: [
-      {
-        id: 'Tiger',
-        destination: 'Nixoefefefewferf sefewsfewfwe wefn',
-        image: <img src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcOPp23EQaDtQApexyIVNHGNST2LcHkLQ0mQ&usqp=CAU' alt = '' style={{width:180, height:180}} />,
-        description: 'sefwefeffweffr w43erwrw4rw4rw 4rf 4rsdfsefr esfewfe dfffefe efsfsf erferfewfewfewfewf',
-        status: 'active',
-        actions: <button 
-            style = {{backgroundColor:'red', color:'white', padding:5, borderRadius:6, width:100, border:'none'}}>
-            Delete</button>
-
-      }
     ]
-  };
+  
+    useEffect(()=>{
+      setLoading(true)
+      const allData = onSnapshot(collection(db,'Discover_Srilanka'),(snapshot)=>{
+        let list = []
+        snapshot.docs.forEach((doc)=>{
+          list.push({
+            id:doc.id,
+            ...doc.data()
+          })
+        })
+        let rowDataCollection = []
+        list.forEach((item) =>{
+          const newItem = { id: item.id, destination: item.destination, image: item.image, description: item.description, status: item.status}
+          rowDataCollection.push(newItem)
+        })
+        setRowData(rowDataCollection)
+        console.log({rowDataCollection})
+        setLoading(false)
+      },(error)=>{
+        setError(error.message)
+      });
+      return ()=>{
+        allData()
+      };
+    },[]);
 
-  return (
-    <div className="allDiscoveries">
-          {discovery.map((discover)=>(
-            <h3>{discover.date}</h3>
-          ))}
-
-        
-            <MDBDataTable
-              scrollX
-              striped
-              bordered
-              data={data}
-            />   
-    </div>
-    
-  );
+    return (
+      <div className="allDiscoveries">
+        <MDBTable scrollX>
+          
+          <MDBTableHead>
+            <tr>
+              {columns.map((item, index) => (
+                <th>{item.label}</th>
+              ))}
+            </tr>
+          </MDBTableHead>
+          <MDBTableBody>
+            {
+                rowData.map((item, index) => (
+                  <tr key={index}>
+                      <td>{item.id}</td>
+                      <td>{item.destination}</td>
+                      <td><img width="500" height = '200' alt='' src={item.image}/></td>
+                      <td>{item.description}</td>
+                      <td>{item.status}</td>
+                      <td><button className='dltBtn'>Delete</button></td>
+                  </tr>
+                ))  
+            }
+          </MDBTableBody>
+        </MDBTable>
+      </div>
+      
+    );
 }
 
 export default AllAdmins;

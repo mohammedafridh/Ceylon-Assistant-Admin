@@ -1,10 +1,16 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import '../../DiscoverGallery/DiscoverGalleryContents/ViewDiscover.css'
-import { MDBDataTable } from 'mdbreact';
+import {db} from '../../../../Firebase'
+import {collection, onSnapshot} from 'firebase/firestore'
+import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from 'mdbreact';
 
 const ViewAddThings = () => {
-  const data = {
-    columns: [
+
+  const [loading,setLoading] = useState(false)
+  const [rowData,setRowData] = useState([])
+  const [error,setError] = useState('')
+  
+  const columns = [
       {
         label: 'Faq Id',
         field: 'id',
@@ -24,42 +30,49 @@ const ViewAddThings = () => {
         width: 200
       },
       {
-        label: "Status",
-        field: 'status',
-        sort: 'asc',
-        width: 200
-      },
-      {
         label: "Actions",
         field: 'actions',
         sort: 'asc',
         width: 130
       }
-    ],
-    rows: [
-      {
-        id: 'Tiger',
-        question: 'Nixoefefefewferf sefewsfewfwe wefn',
-        answer: <img src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcOPp23EQaDtQApexyIVNHGNST2LcHkLQ0mQ&usqp=CAU' alt = '' style={{width:180, height:180}} />,
-        status: 'active',
-        actions: <button 
-            style = {{backgroundColor:'red', color:'white', padding:5, borderRadius:6, width:100, border:'none'}}>
-            Delete</button>
-
-      }
     ]
-  };
+
+    useEffect(()=>{
+      setLoading(true)
+      const allData = onSnapshot(collection(db,'faq'),(snapshot)=>{
+        let list = []
+        snapshot.docs.forEach((doc)=>{
+          list.push({
+            id:doc.id,
+            ...doc.data()
+          })
+        })
+        let rowDataCollection = []
+        list.forEach((item) =>{
+          const newItem = { id: item.id, question: item.question, answer: item.answer, actions: <button>Delete</button>}
+          rowDataCollection.push(newItem)
+        })
+        setRowData(rowDataCollection)
+        console.log({rowDataCollection})
+        setLoading(false)
+      },(error)=>{
+        setError(error.message)
+      });
+      return ()=>{
+        allData()
+      };
+    },[]);
 
   return (
     <div className="allDiscoveries">
-        <h3>All FAQ's</h3>
         <MDBDataTable
             scrollX
             striped
             bordered
-            data={data}
+            rows={rowData}
+            columns={columns}
         />
-    </div>
+      </div>
     
   );
 }

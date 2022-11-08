@@ -14,7 +14,7 @@ const AddThings = () => {
 
   const addThingsHandler = async(e)=>{
       e.preventDefault();
-      const addDetails = collection(db, 'ThingsToDo')
+      const addDetails = collection(db, 'ThingsToDoSrilanka')
         addDoc(addDetails,{Activity:activityName, image: imageUrl, description:description, date: date, status:status})
         .then(()=>{
             setActivityName('')
@@ -35,6 +35,7 @@ const AddThings = () => {
                   className='infoInput' 
                   onChange = {(e)=> setActivityName(e.target.value)}
                   placeholder='Activity Name'
+                  value = {activityName}
               />
             </div>
 
@@ -44,6 +45,7 @@ const AddThings = () => {
                     className='infoInput' 
                     onChange = {(e)=> setImageUrl(e.target.value)}
                     placeholder= 'Image URL'
+                    value = {imageUrl}
                 />
             </div>
 

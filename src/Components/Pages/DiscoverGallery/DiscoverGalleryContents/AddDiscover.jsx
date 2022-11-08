@@ -10,6 +10,7 @@ const AddDiscover = () => {
   const [imageUrl,setImageUrl] = useState(true)
   const [gallery,setGallery] = useState(false)
   const [destination,setDestination] = useState('')
+  const [destinationNickname, setDestinationNickname] = useState('')
   const [description,setDescription] = useState('')
   const [photoUrl,setPhotoUrl] = useState('')
   const [photo,setPhoto] = useState(null)
@@ -52,9 +53,10 @@ const AddDiscover = () => {
   const galleryImage = async ()=>{
     const addDetails = collection(db, 'Discover_Srilanka')
     console.log('abc')
-    await addDoc(addDetails,{destination:destination, image: url, description:description, date:date, status:status})
+    await addDoc(addDetails,{destination:destination, nickname: destinationNickname, image: url, description:description, date:date, status:status})
     .then(()=>{
       setDestination('')
+      setDestinationNickname('')
       setPhotoUrl('')
       setDescription('')
     })
@@ -69,9 +71,10 @@ const AddDiscover = () => {
   const urlImage = async ()=>{
     const addDetails = collection(db, 'Discover_Srilanka')
     console.log('def')
-    await addDoc(addDetails,{destination:destination, image: photoUrl, description:description, date:date, status:status})
+    await addDoc(addDetails,{destination:destination, nickname: destinationNickname, image: photoUrl, description:description, date:date, status:status})
     .then(()=>{
       setDestination('')
+      setDestinationNickname('')
       setPhotoUrl('')
       setDescription('')
     })
@@ -96,6 +99,17 @@ const AddDiscover = () => {
                   className='infoInput' 
                   onChange = {(e)=> setDestination(e.target.value)}
                   placeholder='Destination Name'
+                  value = {destination}
+              />
+            </div>
+
+            <div>
+              <input 
+                  type="text" 
+                  className='infoInput' 
+                  onChange = {(e)=> setDestinationNickname(e.target.value)}
+                  placeholder='Destination Nickname'
+                  value = {destinationNickname}
               />
             </div>
 
@@ -107,6 +121,7 @@ const AddDiscover = () => {
                     className='infoInput' 
                     onChange = {(e)=> imageUrl? setPhotoUrl(e.target.value): setPhoto(e.target.files[0])}
                     placeholder= {imageUrl && 'Enter Image Url'}
+                    value = {imageUrl? photoUrl: photo}
                 />
             </div>
 
