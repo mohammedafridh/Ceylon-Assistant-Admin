@@ -1,0 +1,178 @@
+.addUser{
+    background-color: var(--cardColor);
+    padding: 2rem 1rem 0rem 2rem;
+    border-radius: 1rem;
+    width: 95%;
+    box-shadow: 3px 3px 5px 6px #ccc;
+    margin: 2rem 0rem 4rem 0rem;
+}
+
+.userTypeButtons{
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.userTypeButtons>button{
+    height: 3rem;
+    padding: 0.5rem 2rem;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    border-radius: 1rem;
+    outline: none;
+    border: none;
+    background: lightgreen;
+    color: white;
+}
+
+.addUserForm{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0rem 2rem 0rem;
+    margin: 1rem auto;
+    width: 95%;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    /* box-shadow: 3px 3px 6px 5px #ccc; */
+    border-radius: 10px;
+    flex: 1;
+}
+
+.addUserForm>h3{
+    font-weight: bold;
+}
+
+.addUserForm>div{
+    display: flex;
+    gap: 1rem;
+    height: 2rem;
+    width: 100%;
+}
+
+.userInput{
+    border: none;
+    outline: none;
+    background-color: var(--inputColor);
+    border-radius: 8px;
+    padding: 20px;
+    flex: 1;
+}
+
+.form-select{
+    width: 15rem!important;
+    outline: none!important;
+    border: none!important;
+    background-color: var(--inputColor)!important;
+    color: gray!important;
+}
+
+
+/* .selectDrop{
+    width: 15rem!important;
+    height: 2.3rem!important;
+    
+    padding: 5px 10px!important;
+    background-color: var(--inputColor)!important;
+    color: gray!important;
+    border-radius: 8px!important;
+} */
+
+.infoSelect{
+    background-color: var(--inputColor)!important;
+}
+
+.addUserForm>button{
+    width: 8rem;
+    height: 2.5rem;
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    background: var(--buttonBg);
+    transition: all 100ms ease-out;
+}
+
+.perKm{
+    display: flex;
+    flex-direction: column;
+    width: 10rem;
+}
+
+.perKm>input{
+    height: 1rem;
+}
+
+.perKm>span{
+    font-size: 11px;
+    color: red;
+    font-weight: 600;
+}
+
+.mantine-1ajyf09{
+    background-color: var(--inputColor)!important;
+    border: none!important;
+    height: 1rem!important;
+    border-radius: 8px!important;
+}
+
+.mantine-1rbe782{
+    background-color: var(--inputColor)!important;
+    border: none!important;
+    height: 1rem!important;
+    border-radius: 8px!important;
+}
+
+.userAuthImageContainer{
+    font-family: 'Source Sans Pro', sans-serif!important;
+    font-size: 13.5px;
+    flex: 1;
+}
+
+.authProfile{
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    align-items: center;
+    background-color: var(--inputColor);
+    padding: 10px 5px;
+    border-radius: 8px;
+    text-align: center;
+    justify-content: center;
+}
+
+.typeDrop{
+    width: 17rem!important;
+    border: none!important;
+    outline: none!important;
+
+}
+
+.langDrop{
+    width: 100%!important;
+    border: none!important;
+    outline: none!important;
+}
+
+.guideDrop{
+    width: 22rem!important;
+    border: none!important;
+    outline: none!important;
+}
+
+.css-1s2u09g-control{
+    background-color: var(--inputColor)!important;
+    border-radius: 6px!important;
+    border: none!important;
+    outline: none!important;
+    font-family: inherit!important;
+    font-weight: 400!important;
+    text-align: left!important;
+}

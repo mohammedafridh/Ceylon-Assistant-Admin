@@ -1,0 +1,14 @@
+.successModal{
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.successModal>img{
+    width: 5rem;
+    height: 5rem;
+}
+
+.successModal>h3{
+    margin-top: 1rem;
+}

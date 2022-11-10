@@ -21,7 +21,7 @@ const SideBar = () => {
                 <ul className="sideBarList">
 
                     <li className="sideBarListItem">
-                        <Link to = '/users'> <People/> Users </Link>
+                        <Link to = '/adminPage'> <People/> Users </Link>
                     </li>
                     <li className="sideBarListItem">
                     <Link to = '/bookings'> <BookOnline/> Bookings </Link>

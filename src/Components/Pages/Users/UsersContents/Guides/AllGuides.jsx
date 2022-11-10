@@ -1,8 +1,8 @@
 import React from 'react'
-import './AllUsers.css'
+import '../AllUsers.css'
 import { MDBDataTable } from 'mdbreact';
 
-const AllTourists = () => {
+const AllGuides = () => {
   const data = {
     columns: [
       {
@@ -12,14 +12,14 @@ const AllTourists = () => {
         width: 250
       },
       {
-        label: 'Profile Image',
+        label: 'Guide image',
         field: 'profile',
         sort: 'asc',
         width: 250
       },
       {
-        label: 'Passport Image',
-        field: 'passportImage',
+        label: 'NIC image',
+        field: 'nicImage',
         sort: 'asc',
         width: 250
       },
@@ -42,8 +42,62 @@ const AllTourists = () => {
         width: 150
       },
       {
-        label: 'Passport Number',
-        field: 'passportNumber',
+        label: 'NIC',
+        field: 'nic',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'Address',
+        field: 'address',
+        sort: 'asc',
+        width: 300
+      },
+      {
+        label: 'District',
+        field: 'district',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'Guide Type',
+        field: 'guideType',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'Languages',
+        field: 'languages',
+        sort: 'asc',
+        width: 200
+      },
+      {
+        label: 'Guide Rate',
+        field: 'guideRate',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'Vehicle Type',
+        field: 'vehicleType',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'vehicle Modal',
+        field: 'vehicleModal',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'Passengers',
+        field: 'maxPassenger',
+        sort: 'asc',
+        width: 100
+      },
+      {
+        label: 'Per Km Rate',
+        field: 'perKm',
         sort: 'asc',
         width: 150
       },
@@ -76,11 +130,20 @@ const AllTourists = () => {
       {
         id: 'Tiger',
         profile: <img src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcOPp23EQaDtQApexyIVNHGNST2LcHkLQ0mQ&usqp=CAU' alt = '' style={{width:180, height:180, marginLeft:20}} />,
-        passportImage: <img src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcOPp23EQaDtQApexyIVNHGNST2LcHkLQ0mQ&usqp=CAU' alt = '' style={{width:160, height:180, marginLeft:30}} />,
+        nicImage: <img src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcOPp23EQaDtQApexyIVNHGNST2LcHkLQ0mQ&usqp=CAU' alt = '' style={{width:160, height:180, marginLeft:30}} />,
         firstName: 'Nixon',
         lastName: 'System Architect',
         contactNumber: 'Edinburgh',
-        passportNumber: '61',
+        nic: '61',
+        address: '2011/04/25',
+        district: '$320,800',
+        guideType: 'System Architect',
+        languages: 'System Architect',
+        guideRate: 'System Architect',
+        vehicleType: 'System Architect',
+        vehicleModal: 'System Architect',
+        maxPassenger: '15',
+        perKm: '350',
         email: 'System Architect',
         date: 'System Architect',
         status: 'active',
@@ -93,7 +156,7 @@ const AllTourists = () => {
 
   return (
     <div className="allUsers">
-        <h3>All Tourists</h3>
+        <h3>All Guides</h3>
         <MDBDataTable
             scrollX
             striped
@@ -105,4 +168,4 @@ const AllTourists = () => {
   );
 }
 
-export default AllTourists;
+export default AllGuides;

@@ -1,5 +1,5 @@
 import React from 'react'
-import './AllUsers.css'
+import '../AllUsers.css'
 import { MDBDataTable } from 'mdbreact';
 
 const AllAdmins = () => {
