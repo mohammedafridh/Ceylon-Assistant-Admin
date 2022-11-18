@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import '../Admin/Admin.css'
-import {MultiSelect } from '@mantine/core';
 import { useUserAuth } from '../../../../../Context/Context';
 import {db,storage} from '../../../../../Firebase'
 import {doc, setDoc } from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {v4} from 'uuid'
 import Select from 'react-select'
+import SuccessModal from "../../../../Modals/SuccessModal";
 
 
 const AddGuide = () => {
@@ -22,7 +22,8 @@ const AddGuide = () => {
     const [perKm, setPerKm] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [password2, setPassword2] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [passwordMatch, setPasswordMatch] = useState(true);
     const [profileImage, setProfileImage] = useState('')
     const [nicImage, setNicImage] = useState('')
     const [passportImage, setPassportImage] = useState('')
@@ -30,6 +31,7 @@ const AddGuide = () => {
     const [error, setError] = useState('')
     const[url,setUrl] = useState(null)
     const[nicUrl,setNicUrl] = useState(null)
+    const [formStatus, setFormStatus] = useState('')
     const {signUp} = useUserAuth();
     const current = new Date();
     const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
@@ -163,9 +165,15 @@ const AddGuide = () => {
 
 
       const guideHandler = async (e) => {
-        e.preventDefault()
+        validatePassword()
+        e.preventDefault();
+        setError("");
         try {
-            signUp(email, password)
+          if(passwordMatch === false) {
+            return
+          }
+          
+          signUp(email, password)
               .then((data) => {
                 const addDetails = doc(db, "Guides", data.user.uid);
                 
@@ -208,24 +216,34 @@ const AddGuide = () => {
                 setNicUrl('')
                 setEmail('')
                 setPassword('')
+                setConfirmPassword("");
+                setFormStatus("Success")
               })
               .catch((error) => {
-                console.log(error);
+                setFormStatus("Error")
               });
           } catch (err) {
             setError(err.message);
-            console.log(err);
+            setFormStatus("Error")
           }
-
     }
+
+    const validatePassword = () => {
+      console.log(passwordMatch, password, confirmPassword)
+      password === confirmPassword
+        ? setPasswordMatch(true)
+        : setPasswordMatch(false);
+    };
 
   return (
     <div className='UsersContainer'>
         <div className="addUser">
 
-        <div className = 'addUserForm'>
+        <form onSubmit={guideHandler} className = 'addUserForm'>
                 
             <h3>Add Guide</h3>
+            { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
+
 
             <div>
                     <input 
@@ -234,6 +252,7 @@ const AddGuide = () => {
                         onChange = {(e)=> setFName(e.target.value)}
                         placeholder='First Name'
                         value = {fName}
+                        required
                     />
                     <input 
                         type="text" 
@@ -241,6 +260,7 @@ const AddGuide = () => {
                         onChange = {(e)=> setLName(e.target.value)}
                         placeholder='Last Name'
                         value = {lName}
+                        required
                     />
             </div>
 
@@ -251,6 +271,7 @@ const AddGuide = () => {
                         onChange = {(e)=> setContactNumber(e.target.value)}
                         placeholder='Contact Number'
                         value = {contactNumber}
+                        required
                     />
                
                     <input 
@@ -259,6 +280,7 @@ const AddGuide = () => {
                         onChange = {(e)=>setNicNumber(e.target.value)}
                         placeholder='NIC Number'
                         value = {nicNumber}
+                        required
                     />
             </div>
 
@@ -269,6 +291,7 @@ const AddGuide = () => {
                     onChange = {(e)=> setAddress(e.target.value)}
                     placeholder='Address'
                     value = {address}
+                    required
                 /> 
 
                 <Select 
@@ -276,6 +299,7 @@ const AddGuide = () => {
                   placeholder = 'Select District' 
                   onChange={districtHandler}
                   className = 'typeDrop'
+                  required
                 />
             </div>
 
@@ -285,6 +309,7 @@ const AddGuide = () => {
                 placeholder = 'Select Languages'
                 onChange={languageHandler}
                 className = 'langDrop'
+                required
               />
             </div>
 
@@ -294,6 +319,7 @@ const AddGuide = () => {
                   placeholder = 'Guide Type' 
                   onChange={typeHandler}
                   className = 'guideDrop'
+                  required
                 />
 
                 <input 
@@ -302,6 +328,7 @@ const AddGuide = () => {
                     onChange = {(e)=> setGuideRate(e.target.value)} 
                     placeholder='Guide Rate Per Day'
                     value = {guideRate}
+                    required
                 />
             </div>
 
@@ -311,6 +338,7 @@ const AddGuide = () => {
                   placeholder = 'Vehicle Type' 
                   onChange={vehicleHandler}
                   className = 'typeDrop'
+                  required
                 />
 
                 <input 
@@ -319,6 +347,7 @@ const AddGuide = () => {
                     onChange = {(e)=> setModel(e.target.value)} 
                     placeholder='Vehicle Model'
                     value = {model}
+                    required
                 />
 
                 <input 
@@ -327,6 +356,7 @@ const AddGuide = () => {
                     onChange = {(e)=> setMaxPassengers(e.target.value)} 
                     placeholder='Maximum Passengers'
                     value = {maxPassengers}
+                    required
                 />
 
                 <div className = 'perKm'>
@@ -336,6 +366,7 @@ const AddGuide = () => {
                         onChange = {(e)=> setPerKm(e.target.value)} 
                         placeholder='Per Km Rate'
                         value = {perKm}
+                        required
                     />
                     <span>*Rate for own vehicle charges</span>
                 </div>
@@ -348,25 +379,30 @@ const AddGuide = () => {
                     onChange = {(e)=> setEmail(e.target.value)}
                     placeholder='Email Address'
                     value = {email}
+                    required
                 />    
             </div>
 
             <div>
                 <input 
-                    type="password" 
-                    className='userInput' 
-                    onChange = {(e)=> setPassword(e.target.value)}
-                    placeholder='Password'
-                    value = {password}
+                    type="password"
+                    className="userInput"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                 />
 
-                {/* <input 
-                    type="password" 
-                    className='infoInput' 
-                    onChange = {(e)=> setPassword2(e.target.value)}
-                    placeholder='Confirm Password'
-                /> */}
+                <input 
+                    type="password"
+                    className="userInput"
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}  
+                    required
+                />
             </div>
+           
 
             <div className='userAuthImageContainer'>
                 <div className="authProfile">
@@ -375,6 +411,7 @@ const AddGuide = () => {
                         type="file" 
                         name = 'profileImg' 
                         onChange = {(e) => setProfileImage(e.target.files[0])}
+                        required
                     />
                 </div>
             
@@ -384,17 +421,17 @@ const AddGuide = () => {
                         type="file" 
                         name = 'coverImg' 
                         onChange = {(e)=>setNicImage(e.target.files[0])}
+                        required
                     />
                 </div>
 
             </div>
-            <button className="button infoButton" 
-                onClick={guideHandler}>
-                Add Guide
+            <button type="submit" className="button infoButton">
+                 Add Guide
             </button>
+        </form>
         </div>
-        
-        </div>
+        <SuccessModal modalOpened={formStatus === 'Success' ?  true : false} setModalOpened={() => {setFormStatus('')}}/>
      </div>
 
   )

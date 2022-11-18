@@ -1,13 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import '../Admin/Admin.css'
-import {Select, MultiSelect } from '@mantine/core';
 import { useUserAuth } from '../../../../../Context/Context';
 import {db,storage} from '../../../../../Firebase'
 import {doc, setDoc } from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {v4} from 'uuid'
-import {Form} from 'react-bootstrap'
-
+import SuccessModal from "../../../../Modals/SuccessModal";
 
 const AddTourist = () => {
 
@@ -17,13 +15,15 @@ const AddTourist = () => {
     const [passportNumber, setPassportNumber] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [password2, setPassword2] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [passwordMatch, setPasswordMatch] = useState(true);
     const [profileImage, setProfileImage] = useState('')
     const [passportImage, setPassportImage] = useState('')
     const [status, setStatus] = useState('Active')
     const [error, setError] = useState('')
     const[url,setUrl] = useState(null)
     const[passportUrl,setPassportUrl] = useState(null)
+    const [formStatus, setFormStatus] = useState('')
     const {signUp} = useUserAuth();
     const current = new Date();
     const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
@@ -74,7 +74,13 @@ const AddTourist = () => {
       }, [profileImage, passportImage]);
 
       const touristHandler = async (e) => {
+        validatePassword()
+        e.preventDefault();
+        setError("");
         try {
+          if(passwordMatch === false) {
+            return
+          }
             signUp(email, password)
               .then((data) => {
                 const addDetails = doc(db, "Tourist", data.user.uid);    
@@ -97,23 +103,33 @@ const AddTourist = () => {
                 setPassportUrl('')
                 setEmail('')
                 setPassword('')
+                setConfirmPassword('');
+                setFormStatus("Success")
               })
               .catch((error) => {
-                console.log(error);
+                setFormStatus("Error")
+                setError(error.message)
               });
           } catch (err) {
             setError(err.message);
-            console.log(err);
+            setFormStatus("Error")
           }
-
     }
+
+    const validatePassword = () => {
+      console.log(passwordMatch, password, confirmPassword)
+      password === confirmPassword
+        ? setPasswordMatch(true)
+        : setPasswordMatch(false);
+    };
 
   return (
     <div className='UsersContainer'>
         <div className="addUser">
-        <div className = 'addUserForm'>
+        <form onSubmit={touristHandler} className = 'addUserForm'>
                 
             <h3>Add Tourist</h3>
+            { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
 
             <div>
                     <input 
@@ -122,6 +138,7 @@ const AddTourist = () => {
                         onChange = {(e)=> setFName(e.target.value)}
                         placeholder='First Name'
                         value = {fName}
+                        required
                     />
                     <input 
                         type="text" 
@@ -129,6 +146,7 @@ const AddTourist = () => {
                         onChange = {(e)=> setLName(e.target.value)}
                         placeholder='Last Name'
                         value = {lName}
+                        required
                     />
             </div>
 
@@ -139,6 +157,7 @@ const AddTourist = () => {
                         onChange = {(e)=> setContactNumber(e.target.value)}
                         placeholder='Contact Number'
                         value = {contactNumber}
+                        required
                     />
                
                     <input 
@@ -147,6 +166,7 @@ const AddTourist = () => {
                         onChange = {(e)=>setPassportNumber(e.target.value)}
                         placeholder= 'Passport Number'
                         value = {passportNumber}
+                        required
                     />
             </div>
 
@@ -157,6 +177,7 @@ const AddTourist = () => {
                     onChange = {(e)=> setEmail(e.target.value)}
                     placeholder='Email Address'
                     value = {email}
+                    required
                 />    
             </div>
 
@@ -167,16 +188,19 @@ const AddTourist = () => {
                     onChange = {(e)=> setPassword(e.target.value)}
                     placeholder='Password'
                     value = {password}
+                    required
                 />
 
-                {/* <input 
+                <input 
                     type="password" 
                     className='userInput' 
-                    onChange = {(e)=> setPassword2(e.target.value)}
+                    onChange = {(e)=> setConfirmPassword(e.target.value)}
                     placeholder='Confirm Password'
-                /> */}
+                    value = {confirmPassword}
+                    required
+                />
             </div>
-
+           
             <div className='userAuthImageContainer'>
                 <div className="authProfile">
                     Profile Image
@@ -184,6 +208,7 @@ const AddTourist = () => {
                         type="file" 
                         name = 'profileImg' 
                         onChange = {(e) => setProfileImage(e.target.files[0])}
+                        required
                     />
                 </div>
             
@@ -193,13 +218,17 @@ const AddTourist = () => {
                         type="file" 
                         name = 'coverImg' 
                         onChange = {(e)=>setPassportImage(e.target.files[0])}
+                        required
                     />
                 </div>
             </div>
-            <button className="button infoButton" onClick={touristHandler}>Add Tourist </button>
-        </div>
+            <button type="submit" className="button infoButton">
+                 Add Tourist
+            </button>
+        </form>
         
         </div>
+        <SuccessModal modalOpened={formStatus === 'Success' ?  true : false} setModalOpened={() => {setFormStatus('')}}/>
      </div>
 
   )
