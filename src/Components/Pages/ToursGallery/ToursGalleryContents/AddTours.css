@@ -35,14 +35,11 @@
     outline: none;
     background-color: var(--inputColor);
     border-radius: 8px;
-    padding: 10px;
+    padding: 7px;
     flex: 1;
     width: 18rem;
 }
 
-.infoSelect{
-    background-color: var(--inputColor)!important;
-}
 
 .addThingsForm>button{
     width: 8rem;
@@ -72,9 +69,18 @@
     gap: 1rem;
 }
 
+.splitImageContainer{
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
 .authProfile{
     display: flex;
     gap: 1rem;
     flex: 1;
 }
+
+
+
 

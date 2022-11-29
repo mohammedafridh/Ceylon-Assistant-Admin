@@ -1,8 +1,10 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import './AddTours.css'
-import {collection, addDoc} from 'firebase/firestore'
-import {db} from '../../../../Firebase'
+import {collection, addDoc, setDoc, doc} from 'firebase/firestore'
+import {db,storage} from '../../../../Firebase'
 import {Select } from '@mantine/core';
+import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+import {v4} from 'uuid'
 
 const AddTours = () => {
 
@@ -16,21 +18,10 @@ const AddTours = () => {
   const [image4,setImage4] = useState('')
   const [status,setStatus] = useState('active')
 
-  const addThingsHandler = async(e)=>{
-      e.preventDefault();
-      const addDetails = collection(db, 'AddTours')
-        addDoc(addDetails,{destination:destination, district: district, guide:guide, mainImage:mainImage, status:status})
-        .then(()=>{
-          setDestination('')
-          setDistrict('')
-          setGuide('')
-          setMainImage('')
-        })
-  }
 
   return (
     <div className="addThings">
-        <div className = 'addThingsForm'>      
+        <form onSubmit='' className = 'addThingsForm'>      
             <h3>Add Tours</h3>
             <div className='detailsContainer'>
               <input 
@@ -39,6 +30,7 @@ const AddTours = () => {
                     onChange = {(e)=> setGuide(e.target.value)}
                     placeholder='Guide Name'
                     value = {guide}
+                    required
                 />
 
               <input 
@@ -47,6 +39,7 @@ const AddTours = () => {
                   onChange = {(e)=> setDestination(e.target.value)}
                   placeholder='Destination'
                   value = {destination}
+                  required
               />
 
             <Select 
@@ -54,6 +47,7 @@ const AddTours = () => {
                 onChange = {(e)=> setDistrict(e.target.value)} 
                 placeholder='District'
                 value = {district}
+                required
 
                 data={[
                   { value: 'Hambanthota', label: 'Hambanthota' },
@@ -93,9 +87,11 @@ const AddTours = () => {
                         name = 'coverImg' 
                         onChange = {(e)=>setMainImage(e.target.files[0])}
                         value = {mainImage}
+                        required
                     />
                 </div>
 
+              <div className= 'splitImageContainer'>
                 <div className="authProfile">
                     <span>Image 1</span>
                       <input 
@@ -115,7 +111,9 @@ const AddTours = () => {
                           value = {image2}
                       />
                 </div>
+              </div>
 
+              <div className= 'splitImageContainer'>
                 <div className="authProfile">
                     <span>Image 3</span>
                       <input 
@@ -135,12 +133,13 @@ const AddTours = () => {
                           value = {image4}
                       />
                 </div>
+              </div>
             </div>
 
           <div className='addThingsBtnContainer'>
-              <button className='addThingsBtn' onClick = {addThingsHandler}> Add Tour</button>
+              <button type = 'submit' className='addThingsBtn' > Add Tour</button>
           </div>   
-        </div>
+        </form>
       </div>
   )
 }
