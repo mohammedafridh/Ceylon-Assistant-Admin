@@ -46,7 +46,7 @@ const SideBar = () => {
                 <ul className="sideBarList">
                     
                     <li className="sideBarListItem">
-                        <Mail/> Messages
+                    <Link to = '/messages'><Mail/> Messages</Link>
                     </li>
 
                     <li className="sideBarListItem">

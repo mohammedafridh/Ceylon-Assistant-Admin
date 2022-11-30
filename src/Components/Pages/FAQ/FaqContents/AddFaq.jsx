@@ -15,7 +15,7 @@ const AddFaq = () => {
     try{
       const addDetails = collection(db, 'faq')
       try{
-      await addDoc(addDetails,{question:question, answer: answer, date:date, status:status})
+      await addDoc(addDetails,{question:question+'?', answer: answer, date:date, status:status})
       .then(()=>{
         setQuestion('')
         setAnswer('')
@@ -38,7 +38,7 @@ const AddFaq = () => {
               <input 
                     type="text" 
                     className='faqInput' 
-                    onChange = {(e)=> setQuestion(e.target.value + ' ?')}
+                    onChange = {(e)=> setQuestion(e.target.value)}
                     placeholder='Question'
                     value = {question}
                     required

@@ -1,0 +1,30 @@
+.messages{
+    margin: 0rem auto;
+    background-color: var(--cardColor);
+    padding: 2rem;
+}
+
+.messageCard{
+    margin: 2rem auto;
+    border: 1px solid gray;
+    width: 70%;
+    padding: 1rem 2rem;
+}
+
+.messageCard>h5{
+    font-weight: bold;
+    text-align: center;
+    color: rgb(41, 115, 150);
+}
+
+.replyBtn{
+    margin-top: 2rem;
+    padding: 5px;
+    width: 7rem;
+    border: none;
+    outline: none;
+    color: white;
+    border-radius: 5px;
+    background-color: rgb(126, 173, 56);
+    margin-left: 31rem;
+}

@@ -11,6 +11,7 @@ import Faq from './Components/Pages/FAQ/Faq';
 import AdminPageSetup from './Components/Pages/Users/UsersContents/Admin/AdminPageSetup';
 import GuidePageSetup from './Components/Pages/Users/UsersContents/Guides/GuidePageSetup';
 import TouristPageSetup from './Components/Pages/Users/UsersContents/Tourists/TouristPageSetup';
+import Messages from './Components/Pages/Messages/Messages';
 
 function App() {
     return(
@@ -34,6 +35,7 @@ function App() {
                             <Route path = '/addThingsToDo' element = {<AddThingsToDo />} />
                             <Route path = '/toursGallery' element = {<ToursGallery />} />
                             <Route path = '/faq' element = {<Faq />} />
+                            <Route path = '/messages' element = {<Messages />} />
                         </Routes>
                     </div>
                                  
