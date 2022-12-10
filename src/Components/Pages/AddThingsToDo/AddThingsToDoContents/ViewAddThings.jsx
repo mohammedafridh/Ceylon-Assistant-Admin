@@ -1,74 +1,90 @@
-import React from 'react'
-import '../../DiscoverGallery/DiscoverGalleryContents/ViewDiscover.css'
-import { MDBDataTable } from 'mdbreact';
+import React, { useState, useEffect } from "react";
+import "../../DiscoverGallery/DiscoverGalleryContents/ViewDiscover.css";
+import { db } from "../../../../Firebase";
+import { collection, onSnapshot } from "firebase/firestore";
+import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 
 const ViewAddThings = () => {
-  const data = {
-    columns: [
-      {
-        label: 'Add Things Id',
-        field: 'id',
-        sort: 'asc',
-        width: 250
-      },
-      {
-        label: 'Activity Name',
-        field: 'activityName',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: 'Image',
-        field: 'image',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: 'Description',
-        field: 'description',
-        sort: 'asc',
-        width: 400
-      },
-      {
-        label: "Status",
-        field: 'status',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: "Actions",
-        field: 'actions',
-        sort: 'asc',
-        width: 130
-      }
-    ],
-    rows: [
-      {
-        id: 'Tiger',
-        activityName: 'Nixoefefefewferf sefewsfewfwe wefn',
-        image: <img src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcOPp23EQaDtQApexyIVNHGNST2LcHkLQ0mQ&usqp=CAU' alt = '' style={{width:180, height:180}} />,
-        description: 'sefwefeffweffr w43erwrw4rw4rw 4rf 4rsdfsefr esfewfe dfffefe efsfsf erferfewfewfewfewf',
-        status: 'active',
-        actions: <button 
-            style = {{backgroundColor:'red', color:'white', padding:5, borderRadius:6, width:100, border:'none'}}>
-            Delete</button>
+  const [loading, setLoading] = useState(false);
+  const [tableData, setTableData] = useState();
+  const [error, setError] = useState("");
 
+  const columnData = [
+    {
+      label: "Add Things Id",
+      field: "id",
+      sort: "asc",
+      width: 250,
+    },
+    {
+      label: "Activity",
+      field: "activity",
+      sort: "asc",
+      width: 200,
+    },
+    {
+      label: "Description",
+      field: "description",
+      sort: "asc",
+      width: 200,
+    },
+    {
+      label: "Image",
+      field: "image",
+      sort: "asc",
+      width: 200,
+    },
+    {
+      label: "Actions",
+      field: "actions",
+      sort: "asc",
+      width: 130,
+    },
+  ];
+
+  useEffect(() => {
+    setLoading(true);
+    const allData = onSnapshot(
+      collection(db, "ThingsToDoSrilanka"),
+      (snapshot) => {
+        let list = [];
+        snapshot.docs.forEach((doc) => {
+          list.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        let rowDataCollection = [];
+        list.forEach((item) => {
+          const newItem = {
+            id: item.id,
+            activity: item.Activity,
+            description: item.description,
+            image:<img src = {item.image} style = {{width:170, height: 170}}/>,
+            actions: <button>Delete</button>,
+          };
+          rowDataCollection.push(newItem);
+        });
+        setTableData({
+          columns: columnData,
+          rows: rowDataCollection,
+        });
+        setLoading(false);
+      },
+      (error) => {
+        setError(error.message);
       }
-    ]
-  };
+    );
+    return () => {
+      allData();
+    };
+  }, []);
 
   return (
     <div className="allDiscoveries">
-        <h3>Add Things Gallery</h3>
-        <MDBDataTable
-            scrollX
-            striped
-            bordered
-            data={data}
-        />
+      <MDBDataTable scrollX scrollY striped bordered data={tableData} />
     </div>
-    
   );
-}
+};
 
 export default ViewAddThings;
