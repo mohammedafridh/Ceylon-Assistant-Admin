@@ -3,11 +3,19 @@ import "../../DiscoverGallery/DiscoverGalleryContents/ViewDiscover.css";
 import { db } from "../../../../Firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
+import UpdateAddThingsModal from "../../../Modals/UpdateAddThingsModal";
 
-const ViewAddThings = () => {
+const ViewAddThings = ({sendData}) => {
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState();
   const [error, setError] = useState("");
+  const [modalOpened, setModalOpened] = useState(false)
+  const [currentItem,setCurrentItem] = useState('')
+
+  const setModal =(item)=>{
+    setModalOpened(true)
+    setCurrentItem(item)
+  }
 
   const columnData = [
     {
@@ -29,6 +37,12 @@ const ViewAddThings = () => {
       width: 200,
     },
     {
+      label: "Description",
+      field: "descriptionTwo",
+      sort: "asc",
+      width: 200,
+    },
+    {
       label: "Image",
       field: "image",
       sort: "asc",
@@ -42,6 +56,9 @@ const ViewAddThings = () => {
     },
   ];
 
+  const updateClick = (id) => {
+    console.log(id);
+  }
   useEffect(() => {
     setLoading(true);
     const allData = onSnapshot(
@@ -60,9 +77,12 @@ const ViewAddThings = () => {
             id: item.id,
             activity: item.Activity,
             description: item.description,
-            image:<img src = {item.image} style = {{width:170, height: 170}}/>,
-            actions: <button>Delete</button>,
+            descriptionTwo: item.description,
+            image:<img src = {item.image} alt="" style = {{width:170, height: 170}}/>,
+            actions: <div><button onClick = {() => setModal(item)}>Update</button></div>,
+            // actions: <div><button onClick = {() => sendData(item)}>Update</button></div>,
           };
+          
           rowDataCollection.push(newItem);
         });
         setTableData({
@@ -82,7 +102,12 @@ const ViewAddThings = () => {
 
   return (
     <div className="allDiscoveries">
-      <MDBDataTable scrollX scrollY striped bordered data={tableData} />
+      <MDBDataTable scrollX  striped bordered data={tableData} maxHeight="250px" />
+      <UpdateAddThingsModal
+        modalOpened={modalOpened}
+        setModalOpened={setModalOpened}
+        data={currentItem}
+      />
     </div>
   );
 };

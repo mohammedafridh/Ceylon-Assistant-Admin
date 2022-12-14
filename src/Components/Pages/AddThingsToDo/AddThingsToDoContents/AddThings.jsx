@@ -2,8 +2,9 @@ import React, {useState} from 'react'
 import './AddThings.css'
 import {collection, addDoc} from 'firebase/firestore'
 import {db} from '../../../../Firebase'
+import { useEffect } from 'react'
 
-const AddThings = () => {
+const AddThings = ({activityNameProp, descriptionProp, imageUrlProp}) => {
 
   const [activityName,setActivityName] = useState('')
   const [description,setDescription] = useState('')
@@ -22,6 +23,12 @@ const AddThings = () => {
             setDescription('')
         })
   }
+
+  useEffect(()=>{
+    setActivityName(activityNameProp)
+    setDescription(descriptionProp)
+    setImageUrl(imageUrlProp)
+  },[activityNameProp, descriptionProp, imageUrlProp])
 
   return (
     <div className="addThings">
