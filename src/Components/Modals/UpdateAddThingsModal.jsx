@@ -1,12 +1,26 @@
 import {useState} from 'react'
 import { Modal, useMantineTheme} from '@mantine/core';
 import '../Pages/AddThingsToDo/AddThingsToDoContents/AddThings.css'
+import { db } from "../../Firebase";
+import {query, doc, updateDoc} from "firebase/firestore";
 
 
 function UpdateAddThingsModal({modalOpened,setModalOpened,data}) {
   const theme = useMantineTheme();
   const [activityName,setActivityName] = useState(data.Activity)
   const [description,setDescription] = useState(data.description)
+
+  const updateDetails = async(data)=>{
+    const item = query(doc(db, 'ThingsToDoSrilanka', data.id));
+    await updateDoc(item, {
+      Activity: activityName,
+      description:description
+    }).then(()=>{
+        setActivityName('')
+        setDescription('')
+        setModalOpened(false)
+    })
+  }
 
   return (
     <Modal
@@ -20,7 +34,7 @@ function UpdateAddThingsModal({modalOpened,setModalOpened,data}) {
 
 <div className = 'addThingsForm'>
                   
-                  <h3>Add Things To Do</h3>
+                  <h3>Update {data.Activity}</h3>
                   
                   <div>
                     <input 
@@ -36,7 +50,7 @@ function UpdateAddThingsModal({modalOpened,setModalOpened,data}) {
                     onChange= {(e)=> setDescription(e.target.value)}></textarea>
       
                 <div className='addThingsBtnContainer'>
-                    <button className='addThingsBtn' onClick = ''> Add Things To Do</button>
+                    <button className='addThingsBtn' onClick = {()=>updateDetails(data)}> Update</button>
                 </div>   
               </div>
     </Modal>

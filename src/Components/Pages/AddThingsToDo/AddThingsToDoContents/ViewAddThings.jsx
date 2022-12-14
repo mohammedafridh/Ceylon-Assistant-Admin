@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../DiscoverGallery/DiscoverGalleryContents/ViewDiscover.css";
 import { db } from "../../../../Firebase";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot,query, doc, updateDoc, } from "firebase/firestore";
 import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import UpdateAddThingsModal from "../../../Modals/UpdateAddThingsModal";
 
@@ -15,6 +15,13 @@ const ViewAddThings = ({sendData}) => {
   const setModal =(item)=>{
     setModalOpened(true)
     setCurrentItem(item)
+  }
+
+  const deleteItem = async(itemId)=>{
+    const item = query(doc(db, 'ThingsToDoSrilanka', itemId));
+    await updateDoc(item, {
+      status: 'inactive'
+    })
   }
 
   const columnData = [
@@ -37,12 +44,6 @@ const ViewAddThings = ({sendData}) => {
       width: 200,
     },
     {
-      label: "Description",
-      field: "descriptionTwo",
-      sort: "asc",
-      width: 200,
-    },
-    {
       label: "Image",
       field: "image",
       sort: "asc",
@@ -56,9 +57,6 @@ const ViewAddThings = ({sendData}) => {
     },
   ];
 
-  const updateClick = (id) => {
-    console.log(id);
-  }
   useEffect(() => {
     setLoading(true);
     const allData = onSnapshot(
@@ -77,9 +75,11 @@ const ViewAddThings = ({sendData}) => {
             id: item.id,
             activity: item.Activity,
             description: item.description,
-            descriptionTwo: item.description,
             image:<img src = {item.image} alt="" style = {{width:170, height: 170}}/>,
-            actions: <div><button onClick = {() => setModal(item)}>Update</button></div>,
+            actions: <div className="btnHolder">
+              <button onClick = {() => deleteItem(item.id)} className = 'dltBtn'>Delete</button>
+              <button onClick = {() => setModal(item)} className = 'updateBtn'>Update</button>             
+            </div>
             // actions: <div><button onClick = {() => sendData(item)}>Update</button></div>,
           };
           

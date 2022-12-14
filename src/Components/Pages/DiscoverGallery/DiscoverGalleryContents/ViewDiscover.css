@@ -21,3 +21,17 @@
     padding: 5px;
     border-radius: 5px;
 }
+
+.updateBtn{
+    background-color: rgb(17, 219, 44);
+    border: none;
+    outline: none;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.btnHolder{
+    display: flex;
+    gap: 0.3rem;
+}
