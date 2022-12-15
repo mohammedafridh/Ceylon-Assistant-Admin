@@ -1,13 +1,28 @@
 import React, { useState, useEffect } from "react";
 import "../../DiscoverGallery/DiscoverGalleryContents/ViewDiscover.css";
 import { db } from "../../../../Firebase";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot,query, doc, updateDoc, } from "firebase/firestore";
 import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
+import UpdateFaqModal from "../../../Modals/UpdateFaqModal";
 
 const ViewFaq = () => {
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState();
   const [error, setError] = useState("");
+  const [modalOpened, setModalOpened] = useState(false)
+  const [currentItem,setCurrentItem] = useState('')
+
+  const setModal =(item)=>{
+    setModalOpened(true)
+    setCurrentItem(item)
+  }
+
+  const deleteItem = async(itemId)=>{
+    const item = query(doc(db, 'ThingsToDoSrilanka', itemId));
+    await updateDoc(item, {
+      status: 'inactive'
+    })
+  }
 
   const columnData = [
     {
@@ -54,7 +69,10 @@ const ViewFaq = () => {
             id: item.id,
             question: item.question,
             answer: item.answer,
-            actions: <div><button>Delete</button><button>Update</button></div>
+            actions: <div className="btnHolder">
+              <button onClick = {() => deleteItem(item.id)} className = 'dltBtn'>Delete</button>
+              <button onClick = {() => setModal(item)} className = 'updateBtn'>Update</button> 
+            </div>
           };
           rowDataCollection.push(newItem);
         });
@@ -75,7 +93,12 @@ const ViewFaq = () => {
 
   return (
     <div className="allDiscoveries">
-      <MDBDataTable scrollX striped bordered data={tableData} />
+      <MDBDataTable scrollX striped bordered data={tableData} maxHeight="200px"/>
+      <UpdateFaqModal
+        modalOpened={modalOpened}
+        setModalOpened={setModalOpened}
+        data={currentItem}
+      />
     </div>
   );
 };

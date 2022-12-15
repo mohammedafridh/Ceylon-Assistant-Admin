@@ -1,110 +1,122 @@
-import React, { useEffect,useState } from 'react'
-import './ViewDiscover.css'
-import { MDBTable, MDBTableBody, MDBTableHead } from 'mdbreact';
-import {db} from '../../../../Firebase'
-import {collection, onSnapshot} from 'firebase/firestore'
+import React, { useState, useEffect } from "react";
+import "../../DiscoverGallery/DiscoverGalleryContents/ViewDiscover.css";
+import { db } from "../../../../Firebase";
+import { collection, onSnapshot,query, doc, updateDoc, } from "firebase/firestore";
+import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
+import UpdateAddThingsModal from "../../../Modals/UpdateAddThingsModal";
 
-const AllAdmins = () => {
+const ViewDiscover = ({sendData}) => {
+  const [loading, setLoading] = useState(false);
+  const [tableData, setTableData] = useState();
+  const [error, setError] = useState("");
+  const [modalOpened, setModalOpened] = useState(false)
+  const [currentItem,setCurrentItem] = useState('')
 
-  const [loading,setLoading] = useState(false)
-  const [rowData,setRowData] = useState([])
-  const [error,setError] = useState('')
+  const setModal =(item)=>{
+    // setModalOpened(true)
+    // setCurrentItem(item)
+  }
 
-  const columns = [
-    
-      {
-        label: 'Discovery Id',
-        field: 'id',
-        sort: 'asc',
-        width: 250
-      },
-      {
-        label: 'Destination',
-        field: 'destination',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: 'Image',
-        field: 'image',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: 'Description',
-        field: 'description',
-        sort: 'asc',
-        width: 400
-      },
-      {
-        label: "Status",
-        field: 'status',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: "Actions",
-        field: 'actions',
-        sort: 'asc',
-        width: 130
-      }
-    ]
-  
-    useEffect(()=>{
-      setLoading(true)
-      const allData = onSnapshot(collection(db,'Discover_Srilanka'),(snapshot)=>{
-        let list = []
-        snapshot.docs.forEach((doc)=>{
+  const deleteItem = async(itemId)=>{
+    const item = query(doc(db, 'Discover_Srilanka', itemId));
+    await updateDoc(item, {
+      status: 'inactive'
+    })
+  }
+
+  const columnData = [
+    {
+      label: "Discovery Id",
+      field: "id",
+      sort: "asc",
+      width: 250,
+    },
+    {
+      label: "Image",
+      field: "image",
+      sort: "asc",
+      width: 200,
+    },
+    {
+      label: "Destination",
+      field: "destination",
+      sort: "asc",
+      width: 200,
+    },
+    {
+      label: "Nickname",
+      field: "nickname",
+      sort: "asc",
+      width: 200,
+    },
+    {
+      label: "Description",
+      field: "description",
+      sort: "asc",
+      width: 200,
+    },
+    {
+      label: "Actions",
+      field: "actions",
+      sort: "asc",
+      width: 130,
+    },
+  ];
+
+  useEffect(() => {
+    setLoading(true);
+    const allData = onSnapshot(
+      collection(db, "Discover_Srilanka"),
+      (snapshot) => {
+        let list = [];
+        snapshot.docs.forEach((doc) => {
           list.push({
-            id:doc.id,
-            ...doc.data()
-          })
-        })
-        let rowDataCollection = []
-        list.forEach((item) =>{
-          const newItem = { id: item.id, destination: item.destination, image: item.image, description: item.description, status: item.status}
-          rowDataCollection.push(newItem)
-        })
-        setRowData(rowDataCollection)
-        console.log({rowDataCollection})
-        setLoading(false)
-      },(error)=>{
-        setError(error.message)
-      });
-      return ()=>{
-        allData()
-      };
-    },[]);
-
-    return (
-      <div className="allDiscoveries">
-        <MDBTable scrollX>
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        let rowDataCollection = [];
+        list.forEach((item) => {
+          const newItem = {
+            id: item.id,
+            image:<img src = {item.image} alt="" style = {{width:170, height: 170}}/>,
+            destination: item.destination,
+            nickname: item.nickname,
+            description: item.description,           
+            actions: <div className="btnHolder">
+              <button onClick = {() => deleteItem(item.id)} className = 'dltBtn'>Delete</button>
+              <button onClick = {() => setModal(item)} className = 'updateBtn'>Update</button>             
+            </div>
+            // actions: <div><button onClick = {() => sendData(item)}>Update</button></div>,
+          };
           
-          <MDBTableHead>
-            <tr>
-              {columns.map((item, index) => (
-                <th>{item.label}</th>
-              ))}
-            </tr>
-          </MDBTableHead>
-          <MDBTableBody>
-            {
-                rowData.map((item, index) => (
-                  <tr key={index}>
-                      <td>{item.id}</td>
-                      <td>{item.destination}</td>
-                      <td><img width="500" height = '200' alt='' src={item.image}/></td>
-                      <td>{item.description}</td>
-                      <td>{item.status}</td>
-                      <td><button className='dltBtn'>Delete</button></td>
-                  </tr>
-                ))  
-            }
-          </MDBTableBody>
-        </MDBTable>
-      </div>
-      
+          rowDataCollection.push(newItem);
+        });
+        setTableData({
+          columns: columnData,
+          rows: rowDataCollection,
+        });
+        setLoading(false);
+      },
+      (error) => {
+        setError(error.message);
+      }
     );
-}
+    return () => {
+      allData();
+    };
+  }, []);
 
-export default AllAdmins;
+  return (
+    <div className="allDiscoveries">
+      <MDBDataTable scrollX  striped bordered data={tableData} maxHeight="250px" />
+      {/* <UpdateAddThingsModal
+        modalOpened={modalOpened}
+        setModalOpened={setModalOpened}
+        data={currentItem}
+      /> */}
+    </div>
+  );
+};
+
+export default ViewDiscover;
