@@ -1,8 +1,10 @@
 import React from 'react'
 import './TopBar.css'
 import {PersonAdd,Message, Settings} from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 const TopBar = () => {
+
   return (
     <div className = 'topBar'>
         <div className="topBarWrapper">
@@ -20,9 +22,11 @@ const TopBar = () => {
                     <Message />
                     <span className="topIconBadge">99+</span>
                 </div>
-                
-                <img src="https://thumbs.dreamstime.com/b/attractive-young-woman-taking-selfie-attractive-young-woman-taking-selfie-color-background-125943076.jpg" 
-                alt="" className="topAvatar" />
+
+                <div>
+                    <img src="https://thumbs.dreamstime.com/b/attractive-young-woman-taking-selfie-attractive-young-woman-taking-selfie-color-background-125943076.jpg" 
+                    alt="" className="topAvatar" />
+                </div>
             </div>
         </div>    
     </div>

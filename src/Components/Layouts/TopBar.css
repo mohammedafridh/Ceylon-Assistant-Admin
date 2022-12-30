@@ -55,3 +55,34 @@
     border-radius: 50%;
     cursor: pointer;
 }
+
+.dropDown{
+    display: none;
+    
+}
+
+.header ul li:hover .dropDown{
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background-color: white;
+    width: 125px;
+    
+}
+
+.header ul li:hover .dropDown ul{
+    display: block;
+    margin: 10px;
+    position: relative;
+    
+}
+
+.header ul li:hover .dropDown ul li{
+    width: 100px;
+    padding: 10px 0;
+   position: relative;
+   left: -60px;
+   color: black;
+   z-index: 2;
+}

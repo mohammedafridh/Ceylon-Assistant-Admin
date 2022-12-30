@@ -12,11 +12,17 @@ import AdminPageSetup from './Components/Pages/Users/UsersContents/Admin/AdminPa
 import GuidePageSetup from './Components/Pages/Users/UsersContents/Guides/GuidePageSetup';
 import TouristPageSetup from './Components/Pages/Users/UsersContents/Tourists/TouristPageSetup';
 import Messages from './Components/Pages/Messages/Messages';
-
+import { GuideProvider  } from './Context/GuidesContext';
+import GuideRequests from './Components/Pages/GuideRequests/GuideRequests';
+import Login from './Components/Pages/AuthenticationPage/Login';
 function App() {
     return(
-        <div className = 'adminPanel'>
+        <GuideProvider>
+        
+            <div className = 'adminPanel'>
+
             <div className = "blur" style = {{top:'36%', left:'-8rem'}}></div>
+
             <TopBar />
                 <div className = 'containers'>
                     <div className = 'sideBarContainer'>
@@ -36,11 +42,14 @@ function App() {
                             <Route path = '/toursGallery' element = {<ToursGallery />} />
                             <Route path = '/faq' element = {<Faq />} />
                             <Route path = '/messages' element = {<Messages />} />
+                            <Route path = '/guideRequests' element = {<GuideRequests />} />
                         </Routes>
                     </div>
                                  
                 </div>    
         </div>
+        </GuideProvider>
+        
         )
     
 }

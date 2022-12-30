@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../DiscoverGallery/DiscoverGalleryContents/ViewDiscover.css";
 import { db } from "../../../../Firebase";
-import { collection, onSnapshot,query, doc, updateDoc, } from "firebase/firestore";
+import { collection, onSnapshot, doc, deleteDoc, } from "firebase/firestore";
 import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import UpdateFaqModal from "../../../Modals/UpdateFaqModal";
 
@@ -18,10 +18,7 @@ const ViewFaq = () => {
   }
 
   const deleteItem = async(itemId)=>{
-    const item = query(doc(db, 'ThingsToDoSrilanka', itemId));
-    await updateDoc(item, {
-      status: 'inactive'
-    })
+    const item = deleteDoc(doc(db, 'faq', itemId));
   }
 
   const columnData = [

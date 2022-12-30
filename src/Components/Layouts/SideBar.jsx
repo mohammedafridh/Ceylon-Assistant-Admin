@@ -1,66 +1,135 @@
-import React from 'react'
-import './SideBar.css'
-import {HelpCenter, People, PlaylistAddCheck, TimeToLeave,TravelExplore,Collections, Mail, Home, BookOnline} from '@mui/icons-material';
-import {Link} from 'react-router-dom'
+import React from "react";
+import "./SideBar.css";
+import {
+  HelpCenter,
+  People,
+  PlaylistAddCheck,
+  TimeToLeave,
+  TravelExplore,
+  Collections,
+  Mail,
+  Home,
+  BookOnline,
+  Message, 
+  PersonAdd
+} from "@mui/icons-material";
+import { Link, NavLink } from "react-router-dom";
 
 const SideBar = () => {
   return (
     <div className="sideBar">
-        <div className="sideBarWrapper">
-            <div className="sideBarMenu">
-                <h3>Dashboard</h3>
-                <ul className="sideBarList">
-                    <li className="sideBarListItem active">
-                        <Link to = '/'><Home/>Home </Link>
-                    </li>
-                </ul>
-            </div>
-
-            <div className="sideBarMenu">
-                <h3>Quick Menu</h3>
-                <ul className="sideBarList">
-
-                    <li className="sideBarListItem">
-                        <Link to = '/adminPage'> <People/> Users </Link>
-                    </li>
-                    <li className="sideBarListItem">
-                    <Link to = '/bookings'> <BookOnline/> Bookings </Link>
-                    </li>
-                    <li className="sideBarListItem">
-                    <Link to = '/discover'><TravelExplore/> Discover Gallery </Link>
-                    </li>
-                    <li className="sideBarListItem">
-                    <Link to = '/addThingsToDo'><PlaylistAddCheck/> Things To Do Gallery</Link>
-                    </li>
-                    <li className="sideBarListItem">
-                    <Link to = '/toursGallery'><Collections/> Tours Gallery </Link>
-                    </li>
-                    <li className="sideBarListItem">
-                    <Link to = '/faq'><HelpCenter/> FAQ</Link>
-                    </li>
-                </ul>
-            </div>
-
-            <div className="sideBarMenu">
-                <h3>Notifications </h3>
-                <ul className="sideBarList">
-                    
-                    <li className="sideBarListItem">
-                    <Link to = '/messages'><Mail/> Messages</Link>
-                    </li>
-
-                    <li className="sideBarListItem">
-                        <Mail/> Guide Requests
-                    </li>
-
-                    <li className="sideBarListItem">
-                        <Mail/> Mail Subscription
-                    </li>
-                </ul>
-            </div>
+      <div className="sideBarWrapper">
+        <div className="sideBarMenu">
+          <h3>Dashboard</h3>
+          <ul className="sideBarList">
+           
+              <NavLink to="/" className={({ isActive }) =>
+                  isActive ? "sideBarListItem active" : "sideBarListItem"
+                } end>
+                <Home />
+                Home{" "}
+              </NavLink>
+            
+          </ul>
         </div>
-    </div>
-  )
-}
 
-export default SideBar
+        <div className="sideBarMenu">
+          <h3>Quick Menu</h3>
+          <ul className="sideBarList">
+            
+              <NavLink
+                to="/adminPage"
+                className={({ isActive }) =>
+                  isActive ? "sideBarListItem active" : "sideBarListItem"
+                }
+              >
+                {" "}
+                <People /> Users{" "}
+              </NavLink>
+        
+            
+              <NavLink
+                to="/bookings"
+                className={({ isActive }) =>
+                  isActive ? "sideBarListItem active" : "sideBarListItem"
+                }
+              >
+                {" "}
+                <BookOnline /> Bookings{" "}
+              </NavLink>
+            
+            
+              <NavLink
+                to="/discover"
+                className={({ isActive }) =>
+                  isActive ? "sideBarListItem active" : "sideBarListItem"
+                }
+              >
+                <TravelExplore /> Discover Gallery{" "}
+              </NavLink>
+           
+         
+              <NavLink
+                to="/addThingsToDo"
+                className={({ isActive }) =>
+                  isActive ? "sideBarListItem active" : "sideBarListItem"
+                }
+              >
+                <PlaylistAddCheck /> Things To Do Gallery
+              </NavLink>
+         
+          
+              <NavLink
+                to="/toursGallery"
+                className={({ isActive }) =>
+                  isActive ? "sideBarListItem active" : "sideBarListItem"
+                }
+              >
+                <Collections /> Tours Gallery{" "}
+              </NavLink>
+        
+           
+              <NavLink
+                to="/faq"
+                className={({ isActive }) =>
+                  isActive ? "sideBarListItem active" : "sideBarListItem"
+                }
+              >
+                <HelpCenter /> FAQ
+              </NavLink>
+           
+          </ul>
+        </div>
+
+        <div className="sideBarMenu">
+          <h3>Notifications </h3>
+          <ul className="sideBarList">
+            <NavLink
+                to="/messages"
+                className={({ isActive }) =>
+                  isActive ? "sideBarListItem active" : "sideBarListItem"
+                }
+              >
+                <Message /> Messages
+              </NavLink>
+
+              <NavLink
+                to="/guideRequests"
+                className={({ isActive }) =>
+                  isActive ? "sideBarListItem active" : "sideBarListItem"
+                }
+              >
+                <PersonAdd /> Guide Requests
+              </NavLink>
+
+            <li className="sideBarListItem">
+              <Mail /> Mail Subscription
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SideBar;

@@ -133,7 +133,15 @@
     width: 17rem!important;
     border: none!important;
     outline: none!important;
+}
 
+.userInputModal{
+    border: none;
+    outline: none;
+    background-color: var(--inputColor);
+    border-radius: 8px;
+    padding: 8px;
+    flex: 1;
 }
 
 .langDrop{

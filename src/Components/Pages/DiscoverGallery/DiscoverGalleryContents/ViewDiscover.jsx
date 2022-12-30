@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "../../DiscoverGallery/DiscoverGalleryContents/ViewDiscover.css";
 import { db } from "../../../../Firebase";
-import { collection, onSnapshot,query, doc, updateDoc, } from "firebase/firestore";
+import { collection, onSnapshot,query, doc, deleteDoc, } from "firebase/firestore";
 import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import UpdateAddThingsModal from "../../../Modals/UpdateAddThingsModal";
+import UpdateDiscoverModal from "../../../Modals/UpdateDiscoverModal";
 
 const ViewDiscover = ({sendData}) => {
   const [loading, setLoading] = useState(false);
@@ -13,15 +14,13 @@ const ViewDiscover = ({sendData}) => {
   const [currentItem,setCurrentItem] = useState('')
 
   const setModal =(item)=>{
-    // setModalOpened(true)
-    // setCurrentItem(item)
+    setModalOpened(true)
+    setCurrentItem(item)
   }
 
   const deleteItem = async(itemId)=>{
-    const item = query(doc(db, 'Discover_Srilanka', itemId));
-    await updateDoc(item, {
-      status: 'inactive'
-    })
+    const item = deleteDoc(doc(db, 'Discover_Srilanka', itemId));
+    alert("Record Deleted Successfully")
   }
 
   const columnData = [
@@ -110,11 +109,11 @@ const ViewDiscover = ({sendData}) => {
   return (
     <div className="allDiscoveries">
       <MDBDataTable scrollX  striped bordered data={tableData} maxHeight="250px" />
-      {/* <UpdateAddThingsModal
+      <UpdateDiscoverModal
         modalOpened={modalOpened}
         setModalOpened={setModalOpened}
         data={currentItem}
-      /> */}
+      />
     </div>
   );
 };

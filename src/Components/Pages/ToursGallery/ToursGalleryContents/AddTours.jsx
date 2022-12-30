@@ -28,7 +28,7 @@ const AddTours = () => {
                     type="text" 
                     className='addTourInput' 
                     onChange = {(e)=> setGuide(e.target.value)}
-                    placeholder='Guide Name'
+                    placeholder='Guide ID'
                     value = {guide}
                     required
                 />
@@ -46,7 +46,6 @@ const AddTours = () => {
                 style = {{width:"20rem", outline:"none"}} 
                 onChange = {(e)=> setDistrict(e.target.value)} 
                 placeholder='District'
-                value = {district}
                 required
 
                 data={[
@@ -86,7 +85,6 @@ const AddTours = () => {
                         type="file" 
                         name = 'coverImg' 
                         onChange = {(e)=>setMainImage(e.target.files[0])}
-                        value = {mainImage}
                         required
                     />
                 </div>
@@ -98,7 +96,6 @@ const AddTours = () => {
                           type="file" 
                           name = 'coverImg' 
                           onChange = {(e)=>setImage1(e.target.files[0])}
-                          value = {image1}
                       />
                 </div>
 
@@ -108,7 +105,6 @@ const AddTours = () => {
                           type="file" 
                           name = 'coverImg' 
                           onChange = {(e)=>setImage2(e.target.files[0])}
-                          value = {image2}
                       />
                 </div>
               </div>
@@ -120,7 +116,6 @@ const AddTours = () => {
                           type="file" 
                           name = 'coverImg' 
                           onChange = {(e)=>setImage3(e.target.files[0])}
-                          value = {image3}
                       />
                 </div>
 
@@ -130,7 +125,6 @@ const AddTours = () => {
                           type="file" 
                           name = 'coverImg' 
                           onChange = {(e)=>setImage4(e.target.files[0])}
-                          value = {image4}
                       />
                 </div>
               </div>

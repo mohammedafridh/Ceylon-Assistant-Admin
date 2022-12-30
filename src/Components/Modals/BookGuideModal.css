@@ -1,0 +1,42 @@
+.infoForm{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.infoForm>div{
+    display: flex;
+    gap: 1rem;
+    height: 2rem;
+    width: 100%;
+}
+
+.infInput{
+    border: none;
+    outline: none;
+    background-color: var(--inputColor);
+    border-radius: 8px;
+    padding: 20px;
+    flex: 1;
+}
+
+.infoSelect{
+    background-color: var(--inputColor)!important;
+}
+
+.infoForm button{
+    width: 6rem;
+    height: 2rem;
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    background: var(--buttonBg);
+    transition: all 100ms ease-out;
+}

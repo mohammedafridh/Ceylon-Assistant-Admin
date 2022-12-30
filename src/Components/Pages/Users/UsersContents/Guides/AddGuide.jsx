@@ -28,10 +28,12 @@ const AddGuide = () => {
     const [nicImage, setNicImage] = useState('')
     const [passportImage, setPassportImage] = useState('')
     const [status, setStatus] = useState('Active')
+    const [availability, setAvailability] = useState('Available')
     const [error, setError] = useState('')
     const[url,setUrl] = useState(null)
     const[nicUrl,setNicUrl] = useState(null)
     const [formStatus, setFormStatus] = useState('')
+    const[modalOpened,setModalOpened] = useState(false)
     const {signUp} = useUserAuth();
     const current = new Date();
     const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
@@ -99,7 +101,7 @@ const AddGuide = () => {
         { value: 'Vavuniya', label: 'Vavuniya' },
     ]
 
-    const[district,setDistrict] = useState(typeData.label)
+    const[district,setDistrict] = useState(districtData.label)
       const districtHandler = (e)=>{
         setDistrict(e.label)
       }
@@ -112,7 +114,7 @@ const AddGuide = () => {
       { value: 'Mini-Jeep', label: 'Mini Jeep' },
     ]
 
-    const[vehicleType,setVehicleType] = useState(typeData.label)
+    const[vehicleType,setVehicleType] = useState(carType.label)
       const vehicleHandler = (e)=>{
         setVehicleType(e.label)
       }
@@ -120,42 +122,47 @@ const AddGuide = () => {
 
       useEffect(() => {
         const getImageUrl = async () => {
-            const guideProfileRef = ref(storage, `GuideProfile/${profileImage.name + v4()}`);
-            uploadBytes(guideProfileRef, profileImage)
-              .then(() => {
-                getDownloadURL(guideProfileRef)
-                  .then((url) => {
-                    console.log({ url });
-                    setUrl(url);
-                  })
-                  .catch((err) => {
-                    setError(err.message, "error getting the image");
-                  });
-              })
-              .catch((err) => {
-                setError(err);
-              });
+            const guideProfileRef = ref(storage, `GuideProfile/${profileImage.name}`);
+            const uploadTask = uploadBytes(guideProfileRef, profileImage)
+            uploadTask.on(
+                      "state_changed",
+                      (snapshot) => {
+                          const percent = Math.round(
+                              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                          );
+                      },
+                      (err) => console.log(err),
+                      () => {
+                          // download url
+                          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                              setUrl(url);
+                          });
+                      }
+                  ); 
           };
         const imageUrl = async () => {
           await getImageUrl();
         };
         const getNicImageUrl = async () => {
-            const guideNicRef = ref(storage, `GuideNic/${nicImage.name + v4()}`);
-            uploadBytes(guideNicRef, nicImage)
-              .then(() => {
-                getDownloadURL(guideNicRef)
-                  .then((url) => {
-                    console.log({ url });
-                    setNicUrl(url);
-                  })
-                  .catch((err) => {
-                    setError(err.message, "error getting the image");
-                  });
-              })
-              .catch((err) => {
-                setError(err);
-              });
+            const guideNicRef = ref(storage, `GuideNic/${nicImage.name}`);
+            const uploadTask = uploadBytes(guideNicRef, nicImage)
+            uploadTask.on(
+                      "state_changed",
+                      (snapshot) => {
+                          const percent = Math.round(
+                              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                          );
+                      },
+                      (err) => console.log(err),
+                      () => {
+                          // download url
+                          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                              setNicUrl(url);
+                          });
+                      }
+                  ); 
           };
+
         const nicImageUrl = async () => {
           await getNicImageUrl();
         };
@@ -165,13 +172,13 @@ const AddGuide = () => {
 
 
       const guideHandler = async (e) => {
-        validatePassword()
+        // validatePassword()
         e.preventDefault();
         setError("");
         try {
-          if(passwordMatch === false) {
-            return
-          }
+        //   if(passwordMatch === false) {
+        //     return
+        //   }
           
           signUp(email, password)
               .then((data) => {
@@ -196,7 +203,8 @@ const AddGuide = () => {
                     email: email,
                     password:password,
                     publishedDate:addDate,
-                    status:status
+                    status:status,
+                    availability:availability
                 };
                 setDoc(addDetails, details);
                 setFName('')
@@ -217,23 +225,24 @@ const AddGuide = () => {
                 setEmail('')
                 setPassword('')
                 setConfirmPassword("");
-                setFormStatus("Success")
+                setModalOpened(true)
+                // setFormStatus("Success")
               })
               .catch((error) => {
-                setFormStatus("Error")
+                // setFormStatus("Error")
               });
           } catch (err) {
             setError(err.message);
-            setFormStatus("Error")
+            // setFormStatus("Error")
           }
     }
 
-    const validatePassword = () => {
-      console.log(passwordMatch, password, confirmPassword)
-      password === confirmPassword
-        ? setPasswordMatch(true)
-        : setPasswordMatch(false);
-    };
+    // const validatePassword = () => {
+    //   console.log(passwordMatch, password, confirmPassword)
+    //   password === confirmPassword
+    //     ? setPasswordMatch(true)
+    //     : setPasswordMatch(false);
+    // };
 
   return (
     <div className='UsersContainer'>
@@ -242,7 +251,7 @@ const AddGuide = () => {
         <form onSubmit={guideHandler} className = 'addUserForm'>
                 
             <h3>Add Guide</h3>
-            { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
+            {/* { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>} */}
 
 
             <div>
@@ -393,14 +402,14 @@ const AddGuide = () => {
                     required
                 />
 
-                <input 
+                {/* <input 
                     type="password"
                     className="userInput"
                     placeholder="Confirm Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}  
                     required
-                />
+                /> */}
             </div>
            
 
@@ -431,7 +440,7 @@ const AddGuide = () => {
             </button>
         </form>
         </div>
-        <SuccessModal modalOpened={formStatus === 'Success' ?  true : false} setModalOpened={() => {setFormStatus('')}}/>
+        <SuccessModal modalOpened={modalOpened} setModalOpened={setModalOpened}/>
      </div>
 
   )

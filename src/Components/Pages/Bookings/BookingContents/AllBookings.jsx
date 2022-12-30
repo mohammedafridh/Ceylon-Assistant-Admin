@@ -1,101 +1,143 @@
-import React from 'react'
-import './AllBookings.css'
-import { MDBDataTable } from 'mdbreact';
+import React, { useContext } from "react";
+import { useState } from "react";
+import "./AllBookings.css";
+import { MDBDataTable } from "mdbreact";
+import { db } from "../../../../Firebase";
+import { useEffect } from "react";
+import { collection, onSnapshot,query,doc,updateDoc } from "firebase/firestore";
+import { useGuides } from "../../../../Context/GuidesContext";
+
 
 const AllBookings = () => {
-  const data = {
-    columns: [
-      {
-        label: 'Tour Id',
-        field: 'id',
-        sort: 'asc',
-        width: 250
-      },
-      {
-        label: 'Guide Email',
-        field: 'email',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: 'Contact Number',
-        field: 'contact',
-        sort: 'asc',
-        width: 150
-      },
-      {
-        label: 'Tour Destination',
-        field: 'tourDestination',
-        sort: 'asc',
-        width: 150
-      },
-      {
-        label: 'Pick-up Destination',
-        field: 'pickupDestination',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: 'From',
-        field: 'from',
-        sort: 'asc',
-        width: 150
-      },
-      {
-        label: 'To',
-        field: 'to',
-        sort: 'asc',
-        width: 150
-      },
-      {
-        label: 'Tour Time.',
-        field: 'time',
-        sort: 'asc',
-        width: 150
-      },
-      {
-        label: "Status",
-        field: 'status',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: "Actions",
-        field: 'actions',
-        sort: 'asc',
-        width: 130
+  const [tableData, setTableData] = useState();
+  const guides = useGuides()
+  const columnData = [
+    {
+      label: "Tour Id",
+      field: "id",
+      sort: "asc",
+      width: 250,
+    },
+    {
+      label: "Guide Email",
+      field: "email",
+      sort: "asc",
+      width: 200,
+    },
+    {
+      label: "Contact Number",
+      field: "contact",
+      sort: "asc",
+      width: 150,
+    },
+    {
+      label: "Tour Destination",
+      field: "tourDestination",
+      sort: "asc",
+      width: 150,
+    },
+    {
+      label: "Pick-up Destination",
+      field: "pickupDestination",
+      sort: "asc",
+      width: 200,
+    },
+    {
+      label: "From",
+      field: "from",
+      sort: "asc",
+      width: 150,
+    },
+    {
+      label: "To",
+      field: "to",
+      sort: "asc",
+      width: 150,
+    },
+    {
+      label: "Tour Time.",
+      field: "time",
+      sort: "asc",
+      width: 150,
+    },
+    {
+      label: "Status",
+      field: "status",
+      sort: "asc",
+      width: 200,
+    },
+    {
+      label: "Actions",
+      field: "actions",
+      sort: "asc",
+      width: 130,
+    },
+  ];
+
+  useEffect(() => {
+    const findGuideEmail = (id) => {
+      const guide = guides.find(guide => guide.id === id)
+      return guide ? guide.email : null
+      
+    }
+    const bookingData = onSnapshot(
+      collection(db, "pending_booking"),
+      (snapshot) => {
+        let list = [];
+        snapshot.docs.forEach((doc) => {
+          list.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        list = list.filter((booking)=>booking.status==="Active")
+        let rowDataCollection = [];
+        list.forEach((item) => {
+          const newItem = {
+            id: item.id,
+            email: findGuideEmail(item.guide),
+            contact: item.contactNumber,
+            tourDestination: item.destination,
+            pickupDestination: item.location,
+            from: item.startData,
+            to: item.endDate,
+            time: item.time,
+            status: item.status,
+            actions: (
+              <div>
+                <button 
+                style = {{color:'white', backgroundColor:'red', padding:6, border:'none'}}
+                onClick = {()=>cancelBooking(item.id)}>Cancel</button>
+              </div>
+            ),
+          };
+          rowDataCollection.push(newItem);
+        });
+        setTableData({
+          columns: columnData,
+          rows: rowDataCollection,
+        });
       }
-    ],
-    rows: [
-      {
-        id: 'Tiger',
-        email: 'Nixon',
-        contact: 'System Architect',
-        tourDestination: 'Edinburgh',
-        pickupDestination: '61',
-        from: '2011/04/25',
-        to: '$320,800',
-        time: 5421,
-        status: 'pending',
-        actions: <button 
-        style = {{backgroundColor:'red', color:'white', padding:5, borderRadius:6, width:100, border:'none'}}>
-          Delete</button>
-      }
-    ]
-  };
+    );
+
+    return () => {
+      bookingData();
+    };
+  }, [guides]);
+
+  const cancelBooking = async(itemId)=>{
+    const bookingCancel = query(doc(db,'pending_booking',itemId));
+     await updateDoc(bookingCancel, {
+      status: 'inactive'
+     });
+  }
 
   return (
     <div className="allBookings">
-        <h3>All Bookings</h3>
-        <MDBDataTable
-            scrollX
-            striped
-            bordered
-            data={data}
-        />
+      <h3>All Bookings</h3>
+      <MDBDataTable scrollX striped bordered data={tableData} maxHeight="200px"/>
     </div>
-    
   );
-}
+};
 
 export default AllBookings;

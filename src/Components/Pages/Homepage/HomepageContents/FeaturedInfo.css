@@ -3,14 +3,15 @@
     display: flex;
     justify-content: space-between;
     padding: 0rem 1rem;
+    margin-bottom: 2rem;
     
 }
 
 .featuredItem{
     background-color: var(--cardColor);
     flex: 1;
-    margin: 0 20px;
-    padding: 30px;
+    margin: 0 10px;
+    padding: 20px;
     border-radius: 10px;
     cursor: pointer;
     -webkit-box-shadow: 8px 8px 31px -3px rgba(0,0,0,0.79); 
@@ -18,7 +19,7 @@
 }
 
 .featuredTitle{
-    font-size: 20px;
+    font-size:18px;
 }
 
 .featuredMoneyContainer{

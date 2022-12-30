@@ -24,6 +24,7 @@ const AddTourist = () => {
     const[url,setUrl] = useState(null)
     const[passportUrl,setPassportUrl] = useState(null)
     const [formStatus, setFormStatus] = useState('')
+    const[modalOpened,setModalOpened] = useState(false)
     const {signUp} = useUserAuth();
     const current = new Date();
     const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
@@ -74,13 +75,10 @@ const AddTourist = () => {
       }, [profileImage, passportImage]);
 
       const touristHandler = async (e) => {
-        validatePassword()
+        // validatePassword()
         e.preventDefault();
         setError("");
         try {
-          if(passwordMatch === false) {
-            return
-          }
             signUp(email, password)
               .then((data) => {
                 const addDetails = doc(db, "Tourist", data.user.uid);    
@@ -89,6 +87,7 @@ const AddTourist = () => {
                     lastName:lName,
                     contactNumber: contactNumber,
                     image: url,
+                    passportNumber:passportNumber,
                     passPortImage: passportUrl,
                     email: email,
                     password:password,
@@ -99,29 +98,30 @@ const AddTourist = () => {
                 setFName('')
                 setLName('')
                 setContactNumber('')
+                setPassportNumber('')
                 setUrl('')
                 setPassportUrl('')
                 setEmail('')
                 setPassword('')
-                setConfirmPassword('');
-                setFormStatus("Success")
+                setModalOpened(true)
+                // setFormStatus("Success")
               })
               .catch((error) => {
-                setFormStatus("Error")
+                // setFormStatus("Error")
                 setError(error.message)
               });
           } catch (err) {
             setError(err.message);
-            setFormStatus("Error")
+            // setFormStatus("Error")
           }
     }
 
-    const validatePassword = () => {
-      console.log(passwordMatch, password, confirmPassword)
-      password === confirmPassword
-        ? setPasswordMatch(true)
-        : setPasswordMatch(false);
-    };
+    // const validatePassword = () => {
+    //   console.log(passwordMatch, password, confirmPassword)
+    //   password === confirmPassword
+    //     ? setPasswordMatch(true)
+    //     : setPasswordMatch(false);
+    // };
 
   return (
     <div className='UsersContainer'>
@@ -129,7 +129,6 @@ const AddTourist = () => {
         <form onSubmit={touristHandler} className = 'addUserForm'>
                 
             <h3>Add Tourist</h3>
-            { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
 
             <div>
                     <input 
@@ -191,14 +190,6 @@ const AddTourist = () => {
                     required
                 />
 
-                <input 
-                    type="password" 
-                    className='userInput' 
-                    onChange = {(e)=> setConfirmPassword(e.target.value)}
-                    placeholder='Confirm Password'
-                    value = {confirmPassword}
-                    required
-                />
             </div>
            
             <div className='userAuthImageContainer'>
@@ -228,7 +219,7 @@ const AddTourist = () => {
         </form>
         
         </div>
-        <SuccessModal modalOpened={formStatus === 'Success' ?  true : false} setModalOpened={() => {setFormStatus('')}}/>
+        <SuccessModal modalOpened={modalOpened} setModalOpened={setModalOpened}/>
      </div>
 
   )

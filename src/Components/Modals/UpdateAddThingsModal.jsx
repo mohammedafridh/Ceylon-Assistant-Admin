@@ -3,13 +3,18 @@ import { Modal, useMantineTheme} from '@mantine/core';
 import '../Pages/AddThingsToDo/AddThingsToDoContents/AddThings.css'
 import { db } from "../../Firebase";
 import {query, doc, updateDoc} from "firebase/firestore";
+import { useEffect } from 'react';
 
 
 function UpdateAddThingsModal({modalOpened,setModalOpened,data}) {
   const theme = useMantineTheme();
   const [activityName,setActivityName] = useState(data.Activity)
   const [description,setDescription] = useState(data.description)
-
+  console.log({data})
+  useEffect(()=>{
+    setActivityName(data.Activity)
+    setDescription(data.description)
+  },[data])
   const updateDetails = async(data)=>{
     const item = query(doc(db, 'ThingsToDoSrilanka', data.id));
     await updateDoc(item, {
@@ -29,7 +34,7 @@ function UpdateAddThingsModal({modalOpened,setModalOpened,data}) {
       overlayBlur={0.5}
       size = '60%'
       opened = {modalOpened}
-      onClose = {()=>setModalOpened(false)}
+      onClose = {()=>{setModalOpened(false); setActivityName(''); setDescription('')}}
     >
 
 <div className = 'addThingsForm'>
