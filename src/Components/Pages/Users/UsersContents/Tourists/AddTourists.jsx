@@ -24,6 +24,7 @@ const AddTourist = () => {
     const[profileURL,setProfileURL] = useState(null)
     const[passportUrl,setPassportUrl] = useState(null)
     const [formStatus, setFormStatus] = useState('')
+    const[imgError,setImgError] = useState(false)
     const {signUp} = useUserAuth();
     const current = new Date();
     const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
@@ -33,6 +34,7 @@ const AddTourist = () => {
         const storageImageRef = ref(storage, `${imageFolder}/${image?.name + v4()}`);
         if(image === null || image === undefined || image === '') {
           console.log("No file selected");
+          setImgError(true)
           return
         }
         uploadBytes(storageImageRef, image).then(() => {
@@ -105,7 +107,7 @@ const AddTourist = () => {
                 
             <h3>Add Tourist</h3>
             { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
-
+            {imgError?<p style = {{color:"red", fontWeight:"bold"}}>Image not Valid</p> : ''}
             <div>
                     <input 
                         type="text" 

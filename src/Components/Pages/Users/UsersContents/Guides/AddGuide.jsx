@@ -34,6 +34,7 @@ const AddGuide = () => {
     const[nicUrl,setNicUrl] = useState(null)
     const [formStatus, setFormStatus] = useState('')
     const[modalOpened,setModalOpened] = useState(false)
+    const[imgError,setImgError] = useState(false)
     const {signUp} = useUserAuth();
     const current = new Date();
     const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
@@ -219,7 +220,6 @@ const AddGuide = () => {
                 
             <h3>Add Guide</h3>
             { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
-
 
             <div>
                     <input 
