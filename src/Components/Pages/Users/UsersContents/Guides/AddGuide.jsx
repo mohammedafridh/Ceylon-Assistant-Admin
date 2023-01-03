@@ -119,92 +119,59 @@ const AddGuide = () => {
         setVehicleType(e.label)
       }
 
+      //start
 
-      useEffect(() => {
-        const getImageUrl = async () => {
-            const guideProfileRef = ref(storage, `GuideProfile/${profileImage.name}`);
-            const uploadTask = uploadBytes(guideProfileRef, profileImage)
-            uploadTask.on(
-                      "state_changed",
-                      (snapshot) => {
-                          const percent = Math.round(
-                              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                          );
-                      },
-                      (err) => console.log(err),
-                      () => {
-                          // download url
-                          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                              setUrl(url);
-                          });
-                      }
-                  ); 
-          };
-        const imageUrl = async () => {
-          await getImageUrl();
-        };
-        const getNicImageUrl = async () => {
-            const guideNicRef = ref(storage, `GuideNic/${nicImage.name}`);
-            const uploadTask = uploadBytes(guideNicRef, nicImage)
-            uploadTask.on(
-                      "state_changed",
-                      (snapshot) => {
-                          const percent = Math.round(
-                              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                          );
-                      },
-                      (err) => console.log(err),
-                      () => {
-                          // download url
-                          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                              setNicUrl(url);
-                          });
-                      }
-                  ); 
-          };
-
-        const nicImageUrl = async () => {
-          await getNicImageUrl();
-        };
-        imageUrl();
-        nicImageUrl();
-      }, [profileImage, nicImage]);
-
-
+      const setImage = (e, imageFolder, setUrl) => {
+        const image = e.target.files[0];
+        const storageImageRef = ref(storage, `${imageFolder}/${image?.name + v4()}`);
+        if(image === null || image === undefined || image === '') {
+          console.log("No file selected");
+          return
+        }
+        uploadBytes(storageImageRef, image).then(() => {
+          console.log("Uploaded a blob or file!");
+          getDownloadURL(storageImageRef)
+            .then((url) => {
+              setUrl(url);
+              console.log({ profile: url });
+            })
+            .catch((error) => {
+              console.log({ error });
+            })
+        });
+      }
       const guideHandler = async (e) => {
-        // validatePassword()
+        validatePassword()
         e.preventDefault();
         setError("");
         try {
-        //   if(passwordMatch === false) {
-        //     return
-        //   }
-          
-          signUp(email, password)
+          if(passwordMatch === false) {
+            return
+          }
+            signUp(email, password)
               .then((data) => {
-                const addDetails = doc(db, "Guides", data.user.uid);
-                
+                const addDetails = doc(db, "Guides", data.user.uid);    
                 const details = {
-                    firstName:fName,
-                    lastName:lName,
-                    contactNumber: contactNumber,
-                    nicNumber: nicNumber,
-                    address: address,
-                    district: district,
-                    guideType : type,
-                    languages: languages,
-                    guideRate:guideRate,
-                    vehicleType:vehicleType,
-                    model: model,
-                    maxPassengers:maxPassengers,
-                    perKmRate: perKm,
-                    image: url,
-                    nicImage: nicUrl,
-                    email: email,
-                    password:password,
-                    publishedDate:addDate,
-                    status:status,
-                    availability:availability
+                  firstName:fName,
+                  lastName:lName,
+                  contactNumber: contactNumber,
+                  nicNumber: nicNumber,
+                  address: address,
+                  district: district,
+                  guideType : type,
+                  languages: languages,
+                  guideRate:guideRate,
+                  vehicleType:vehicleType,
+                  model: model,
+                  maxPassengers:maxPassengers,
+                  perKmRate: perKm,
+                  image: profileImage,
+                  nicImage: nicImage,
+                  email: email,
+                  password:password,
+                  publishedDate:addDate,
+                  status:status,
+                  availability:availability
                 };
                 setDoc(addDetails, details);
                 setFName('')
@@ -225,24 +192,24 @@ const AddGuide = () => {
                 setEmail('')
                 setPassword('')
                 setConfirmPassword("");
-                setModalOpened(true)
-                // setFormStatus("Success")
+                setFormStatus("Success")
               })
               .catch((error) => {
-                // setFormStatus("Error")
+                setFormStatus("Error")
+                setError(error.message)
               });
           } catch (err) {
             setError(err.message);
-            // setFormStatus("Error")
+            setFormStatus("Error")
           }
     }
 
-    // const validatePassword = () => {
-    //   console.log(passwordMatch, password, confirmPassword)
-    //   password === confirmPassword
-    //     ? setPasswordMatch(true)
-    //     : setPasswordMatch(false);
-    // };
+    const validatePassword = () => {
+      console.log(passwordMatch, password, confirmPassword)
+      password === confirmPassword
+        ? setPasswordMatch(true)
+        : setPasswordMatch(false);
+    };
 
   return (
     <div className='UsersContainer'>
@@ -251,7 +218,7 @@ const AddGuide = () => {
         <form onSubmit={guideHandler} className = 'addUserForm'>
                 
             <h3>Add Guide</h3>
-            {/* { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>} */}
+            { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
 
 
             <div>
@@ -402,14 +369,14 @@ const AddGuide = () => {
                     required
                 />
 
-                {/* <input 
+                <input 
                     type="password"
                     className="userInput"
                     placeholder="Confirm Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}  
                     required
-                /> */}
+                />
             </div>
            
 
@@ -419,7 +386,7 @@ const AddGuide = () => {
                     <input 
                         type="file" 
                         name = 'profileImg' 
-                        onChange = {(e) => setProfileImage(e.target.files[0])}
+                        onChange = {(e) => setImage(e, 'TestPassport', setProfileImage)}
                         required
                     />
                 </div>
@@ -429,7 +396,7 @@ const AddGuide = () => {
                     <input 
                         type="file" 
                         name = 'coverImg' 
-                        onChange = {(e)=>setNicImage(e.target.files[0])}
+                        onChange = {(e) => setImage(e, 'TestPassport', setNicImage)}
                         required
                     />
                 </div>

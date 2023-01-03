@@ -6,6 +6,7 @@ import {doc, setDoc } from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {v4} from 'uuid'
 import SuccessModal from "../../../../Modals/SuccessModal";
+import { Button, FileInput } from '@mantine/core';
 
 const AddTourist = () => {
 
@@ -17,68 +18,43 @@ const AddTourist = () => {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [passwordMatch, setPasswordMatch] = useState(true);
-    const [profileImage, setProfileImage] = useState('')
     const [passportImage, setPassportImage] = useState('')
     const [status, setStatus] = useState('Active')
     const [error, setError] = useState('')
-    const[url,setUrl] = useState(null)
+    const[profileURL,setProfileURL] = useState(null)
     const[passportUrl,setPassportUrl] = useState(null)
     const [formStatus, setFormStatus] = useState('')
-    const[modalOpened,setModalOpened] = useState(false)
     const {signUp} = useUserAuth();
     const current = new Date();
     const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
 
-      useEffect(() => {
-        const getImageUrl = async () => {
-            const guideProfileRef = ref(storage, `TouristProfile/${profileImage.name + v4()}`);
-            uploadBytes(guideProfileRef, profileImage)
-              .then(() => {
-                getDownloadURL(guideProfileRef)
-                  .then((url) => {
-                    console.log({ url });
-                    setUrl(url);
-                  })
-                  .catch((err) => {
-                    setError(err.message, "error getting the image");
-                  });
-              })
-              .catch((err) => {
-                setError(err);
-              });
-          };
-        const imageUrl = async () => {
-          await getImageUrl();
-        };
-        const getPassPortImageUrl = async () => {
-            const guidePassportRef = ref(storage, `TouristPassport/${passportImage.name + v4()}`);
-            uploadBytes(guidePassportRef, passportImage)
-              .then(() => {
-                getDownloadURL(guidePassportRef)
-                  .then((url) => {
-                    console.log({ url });
-                    setPassportUrl(url);
-                  })
-                  .catch((err) => {
-                    setError(err.message, "error getting the image");
-                  });
-              })
-              .catch((err) => {
-                setError(err);
-              });
-          };
-        const passPortImageUrl = async () => {
-          await getPassPortImageUrl();
-        };
-        imageUrl();
-        passPortImageUrl();
-      }, [profileImage, passportImage]);
-
+     const setImage = (e, imageFolder, setUrl) => {
+        const image = e.target.files[0];
+        const storageImageRef = ref(storage, `${imageFolder}/${image?.name + v4()}`);
+        if(image === null || image === undefined || image === '') {
+          console.log("No file selected");
+          return
+        }
+        uploadBytes(storageImageRef, image).then(() => {
+          console.log("Uploaded a blob or file!");
+          getDownloadURL(storageImageRef)
+            .then((url) => {
+              setUrl(url);
+              console.log({ profile: url });
+            })
+            .catch((error) => {
+              console.log({ error });
+            })
+        });
+      }
       const touristHandler = async (e) => {
-        // validatePassword()
+        validatePassword()
         e.preventDefault();
         setError("");
         try {
+          if(passwordMatch === false) {
+            return
+          }
             signUp(email, password)
               .then((data) => {
                 const addDetails = doc(db, "Tourist", data.user.uid);    
@@ -86,11 +62,9 @@ const AddTourist = () => {
                     firstName:fName,
                     lastName:lName,
                     contactNumber: contactNumber,
-                    image: url,
-                    passportNumber:passportNumber,
+                    image: profileURL,
                     passPortImage: passportUrl,
                     email: email,
-                    password:password,
                     publishedDate:addDate,
                     status:status
                 };
@@ -98,30 +72,31 @@ const AddTourist = () => {
                 setFName('')
                 setLName('')
                 setContactNumber('')
-                setPassportNumber('')
-                setUrl('')
+                setProfileURL('')
                 setPassportUrl('')
                 setEmail('')
                 setPassword('')
-                setModalOpened(true)
-                // setFormStatus("Success")
+                setConfirmPassword('');
+                setFormStatus("Success")
               })
               .catch((error) => {
-                // setFormStatus("Error")
+                setFormStatus("Error")
                 setError(error.message)
               });
           } catch (err) {
             setError(err.message);
-            // setFormStatus("Error")
+            setFormStatus("Error")
           }
     }
 
-    // const validatePassword = () => {
-    //   console.log(passwordMatch, password, confirmPassword)
-    //   password === confirmPassword
-    //     ? setPasswordMatch(true)
-    //     : setPasswordMatch(false);
-    // };
+    const validatePassword = () => {
+      console.log(passwordMatch, password, confirmPassword)
+      password === confirmPassword
+        ? setPasswordMatch(true)
+        : setPasswordMatch(false);
+    };
+
+  
 
   return (
     <div className='UsersContainer'>
@@ -129,6 +104,7 @@ const AddTourist = () => {
         <form onSubmit={touristHandler} className = 'addUserForm'>
                 
             <h3>Add Tourist</h3>
+            { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
 
             <div>
                     <input 
@@ -190,6 +166,14 @@ const AddTourist = () => {
                     required
                 />
 
+                <input 
+                    type="password" 
+                    className='userInput' 
+                    onChange = {(e)=> setConfirmPassword(e.target.value)}
+                    placeholder='Confirm Password'
+                    value = {confirmPassword}
+                    required
+                />
             </div>
            
             <div className='userAuthImageContainer'>
@@ -198,9 +182,10 @@ const AddTourist = () => {
                     <input 
                         type="file" 
                         name = 'profileImg' 
-                        onChange = {(e) => setProfileImage(e.target.files[0])}
+                        onChange = {(e) => setImage(e, 'TestProfile', setProfileURL)}
                         required
                     />
+
                 </div>
             
                 <div className="authProfile">
@@ -208,7 +193,7 @@ const AddTourist = () => {
                     <input 
                         type="file" 
                         name = 'coverImg' 
-                        onChange = {(e)=>setPassportImage(e.target.files[0])}
+                        onChange = {(e) => setImage(e, 'TestPassport', setPassportUrl)}
                         required
                     />
                 </div>
@@ -219,7 +204,7 @@ const AddTourist = () => {
         </form>
         
         </div>
-        <SuccessModal modalOpened={modalOpened} setModalOpened={setModalOpened}/>
+        <SuccessModal modalOpened={formStatus === 'Success' ?  true : false} setModalOpened={() => {setFormStatus('')}}/>
      </div>
 
   )
