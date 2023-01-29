@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import './AddFaq.css'
 import {collection, addDoc} from 'firebase/firestore'
 import {db} from '../../../../Firebase'
+import { toast } from "react-hot-toast";
 
 const AddFaq = () => {
 
@@ -19,13 +20,14 @@ const AddFaq = () => {
       .then(()=>{
         setQuestion('')
         setAnswer('')
+        toast.success('FAQ Added Successfully!')
       })
 
       }catch(err){
-        err.message('Cant add FAQ')
+        toast.error('Cant add FAQ. Try Again!')
       }
     }catch(err){
-      err.message('Cant Connect. Please Try Again!')
+      toast.error('Cant Connect. Please Try Again!')
     }
     
   }

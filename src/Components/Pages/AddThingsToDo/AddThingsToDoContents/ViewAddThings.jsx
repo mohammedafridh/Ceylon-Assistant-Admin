@@ -4,6 +4,7 @@ import { db } from "../../../../Firebase";
 import { collection, onSnapshot, doc, deleteDoc, } from "firebase/firestore";
 import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import UpdateAddThingsModal from "../../../Modals/UpdateAddThingsModal";
+import { toast } from 'react-hot-toast'
 
 const ViewAddThings = ({sendData}) => {
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,7 @@ const ViewAddThings = ({sendData}) => {
 
   const deleteItem = async(itemId)=>{
     const item = deleteDoc(doc(db, 'ThingsToDoSrilanka', itemId));
+    toast.success('Item Deleted Successfully!')
   }
 
   const columnData = [
@@ -32,25 +34,25 @@ const ViewAddThings = ({sendData}) => {
       label: "Activity",
       field: "activity",
       sort: "asc",
-      width: 200,
+      width: 250,
     },
     {
       label: "Description",
       field: "description",
       sort: "asc",
-      width: 200,
+      width: 350,
     },
     {
       label: "Image",
       field: "image",
       sort: "asc",
-      width: 200,
+      width: 250,
     },
     {
       label: "Actions",
       field: "actions",
       sort: "asc",
-      width: 130,
+      width: 220,
     },
   ];
 
@@ -72,7 +74,7 @@ const ViewAddThings = ({sendData}) => {
             id: item.id,
             activity: item.Activity,
             description: item.description,
-            image:<img src = {item.image} alt="" style = {{width:170, height: 170}}/>,
+            image:<img src = {item.image} alt="" style = {{width:220, height: 220}}/>,
             actions: <div className="btnHolder">
               <button onClick = {() => deleteItem(item.id)} className = 'dltBtn'>Delete</button>
               <button onClick = {() => setModal(item)} className = 'updateBtn'>Update</button>             

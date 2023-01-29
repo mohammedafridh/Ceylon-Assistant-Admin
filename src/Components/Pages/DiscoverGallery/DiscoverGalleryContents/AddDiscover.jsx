@@ -4,6 +4,7 @@ import {collection, addDoc} from 'firebase/firestore'
 import {db, storage} from '../../../../Firebase'
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import { toast } from "react-hot-toast";
 
 const AddDiscover = () => {
 
@@ -59,6 +60,7 @@ const AddDiscover = () => {
       setDestinationNickname('')
       setPhotoUrl('')
       setDescription('')
+      toast.success('Discovery Added Successfully')
     })
   }
 
@@ -77,6 +79,7 @@ const AddDiscover = () => {
       setDestinationNickname('')
       setPhotoUrl('')
       setDescription('')
+      toast.success('Discovery Added Successfully')
     })
   }
 

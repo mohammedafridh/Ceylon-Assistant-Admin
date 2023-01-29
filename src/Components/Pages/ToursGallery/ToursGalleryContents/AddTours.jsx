@@ -2,27 +2,105 @@ import React, {useState,useEffect} from 'react'
 import './AddTours.css'
 import {collection, addDoc, setDoc, doc} from 'firebase/firestore'
 import {db,storage} from '../../../../Firebase'
-import {Select } from '@mantine/core';
+import Select from 'react-select'
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {v4} from 'uuid'
+import { toast } from "react-hot-toast";
 
 const AddTours = () => {
 
   const [destination,setDestination] = useState('')
-  const [district,setDistrict] = useState('')
   const [guide,setGuide] = useState('')
   const [mainImage,setMainImage] = useState('')
   const [image1,setImage1] = useState('')
   const [image2,setImage2] = useState('')
   const [image3,setImage3] = useState('')
   const [image4,setImage4] = useState('')
-  const [status,setStatus] = useState('active')
+  const [status,setStatus] = useState('Active')
+  const [error,setError] = useState(false)
+  const [imgError,setImgError] = useState('')
 
+
+  const districtData=[
+    { value: 'Hambanthota', label: 'Hambanthota' },
+    { value: 'Matara', label: 'Matara' },
+    { value: 'Galle', label: 'Galle' },
+    { value: 'Badulla', label: 'Badulla' },
+    { value: 'Monaragala', label: 'Monaragala' },
+    { value: 'Trincomalee', label: 'Trincomalee' },
+    { value: 'Batticaloa', label: 'Batticaloa' },
+    { value: 'Ampara', label: 'Ampara' },
+    { value: 'Kegalle', label: 'Kegalle' },
+    { value: 'Rathnapura', label: 'Rathnapura' },
+    { value: 'Matale', label: 'Matale' },
+    { value: 'Kandy', label: 'Kandy' },
+    { value: 'Nuwara-Eliya', label: 'Nuwara Eliya' },
+    { value: 'Anuradhapura', label: 'Anuradhapura' },
+    { value: 'Polonnaruwa', label: 'Polonnaruwa' },
+    { value: 'Gampaha', label: 'Gampaha' },
+    { value: 'Colombo', label: 'Colombo' },
+    { value: 'Kalutara', label: 'Kalutara' },
+    { value: 'Puttalam', label: 'Puttalam' },
+    { value: 'Kurunegala', label: 'Kurunegala' },
+    { value: 'Jaffna', label: 'Jaffna' },
+    { value: 'Kilinochchi', label: 'Kilinochchi' },
+    { value: 'Mannar', label: 'Mannar' },
+    { value: 'Mullativu', label: 'Mullativu' },
+    { value: 'Vavuniya', label: 'Vavuniya' },
+]
+
+const[district,setDistrict] = useState(districtData.label)
+  const districtHandler = (e)=>{
+    setDistrict(e.label)
+  }
+
+  const setImage = (e, imageFolder, setUrl) => {
+    const image = e.target.files[0];
+    const storageImageRef = ref(storage, `${imageFolder}/${image?.name + v4()}`);
+    if(image === null || image === undefined || image === '') {
+      console.log("No file selected");
+      setImgError(true)
+      return
+    }
+    uploadBytes(storageImageRef, image).then(() => {
+      setImgError(false)
+      getDownloadURL(storageImageRef)
+        .then((url) => {
+          setUrl(url);
+          console.log({ profile: url });
+        })
+        .catch((error) => {
+          console.log({ error });
+        })
+    });
+  }
+
+  const tourHandler = async(e)=>{
+    e.preventDefault()
+    try{
+      const addTour = doc(db, "toursGallery", guide)
+      await setDoc(addTour,{guideId:guide, destination:destination, district: district,
+      mainImage:mainImage, image1:image1, image2:image2, image3:image3, image4:image4, status:status})
+        .then(()=>{
+          setGuide('')
+          setDestination('')
+          setDistrict('')
+          setMainImage('')
+          setError(false)
+          toast.success('Tour Added Successfully!')
+        })
+    }catch(err){
+      toast.err('Please Try Again!')
+    }
+
+  }
 
   return (
     <div className="addThings">
-        <form onSubmit='' className = 'addThingsForm'>      
+        <form onSubmit={tourHandler} className = 'addThingsForm'>      
             <h3>Add Tours</h3>
+            { imgError ? <p style = {{color:"red", fontWeight:"bold"}}>* Please select a valid image!</p>: ''}
+
             <div className='detailsContainer'>
               <input 
                     type="text" 
@@ -42,40 +120,14 @@ const AddTours = () => {
                   required
               />
 
-            <Select 
-                style = {{width:"20rem", outline:"none"}} 
-                onChange = {(e)=> setDistrict(e.target.value)} 
-                placeholder='District'
-                required
-
-                data={[
-                  { value: 'Hambanthota', label: 'Hambanthota' },
-                  { value: 'Matara', label: 'Matara' },
-                  { value: 'Galle', label: 'Galle' },
-                  { value: 'Badulla', label: 'Badulla' },
-                  { value: 'Monaragala', label: 'Monaragala' },
-                  { value: 'Trincomalee', label: 'Trincomalee' },
-                  { value: 'Batticaloa', label: 'Batticaloa' },
-                  { value: 'Ampara', label: 'Ampara' },
-                  { value: 'Kegalle', label: 'Kegalle' },
-                  { value: 'Rathnapura', label: 'Rathnapura' },
-                  { value: 'Matale', label: 'Matale' },
-                  { value: 'Kandy', label: 'Kandy' },
-                  { value: 'Nuwara-Eliya', label: 'Nuwara Eliya' },
-                  { value: 'Anuradhapura', label: 'Anuradhapura' },
-                  { value: 'Polonnaruwa', label: 'Polonnaruwa' },
-                  { value: 'Gampaha', label: 'Gampaha' },
-                  { value: 'Colombo', label: 'Colombo' },
-                  { value: 'Kalutara', label: 'Kalutara' },
-                  { value: 'Puttalam', label: 'Puttalam' },
-                  { value: 'Kurunegala', label: 'Kurunegala' },
-                  { value: 'Jaffna', label: 'Jaffna' },
-                  { value: 'Kilinochchi', label: 'Kilinochchi' },
-                  { value: 'Mannar', label: 'Mannar' },
-                  { value: 'Mullativu', label: 'Mullativu' },
-                  { value: 'Vavuniya', label: 'Vavuniya' },
-              ]}
-            />
+                <Select 
+                    style = {{width:"17rem", outline:"none", border:'none'}} 
+                    options = {districtData} 
+                    placeholder = 'Select District' 
+                    onChange={districtHandler}
+                    className = 'typeDrop'
+                    required
+                />
             </div>
 
             <div className="imageContainer">
@@ -84,7 +136,7 @@ const AddTours = () => {
                     <input 
                         type="file" 
                         name = 'coverImg' 
-                        onChange = {(e)=>setMainImage(e.target.files[0])}
+                        onChange = {(e) => setImage(e, 'toursGallery', setMainImage)}
                         required
                     />
                 </div>
@@ -95,7 +147,7 @@ const AddTours = () => {
                       <input 
                           type="file" 
                           name = 'coverImg' 
-                          onChange = {(e)=>setImage1(e.target.files[0])}
+                          onChange = {(e) => setImage(e, 'toursGallery', setImage1)}
                       />
                 </div>
 
@@ -104,7 +156,7 @@ const AddTours = () => {
                       <input 
                           type="file" 
                           name = 'coverImg' 
-                          onChange = {(e)=>setImage2(e.target.files[0])}
+                          onChange = {(e) => setImage(e, 'toursGallery', setImage2)}
                       />
                 </div>
               </div>
@@ -115,7 +167,7 @@ const AddTours = () => {
                       <input 
                           type="file" 
                           name = 'coverImg' 
-                          onChange = {(e)=>setImage3(e.target.files[0])}
+                          onChange = {(e) => setImage(e, 'toursGallery', setImage3)}
                       />
                 </div>
 
@@ -124,7 +176,7 @@ const AddTours = () => {
                       <input 
                           type="file" 
                           name = 'coverImg' 
-                          onChange = {(e)=>setImage4(e.target.files[0])}
+                          onChange = {(e) => setImage(e, 'toursGallery', setImage4)}
                       />
                 </div>
               </div>

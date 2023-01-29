@@ -12,3 +12,12 @@
     justify-content: center;
     font-weight: bold;
 }
+
+.actBtn{
+    background-color: #15EC8A ;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}

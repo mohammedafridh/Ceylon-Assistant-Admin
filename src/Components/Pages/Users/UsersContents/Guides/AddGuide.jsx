@@ -33,6 +33,7 @@ const AddGuide = () => {
     const[url,setUrl] = useState(null)
     const[nicUrl,setNicUrl] = useState(null)
     const [formStatus, setFormStatus] = useState('')
+    const [ratings, setRatings] = useState([])
     const[modalOpened,setModalOpened] = useState(false)
     const[imgError,setImgError] = useState(false)
     const {signUp} = useUserAuth();
@@ -120,8 +121,6 @@ const AddGuide = () => {
         setVehicleType(e.label)
       }
 
-      //start
-
       const setImage = (e, imageFolder, setUrl) => {
         const image = e.target.files[0];
         const storageImageRef = ref(storage, `${imageFolder}/${image?.name + v4()}`);
@@ -172,7 +171,8 @@ const AddGuide = () => {
                   password:password,
                   publishedDate:addDate,
                   status:status,
-                  availability:availability
+                  availability:availability,
+                  ratings:ratings
                 };
                 setDoc(addDetails, details);
                 setFName('')
@@ -211,6 +211,8 @@ const AddGuide = () => {
         ? setPasswordMatch(true)
         : setPasswordMatch(false);
     };
+
+
 
   return (
     <div className='UsersContainer'>

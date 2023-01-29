@@ -16,6 +16,9 @@
     cursor: pointer;
     -webkit-box-shadow: 8px 8px 31px -3px rgba(0,0,0,0.79); 
     box-shadow: 3px 3px 5px 6px rgb(221, 220, 220);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
 }
 
 .featuredTitle{
@@ -25,6 +28,8 @@
 .featuredMoneyContainer{
     margin: 10px 0px;
     display: flex;
+    text-align: center;
+    justify-content: center;
     align-items: center;
 }
 

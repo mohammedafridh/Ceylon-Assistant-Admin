@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react';
 import {useUserAuth} from '../../Context/Context' 
 import {collection, addDoc} from 'firebase/firestore'
 import {db} from '../../Firebase'
+import { toast } from 'react-hot-toast';
 
 function BookGuideModal({modalOpened,setModalOpened,guide}) {
   const theme = useMantineTheme();
   const {user} = useUserAuth();
   const [tourGuide,setTourGuide] = useState(guide.id)
-    const[tourist,setTourist] = useState(user.uid)
+    const[tourist,setTourist] = useState('')
     const[tourLocation,setTourLocation] = useState('')
     const[destination,setDestination] = useState('')
     const[startData,setStartDate] = useState('')
@@ -28,10 +29,11 @@ function BookGuideModal({modalOpened,setModalOpened,guide}) {
       e.preventDefault();
       try{
         const addDetails = collection(db, 'pending_booking')
-        await addDoc(addDetails,{guide:guide.id, tourist: user.uid, location:tourLocation, destination: destination, startData: startData, 
+        await addDoc(addDetails,{guide:guide.id,tourist:tourist, location:tourLocation, destination: destination, startData: startData, 
         endDate:endDate, time: time, status:status})
         .then(()=>{
           setModalOpened(false)
+          toast.success('Booking Successful')
         })
 
       }catch(err){
@@ -46,14 +48,24 @@ function BookGuideModal({modalOpened,setModalOpened,guide}) {
       overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
       overlayOpacity={0.10}
       overlayBlur={0.5}
-      size = '25%'
+      size = '27%'
       opened = {modalOpened}
       onClose = {()=>{setModalOpened(false); setTourLocation(''); setDestination('')
       ; setStartDate(''); setEndDate(''); setTime('')}}
     >
 
-        <form className = 'infoForm' onSubmit = {()=>bookingHandler()}>
+        <form className = 'infoForm' onSubmit = {bookingHandler}>
             <h3>Book Guide</h3>
+
+            <div>
+                <input 
+                    type="text" 
+                    className='infInput' 
+                    onChange = {(e)=>setTourist(e.target.value)} 
+                    placeholder='Tourist ID'
+                    required
+                />
+            </div>
 
             <div>
                 <input 
@@ -61,7 +73,6 @@ function BookGuideModal({modalOpened,setModalOpened,guide}) {
                     className='infInput' 
                     onChange = {(e)=>setTourLocation(e.target.value)} 
                     placeholder='Tour Location'
-                    value = {tourGuide}
                     required
                 />
             </div>
@@ -72,6 +83,7 @@ function BookGuideModal({modalOpened,setModalOpened,guide}) {
                     className='infInput' 
                     onChange = {(e)=>setDestination(e.target.value)} 
                     placeholder='Pickup Destination'
+                    required
                 />
             </div>
 
@@ -82,6 +94,7 @@ function BookGuideModal({modalOpened,setModalOpened,guide}) {
                     className='infInput' 
                     onChange = {(e)=>setStartDate(e.target.value)}
                     placeholder="Date From"
+                    required
                 />
             </div>
 
@@ -92,6 +105,7 @@ function BookGuideModal({modalOpened,setModalOpened,guide}) {
                     className='infInput' 
                     onChange = {(e)=>setEndDate(e.target.value)}
                     placeholder='Date To'
+                    required
                 />
             </div>
 
@@ -103,6 +117,7 @@ function BookGuideModal({modalOpened,setModalOpened,guide}) {
                     className='infInput' 
                     onChange = {(e)=>setTime(e.target.value)}
                     placeholder='Select Time'
+                    required
                 />
             </div>
             <button type = 'submit' className="button infoButton">Confirm</button>

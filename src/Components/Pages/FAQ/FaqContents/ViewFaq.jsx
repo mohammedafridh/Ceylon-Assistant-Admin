@@ -4,6 +4,7 @@ import { db } from "../../../../Firebase";
 import { collection, onSnapshot, doc, deleteDoc, } from "firebase/firestore";
 import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import UpdateFaqModal from "../../../Modals/UpdateFaqModal";
+import { toast } from "react-hot-toast";
 
 const ViewFaq = () => {
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,7 @@ const ViewFaq = () => {
 
   const deleteItem = async(itemId)=>{
     const item = deleteDoc(doc(db, 'faq', itemId));
+    toast.success('FAQ Deleted Successfully!')
   }
 
   const columnData = [
@@ -26,25 +28,25 @@ const ViewFaq = () => {
       label: "Faq Id",
       field: "id",
       sort: "asc",
-      width: 250,
+      width: 270,
     },
     {
       label: "Question",
       field: "question",
       sort: "asc",
-      width: 200,
+      width: 250,
     },
     {
       label: "Answer",
       field: "answer",
       sort: "asc",
-      width: 200,
+      width: 250,
     },
     {
       label: "Actions",
       field: "actions",
       sort: "asc",
-      width: 130,
+      width: 240,
     },
   ];
 
@@ -66,7 +68,7 @@ const ViewFaq = () => {
             id: item.id,
             question: item.question,
             answer: item.answer,
-            actions: <div className="btnHolder">
+            actions: <div className="btnHolder" style={{marginLeft:10}}>
               <button onClick = {() => deleteItem(item.id)} className = 'dltBtn'>Delete</button>
               <button onClick = {() => setModal(item)} className = 'updateBtn'>Update</button> 
             </div>

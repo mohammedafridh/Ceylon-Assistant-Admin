@@ -6,11 +6,12 @@ import { db } from "../../../../Firebase";
 import { useEffect } from "react";
 import { collection, onSnapshot,query,doc,updateDoc } from "firebase/firestore";
 import { useGuides } from "../../../../Context/GuidesContext";
-
+import { toast } from "react-hot-toast";
 
 const AllBookings = () => {
   const [tableData, setTableData] = useState();
-  const guides = useGuides()
+  const {guides} = useGuides()
+  const {tourists} = useGuides()
   const columnData = [
     {
       label: "Tour Id",
@@ -21,6 +22,12 @@ const AllBookings = () => {
     {
       label: "Guide Email",
       field: "email",
+      sort: "asc",
+      width: 200,
+    },
+    {
+      label: "Tourist Email",
+      field: "touristEmail",
       sort: "asc",
       width: 200,
     },
@@ -77,9 +84,19 @@ const AllBookings = () => {
   useEffect(() => {
     const findGuideEmail = (id) => {
       const guide = guides.find(guide => guide.id === id)
-      return guide ? guide.email : null
-      
+      return guide ? guide.email : null   
     }
+
+    const findGuideNumber = (id) => {
+      const guide = guides.find(guide => guide.id === id)
+      return guide ? guide.contactNumber : null   
+    }
+
+    const findTouristEmail = (id) => {
+      const tourist = tourists.find(tourist => tourist.id === id)
+      return tourist ? tourist.email : null   
+    }
+    
     const bookingData = onSnapshot(
       collection(db, "pending_booking"),
       (snapshot) => {
@@ -96,7 +113,8 @@ const AllBookings = () => {
           const newItem = {
             id: item.id,
             email: findGuideEmail(item.guide),
-            contact: item.contactNumber,
+            touristEmail:findTouristEmail(item.tourist),
+            contact: findGuideNumber(item.guide),
             tourDestination: item.destination,
             pickupDestination: item.location,
             from: item.startData,
@@ -106,7 +124,8 @@ const AllBookings = () => {
             actions: (
               <div>
                 <button 
-                style = {{color:'white', backgroundColor:'red', padding:6, border:'none'}}
+                // style = {{color:'white', backgroundColor:'red', padding:6, border:'none'}}
+                className='dltBtn'
                 onClick = {()=>cancelBooking(item.id)}>Cancel</button>
               </div>
             ),
@@ -130,6 +149,7 @@ const AllBookings = () => {
      await updateDoc(bookingCancel, {
       status: 'inactive'
      });
+     toast.success("Booking Cancelled Successfully!")
   }
 
   return (

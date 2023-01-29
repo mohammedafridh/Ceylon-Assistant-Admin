@@ -3,6 +3,7 @@ import "./Messages.css";
 import { db } from "../../../Firebase";
 import { doc, deleteDoc, onSnapshot, collection } from "firebase/firestore";
 import { Card, Text, Button, Group, Divider, Loader, Center } from "@mantine/core";
+import { toast } from "react-hot-toast";
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
@@ -11,6 +12,7 @@ const Messages = () => {
 
   const deleteMessage = async (id) => {
     await deleteDoc(doc(db, "messages", id));
+    toast.success('Message Noted!')
   };
 
   useEffect(() => {

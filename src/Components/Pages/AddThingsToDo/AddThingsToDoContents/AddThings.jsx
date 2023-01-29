@@ -3,6 +3,7 @@ import './AddThings.css'
 import {collection, addDoc} from 'firebase/firestore'
 import {db} from '../../../../Firebase'
 import { useEffect } from 'react'
+import { toast } from 'react-hot-toast'
 
 const AddThings = ({activityNameProp, descriptionProp, imageUrlProp}) => {
 
@@ -21,6 +22,7 @@ const AddThings = ({activityNameProp, descriptionProp, imageUrlProp}) => {
             setActivityName('')
             setImageUrl('')
             setDescription('')
+            toast.success('Things To Do Sri-Lanka added successfully!')
         })
   }
 

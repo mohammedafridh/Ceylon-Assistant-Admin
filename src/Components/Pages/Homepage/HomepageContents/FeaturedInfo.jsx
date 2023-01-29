@@ -9,6 +9,7 @@ const FeaturedInfo = () => {
   const [tourists, setTourists] = useState([]);
   const [tourGuides, setTourGuides] = useState([])
   const [tours, setTours] = useState([]);
+  const [error,setError] = useState('')
 
 
   const compareBookings = () => {
@@ -149,7 +150,7 @@ const FeaturedInfo = () => {
       setBookings(list);
     },
     (error) => {
-        console.log(error.message);
+        setError(error.message);
       })
     return () => {
       bookingData();

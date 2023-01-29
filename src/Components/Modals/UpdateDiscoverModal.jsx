@@ -6,7 +6,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import {collection, addDoc} from 'firebase/firestore'
 import {query, doc, updateDoc} from "firebase/firestore";
-
+import { toast } from "react-hot-toast";
 
 function UpdateDiscoverModal({modalOpened,setModalOpened,data}) {
   const theme = useMantineTheme();
@@ -87,6 +87,7 @@ function UpdateDiscoverModal({modalOpened,setModalOpened,data}) {
       image:photoUrl
     }).then(()=>{
         setModalOpened(false)
+        toast.success('Discovery Updated Successfully!')
     })
   }
 
@@ -111,7 +112,7 @@ function UpdateDiscoverModal({modalOpened,setModalOpened,data}) {
 <div className="addDiscoverContainer">
   <div className = 'discoverForm'>
             
-      <h3>Add Discover Sri-Lanka</h3>
+      <h3>Update Discover Sri-Lanka</h3>
       
       <div>
         <input 
@@ -149,7 +150,7 @@ function UpdateDiscoverModal({modalOpened,setModalOpened,data}) {
         onChange= {(e)=> setDescription(e.target.value)}></textarea>
 
     <div className='discoverBtnContainer'>
-        <button className='discoverBtn' onClick = {()=>urlImage()}>Add Discovery</button>
+        <button className='discoverBtn' onClick = {()=>urlImage()}>Update Discovery</button>
     </div>   
   </div>
 </div>

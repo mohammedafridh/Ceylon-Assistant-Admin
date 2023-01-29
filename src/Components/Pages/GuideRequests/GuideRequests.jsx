@@ -11,6 +11,8 @@ const GuideRequests = () => {
   const [error, setError] = useState("");
   const [modalOpened, setModalOpened] = useState(false)
   const [currentItem,setCurrentItem] = useState('')
+  const[availability,setAvailability] = useState('Available')
+  const [ratings, setRatings] = useState([])
   const current = new Date();
   const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
   const signUp = useUserAuth()
@@ -39,7 +41,9 @@ const GuideRequests = () => {
                 image: item.image,
                 nicImage: item.nicImage,
                 email: item.email,
+                availability:availability,
                 registeredDate:addDate,
+                ratings:ratings,
                 status: 'Active'
             };
             setDoc(addDetails, details)
@@ -61,7 +65,7 @@ const GuideRequests = () => {
 }
 
   const deleteItem = async(itemId)=>{
-    const item = deleteDoc(doc(db, 'faq', itemId));
+    const item = deleteDoc(doc(db, 'guideRequests', itemId));
   }
 
   const columnData = [

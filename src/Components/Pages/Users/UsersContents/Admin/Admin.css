@@ -79,6 +79,7 @@
     border-radius: 0.5rem;
     background: var(--buttonBg);
     transition: all 100ms ease-out;
+    margin-top: 1rem;
 }
 
 .perKm{
@@ -148,6 +149,19 @@
     width: 100%!important;
     border: none!important;
     outline: none!important;
+}
+
+.proUpdate{
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    align-items: center;
+    background-color: var(--inputColor);
+    padding: 25px 5px;
+    border-radius: 8px;
+    text-align: center;
+    justify-content: center;
+    
 }
 
 .guideDrop{

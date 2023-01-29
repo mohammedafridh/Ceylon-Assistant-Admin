@@ -16,19 +16,26 @@ const AllGuides = () => {
   const [currentItem,setCurrentItem] = useState('')
   const[selectedGuide,setSelectedGuide] = useState({})
 
-  const setModal =(item)=>{
+  const updateGuide =(item)=>{
     setModalOpened(true)
     setCurrentItem(item)
   }
 
-  const deleteItem = async(itemId)=>{
+  const inactivateItem = async(itemId)=>{
     const item = query(doc(db, 'Guides', itemId));
     await updateDoc(item, {
-      status:'Inactive'
+      status:'inactive'
     })
   }
 
-  const setBookingData = (item)=>{
+  const activateItem = async(itemId)=>{
+    const item = query(doc(db, 'Guides', itemId));
+    await updateDoc(item, {
+      status:'Active'
+    })
+  }
+
+  const makeBooking = (item)=>{
     setSelectedGuide(item)
     setBookModalOpened(true)
   }
@@ -39,6 +46,12 @@ const AllGuides = () => {
       field: "id",
       sort: "asc",
       width: 300,
+    },
+    {
+      label: "Email",
+      field: "email",
+      sort: "asc",
+      width: 250,
     },
     {
       label: "Profile",
@@ -108,6 +121,12 @@ const AllGuides = () => {
       width: 150,
     },
     {
+      label: "Vehicle Model",
+      field: "vehicleModel",
+      sort: "asc",
+      width: 200,
+    },
+    {
       label: "Per Km Rate",
       field: "perKmRate",
       sort: "asc",
@@ -120,10 +139,22 @@ const AllGuides = () => {
       width: 200,
     },
     {
+      label: "Availability",
+      field: "availability",
+      sort: "asc",
+      width: 120,
+    },
+    {
+      label: "Status",
+      field: "status",
+      sort: "asc",
+      width: 120,
+    },
+    {
       label: "Actions",
       field: "actions",
       sort: "asc",
-      width: 350,
+      width: 440,
     },
   ];
 
@@ -139,11 +170,12 @@ const AllGuides = () => {
             ...doc.data(),
           });
         });
-        list = list.filter((guide)=>guide.status === "Active")
+        // list = list.filter((guide)=>guide.status === "Active")
         let rowDataCollection = [];
         list.forEach((item) => {
           const newItem = {
             id: item.id,
+            email:item.email,
             profile:<img src = {item.image} style={{width:180, height:180, marginLeft:0}}/>,
             firstName: item.firstName,
             lastName: item.lastName,
@@ -154,13 +186,17 @@ const AllGuides = () => {
             guideType: item.guideType,
             guideRate: item.guideRate,
             languages: item.languages,
-            vehicle: item.vehicleType,           
+            vehicle: item.vehicleType,  
+            vehicleModel:item.model,         
             perKmRate: item.perKmRate,
             maxPassengers: item.maxPassengers,
+            availability:item.availability,
+            status:item.status,
             actions: <div className="btnHolder">
-              <button onClick = {() => deleteItem(item.id)} className = 'dltBtn' style = {{width:100}}>Delete</button>
-              <button onClick = {() => setModal(item)} className = 'updateBtn' style = {{width:100}}>Update</button> 
-              <button onClick = {() => setBookModalOpened(true)} className = 'updateBtn' style = {{backgroundColor:'blue', width:100}}>Book</button> 
+              <button onClick = {() => inactivateItem(item.id)} className = 'dltBtn' style = {{backgroundColor:'#BC0E18',width:100}}>Inactive</button>
+              <button onClick = {() => activateItem(item.id)} className = 'actBtn' style = {{backgroundColor:'#1A73C7',width:100}}>Active</button>
+              <button onClick = {() => updateGuide(item)} className = 'updateBtn' style = {{backgroundColor:'#013E77',width:100}}>Update</button> 
+              <button onClick = {() => makeBooking(item)} className = 'updateBtn' style = {{backgroundColor:'#2E185E', width:100}}>Book</button> 
             </div>
           };
           rowDataCollection.push(newItem);
@@ -192,7 +228,7 @@ const AllGuides = () => {
       <BookGuideModal
         modalOpened={bookModalOpened}
         setModalOpened={setBookModalOpened}
-        guide={setSelectedGuide}
+        guide={selectedGuide}
       />
     </div>
   );

@@ -17,11 +17,11 @@ function UpdateGuideModal({modalOpened,setModalOpened,data}) {
     const [contactNumber, setContactNumber] = useState(data.contactNumber)
     const [address, setAddress] = useState(data.address)
     const [guideRate, setGuideRate] = useState(data.guideRate)
-    const [model, setModel] = useState('')
+    const [model, setModel] = useState(data.model)
     const [maxPassengers, setMaxPassengers] = useState(data.maxPassengers)
     const [perKm, setPerKm] = useState(data.perKmRate)
-    const [profileImage, setProfileImage] = useState('')
-    const [error, setError] = useState('')
+    const[profile,setProfile] = useState('')
+    const [imgError,setImgError] = useState(false)
     const[url,setUrl] = useState(null)
     const [formStatus, setFormStatus] = useState('')
 
@@ -34,7 +34,29 @@ function UpdateGuideModal({modalOpened,setModalOpened,data}) {
     setGuideRate(data.guideRate)
     setMaxPassengers(data.maxPassengers)
     setPerKm(data.perKmRate)
+    setModel(data.model)
   },[data])
+
+  const setImage = (e, imageFolder, setUrl) => {
+    const image = e.target.files[0];
+    const storageImageRef = ref(storage, `${imageFolder}/${image?.name + v4()}`);
+    if(image === null || image === undefined || image === '') {
+      console.log("No file selected");
+      setImgError(true)
+      return
+    }
+    uploadBytes(storageImageRef, image).then(() => {
+      setImgError(false)
+      getDownloadURL(storageImageRef)
+        .then((url) => {
+          setUrl(url);
+          console.log({ profile: url });
+        })
+        .catch((error) => {
+          console.log({ error });
+        })
+    });
+  }
 
   const language = [
     { value: 'Sinhala ', label: 'Sinhala' },
@@ -115,6 +137,7 @@ const vehicleHandler = (e)=>{
 
 
   const updateDetails = async(data)=>{
+    console.log('hello')
     const item = query(doc(db, 'Guides', data.id));
     await updateDoc(item, {
       firstName:fName,
@@ -129,6 +152,7 @@ const vehicleHandler = (e)=>{
       model: model,
       maxPassengers:maxPassengers,
       perKmRate: perKm,
+      image:profile
 
     }).then(()=>{
       alert('Details Updated Successfully')
@@ -141,7 +165,7 @@ const vehicleHandler = (e)=>{
       overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
       overlayOpacity={0.25}
       overlayBlur={0.5}
-      size = '75%'
+      size = '60%'
       opened = {modalOpened}
       onClose = {()=>{setModalOpened(false);
         //  setQuestion(''); 
@@ -152,6 +176,9 @@ const vehicleHandler = (e)=>{
 <div className = 'addThingsForm'>
                 
             <h3>Add Guide</h3>
+
+            { imgError ? <p style = {{color:"red", fontWeight:"bold"}}>* Please select a valid image!</p>: ''}
+            
             <div>
                     <input 
                         type="text" 
@@ -197,7 +224,7 @@ const vehicleHandler = (e)=>{
                   placeholder = 'Select District' 
                   onChange={districtHandler}
                   className = 'typeDrop'
-                  required
+                  value = {district}
                 />
             </div>
 
@@ -207,7 +234,6 @@ const vehicleHandler = (e)=>{
                 placeholder = 'Select Languages'
                 onChange={languageHandler}
                 className = 'langDrop'
-                required
               />
             </div>
 
@@ -217,7 +243,6 @@ const vehicleHandler = (e)=>{
                   placeholder = 'Guide Type' 
                   onChange={typeHandler}
                   className = 'guideDrop'
-                  required
                 />
 
                 <input 
@@ -226,33 +251,6 @@ const vehicleHandler = (e)=>{
                     onChange = {(e)=> setGuideRate(e.target.value)} 
                     placeholder='Guide Rate Per Day'
                     value = {guideRate}
-                    required
-                />
-            </div>
-
-            <div>
-                <Select 
-                  options = {carType} 
-                  placeholder = 'Vehicle Type' 
-                  onChange={vehicleHandler}
-                  className = 'typeDrop'
-                  required
-                />
-
-                <input 
-                    type="text" 
-                    className='userInputModal' 
-                    onChange = {(e)=> setModel(e.target.value)} 
-                    placeholder='Vehicle Model'
-                    value = {model}
-                    required
-                />
-              <input 
-                    type="number" 
-                    className='userInputModal' 
-                    onChange = {(e)=> setMaxPassengers(e.target.value)} 
-                    placeholder='Maximum Passengers'
-                    value = {maxPassengers}
                     required
                 />
 
@@ -268,6 +266,43 @@ const vehicleHandler = (e)=>{
                     <span>*Per Km Rate for own vehicle</span>
                 </div>
             </div>
+
+            <div>
+                <Select 
+                  options = {carType} 
+                  placeholder = 'Vehicle Type' 
+                  onChange={vehicleHandler}
+                  className = 'typeDrop'
+                />
+
+                <input 
+                    type="text" 
+                    className='userInputModal' 
+                    onChange = {(e)=> setModel(e.target.value)} 
+                    placeholder='Vehicle Model'
+                    value = {model}
+                />
+              <input 
+                    type="number" 
+                    className='userInputModal' 
+                    onChange = {(e)=> setMaxPassengers(e.target.value)} 
+                    placeholder='Maximum Passengers'
+                    value = {maxPassengers}
+                    required
+                />
+
+                <div>               
+              </div>
+            </div>
+            <div className="authProfile">
+                  <span>Profile Image</span>
+                    <input 
+                        type="file" 
+                        name = 'coverImg' 
+                        onChange = {(e) => setImage(e, 'Guide_Profile', setProfile)}
+                        required
+                    />
+                </div>
            
             <button onClick = {()=>updateDetails(data)} className="button infoButton">
                  Update Details

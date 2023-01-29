@@ -3,7 +3,7 @@ import { Modal, useMantineTheme} from '@mantine/core';
 import '../Pages/AddThingsToDo/AddThingsToDoContents/AddThings.css'
 import { db } from "../../Firebase";
 import {query, doc, updateDoc} from "firebase/firestore";
-
+import { toast } from "react-hot-toast";
 
 function UpdateFaqModal({modalOpened,setModalOpened,data}) {
   const theme = useMantineTheme();
@@ -22,6 +22,7 @@ function UpdateFaqModal({modalOpened,setModalOpened,data}) {
       answer:answer
     }).then(()=>{
         setModalOpened(false)
+        toast.success('FAQ Updated Successfully!')
     })
   }
 

@@ -5,6 +5,7 @@ import { collection, onSnapshot,query, doc, deleteDoc, } from "firebase/firestor
 import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import UpdateAddThingsModal from "../../../Modals/UpdateAddThingsModal";
 import UpdateDiscoverModal from "../../../Modals/UpdateDiscoverModal";
+import { toast } from "react-hot-toast";
 
 const ViewDiscover = ({sendData}) => {
   const [loading, setLoading] = useState(false);
@@ -20,7 +21,7 @@ const ViewDiscover = ({sendData}) => {
 
   const deleteItem = async(itemId)=>{
     const item = deleteDoc(doc(db, 'Discover_Srilanka', itemId));
-    alert("Record Deleted Successfully")
+    toast.success("Discovery Deleted Successfully")
   }
 
   const columnData = [
@@ -52,13 +53,13 @@ const ViewDiscover = ({sendData}) => {
       label: "Description",
       field: "description",
       sort: "asc",
-      width: 200,
+      width: 400,
     },
     {
       label: "Actions",
       field: "actions",
       sort: "asc",
-      width: 130,
+      width: 220,
     },
   ];
 

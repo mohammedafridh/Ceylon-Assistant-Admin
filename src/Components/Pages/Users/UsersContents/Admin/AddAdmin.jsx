@@ -4,7 +4,7 @@ import { useUserAuth } from "../../../../../Context/Context";
 import { db } from "../../../../../Firebase";
 import { doc, setDoc } from "firebase/firestore";
 import SuccessModal from "../../../../Modals/SuccessModal";
-import ErrorModal from "../../../../Modals/ErrorModal";
+import { toast } from "react-hot-toast";
 
 const AddAdmin = () => {
   const [email, setEmail] = useState("");
@@ -45,11 +45,11 @@ const AddAdmin = () => {
         })
         .catch((error) => {
           console.log(error);
-          setFormStatus("Error")
+         toast.error("Something Went Wrong. Please Try Again!")
         });
     } catch (err) {
       setError(err.message);
-      setFormStatus("Error")
+      toast.error("Something Went Wrong. Please Try Again!")
       console.log(err);
     }
   };

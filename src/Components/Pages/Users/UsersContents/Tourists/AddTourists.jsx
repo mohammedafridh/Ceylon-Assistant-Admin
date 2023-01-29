@@ -25,6 +25,7 @@ const AddTourist = () => {
     const[passportUrl,setPassportUrl] = useState(null)
     const [formStatus, setFormStatus] = useState('')
     const[imgError,setImgError] = useState(false)
+    const[numberOk,setNumberOk] = useState(true)
     const {signUp} = useUserAuth();
     const current = new Date();
     const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
@@ -38,7 +39,7 @@ const AddTourist = () => {
           return
         }
         uploadBytes(storageImageRef, image).then(() => {
-          console.log("Uploaded a blob or file!");
+          setImgError(false)
           getDownloadURL(storageImageRef)
             .then((url) => {
               setUrl(url);
@@ -98,6 +99,12 @@ const AddTourist = () => {
         : setPasswordMatch(false);
     };
 
+    // const validateContactNumber = () => {
+    //   contactNumber === 10
+    //     ? setNumberOk(true)
+    //     : setNumberOk(false);
+    // };
+
   
 
   return (
@@ -107,7 +114,8 @@ const AddTourist = () => {
                 
             <h3>Add Tourist</h3>
             { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
-            {imgError?<p style = {{color:"red", fontWeight:"bold"}}>Image not Valid</p> : ''}
+            {numberOk?'' :<p style = {{color:"red", fontWeight:"bold"}}>Enter a 10 Digit Contact Number</p>}
+            {imgError?<p style = {{color:"red", fontWeight:"bold"}}>No valid image file selected</p> : ''}
             <div>
                     <input 
                         type="text" 

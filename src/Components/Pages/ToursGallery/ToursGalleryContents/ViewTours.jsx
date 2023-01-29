@@ -6,6 +6,7 @@ import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import UpdateAddThingsModal from "../../../Modals/UpdateAddThingsModal";
 import UpdateDiscoverModal from "../../../Modals/UpdateDiscoverModal";
 import { useGuides } from "../../../../Context/GuidesContext";
+import { toast } from "react-hot-toast";
 
 const ViewTours = () => {
   const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ const ViewTours = () => {
   const [error, setError] = useState("");
   const [modalOpened, setModalOpened] = useState(false)
   const [currentItem,setCurrentItem] = useState('')
-  const guides = useGuides()
+  const {guides} = useGuides()
 
   const setModal =(item)=>{
     setModalOpened(true)
@@ -22,21 +23,15 @@ const ViewTours = () => {
 
   const deleteItem = async(itemId)=>{
     const item = deleteDoc(doc(db, 'toursGallery', itemId));
-    alert("Record Deleted Successfully")
+    toast.success("Record Deleted Successfully")
   }
 
   const columnData = [
     {
-      label: "Gallery Id",
-      field: "id",
-      sort: "asc",
-      width: 250,
-    },
-    {
-      label: "Guide Name",
+      label: "Guide Id",
       field: "guideName",
       sort: "asc",
-      width: 200,
+      width: 300,
     },
     {
       label: "Destination",
@@ -91,8 +86,7 @@ const ViewTours = () => {
   useEffect(() => {
     const findGuideName = (id) => {
       const guide = guides.find(guide => guide.id === id)
-      return guide ? guide.firstName: null
-      
+      return guide ? guide.id : null   
     }
 
     setLoading(true);
@@ -110,8 +104,7 @@ const ViewTours = () => {
         let rowDataCollection = [];
         list.forEach((item) => {
           const newItem = {
-            id: item.id,
-            guideName: item.guideId,
+            guideName: findGuideName(item.guideId),
             destination: item.destination,
             district: item.district,
             mainImage: <img src = {item.mainImage} style = {{width:180, height: 180}}/>,

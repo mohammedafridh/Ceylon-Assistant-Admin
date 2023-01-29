@@ -12,13 +12,15 @@ import AdminPageSetup from './Components/Pages/Users/UsersContents/Admin/AdminPa
 import GuidePageSetup from './Components/Pages/Users/UsersContents/Guides/GuidePageSetup';
 import TouristPageSetup from './Components/Pages/Users/UsersContents/Tourists/TouristPageSetup';
 import Messages from './Components/Pages/Messages/Messages';
-import { GuideProvider  } from './Context/GuidesContext';
 import GuideRequests from './Components/Pages/GuideRequests/GuideRequests';
 import Login from './Components/Pages/AuthenticationPage/Login';
+import { Toaster } from 'react-hot-toast';
+import { GuideProvider } from './Context/GuidesContext';
+
 function App() {
     return(
         <GuideProvider>
-        
+        <Toaster />
             <div className = 'adminPanel'>
 
             <div className = "blur" style = {{top:'36%', left:'-8rem'}}></div>

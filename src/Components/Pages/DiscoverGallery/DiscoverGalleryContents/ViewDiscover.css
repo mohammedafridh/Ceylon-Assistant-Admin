@@ -14,21 +14,23 @@
 }
 
 .dltBtn{
-    background-color: red;
+    background-color: #BC0E18;
     border: none;
     outline: none;
     color: white;
     padding: 5px;
     border-radius: 5px;
+    width: 100px;
 }
 
 .updateBtn{
-    background-color: rgb(17, 219, 44);
+    background-color: #013E77;
     border: none;
     outline: none;
     color: white;
     padding: 5px;
     border-radius: 5px;
+    width: 100px;
 }
 
 .btnHolder{
