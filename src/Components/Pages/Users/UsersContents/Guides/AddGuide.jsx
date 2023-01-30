@@ -7,6 +7,7 @@ import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {v4} from 'uuid'
 import Select from 'react-select'
 import SuccessModal from "../../../../Modals/SuccessModal";
+import { toast } from 'react-hot-toast';
 
 
 const AddGuide = () => {
@@ -140,14 +141,12 @@ const AddGuide = () => {
             })
         });
       }
+
       const guideHandler = async (e) => {
-        validatePassword()
         e.preventDefault();
         setError("");
-        try {
-          if(passwordMatch === false) {
-            return
-          }
+          if(password === confirmPassword){
+            if(contactNumber.length === 10){
             signUp(email, password)
               .then((data) => {
                 const addDetails = doc(db, "Guides", data.user.uid);    
@@ -195,22 +194,20 @@ const AddGuide = () => {
                 setConfirmPassword("");
                 setFormStatus("Success")
               })
-              .catch((error) => {
-                setFormStatus("Error")
-                setError(error.message)
-              });
-          } catch (err) {
-            setError(err.message);
-            setFormStatus("Error")
-          }
+            }else{
+              setError('*Contact Number must be 10 characters')
+            }
+            }else{
+              setError('Passwords Do Not Match!')
+            }
     }
 
-    const validatePassword = () => {
-      console.log(passwordMatch, password, confirmPassword)
-      password === confirmPassword
-        ? setPasswordMatch(true)
-        : setPasswordMatch(false);
-    };
+    // const validatePassword = () => {
+    //   console.log(passwordMatch, password, confirmPassword)
+    //   password === confirmPassword
+    //     ? setPasswordMatch(true)
+    //     : setPasswordMatch(false);
+    // };
 
 
 
@@ -221,7 +218,7 @@ const AddGuide = () => {
         <form onSubmit={guideHandler} className = 'addUserForm'>
                 
             <h3>Add Guide</h3>
-            { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
+            <p style={{ color: error && 'red', fontWeight:'bold'}}>{error}</p>
 
             <div>
                     <input 
