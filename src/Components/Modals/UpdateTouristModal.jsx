@@ -64,7 +64,7 @@ function UpdateGuideModal({modalOpened,setModalOpened,data}) {
       overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
       overlayOpacity={0.25}
       overlayBlur={0.5}
-      size = '75%'
+      size = '50%'
       opened = {modalOpened}
       onClose = {()=>{setModalOpened(false);
         //  setQuestion(''); 
@@ -119,17 +119,19 @@ function UpdateGuideModal({modalOpened,setModalOpened,data}) {
                     />
             </div>
 
-            <div>
+            <span className='profilePicture'>
                 <div className="proUpdate">
-                  <span>Profile Image</span>
-                    <input 
-                        type="file" 
-                        name = 'coverImg' 
-                        onChange = {(e) => setImage(e, 'Tourist_Profile', setProfile)}
-                        required
-                    />
+                <span>Profile Image</span>
+                <img src={profile ? profile : data.image} width={250} height={250} alt="profile" />
+                <input
+                  type="file"
+                  name="coverImg"
+                  placeholder="Update Image"
+                  onChange={(e) => setImage(e, "Tourist_Profile", setProfile)}
+                  required
+                />
                 </div>
-            </div>
+            </span>
            
             <button onClick = {()=>updateDetails(data)} className="button infoButton">
                  Update Tourist

@@ -8,6 +8,7 @@ const GuidesContext = createContext();
 export function GuideProvider({children}) {
     const [guides, setGuides] = useState([]);
     const [tourists,setTourists] = useState([])
+    const [admins,setAdmins] = useState([])
 
     useEffect(() => {
         const guidesCollection = onSnapshot(
@@ -48,9 +49,29 @@ export function GuideProvider({children}) {
         };
       }, []);
 
+      useEffect(() => {
+        const touristCollection = onSnapshot(
+          collection(db, "Admin"),
+          (snapshot) => {
+            let list = [];
+            snapshot.docs.forEach((doc) => {
+              list.push({
+                id: doc.id,
+                ...doc.data(),
+              });
+            });
+            setAdmins(list);
+          }
+        );
+        return () => {
+            touristCollection();
+        };
+      }, []);
+
       const context = {
         guides,
         tourists,
+        admins
     }
 
 

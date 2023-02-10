@@ -1,0 +1,64 @@
+.adminLogin{
+    display: flex;
+    background-color: rgb(255, 251, 251);
+    color: rgb(0, 0, 0);
+    border: 1px solid;
+    border-radius: 1rem;
+    width: 34.9rem;
+    margin: 0rem auto;
+    position: absolute;
+    bottom: 30%;
+    left: 28%;
+    /* align-items: center; */
+    /* width: 95%; */
+}
+
+.loginSection img{
+    height: 250px;
+    width: 250px;
+    margin: 10px;
+}
+
+.adminLoginForm{
+    background-color: black;
+    border-radius: 0rem 1rem 1rem 0;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    gap: 1rem;
+    align-items: center;
+    text-align: center;
+    width: 18rem;
+}
+
+.adminLoginForm>h1{
+    font-size: 20px;
+    color: #f95f35;
+}
+
+.loginCredentials{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.loginCredentials>input{
+    background-color:rgba(40, 52, 62, 0.07);
+    outline: none;
+    border: 1px solid white;
+    padding: 5px;
+    border-radius: 6px;
+    width: 14rem;
+    font-size: 12px;
+    color: #ccc;
+}
+
+.logBtn{
+    background: linear-gradient(98.63deg, #f9a225 0%, #f95f35 100%);
+    color: white;
+    width: 10rem;
+    margin-top: 1rem;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 6px;
+}

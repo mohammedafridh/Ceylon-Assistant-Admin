@@ -4,6 +4,7 @@ import { db } from "../../../Firebase";
 import { collection, onSnapshot, doc, deleteDoc, setDoc, query, updateDoc } from "firebase/firestore";
 import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import { useUserAuth } from "../../../Context/Context";
+import { toast } from "react-hot-toast";
 
 const GuideRequests = () => {
   const [loading, setLoading] = useState(false);
@@ -15,7 +16,7 @@ const GuideRequests = () => {
   const [ratings, setRatings] = useState([])
   const current = new Date();
   const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
-  const signUp = useUserAuth()
+  const {signUp} = useUserAuth()
 
   const setModal = async (item) => {
     try {
@@ -48,10 +49,8 @@ const GuideRequests = () => {
             };
             setDoc(addDetails, details)
             .then(async()=>{
-                const cancelItem = query(doc(db,'toursGallery',item.id));
-                await updateDoc(cancelItem, {
-                status: 'inactive'
-       });
+              const items = deleteDoc(doc(db, 'guideRequests', item.id));
+              toast.success('Guide Registration Successful')
             })
           })
           .catch((error) => {

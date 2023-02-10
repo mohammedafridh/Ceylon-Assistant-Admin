@@ -16,6 +16,7 @@ import GuideRequests from './Components/Pages/GuideRequests/GuideRequests';
 import Login from './Components/Pages/AuthenticationPage/Login';
 import { Toaster } from 'react-hot-toast';
 import { GuideProvider } from './Context/GuidesContext';
+import AdminLogin from './Components/Pages/login/AdminLogin';
 
 function App() {
     return(
@@ -24,6 +25,12 @@ function App() {
             <div className = 'adminPanel'>
 
             <div className = "blur" style = {{top:'36%', left:'-8rem'}}></div>
+
+            <div>
+                <Routes>
+                    {/* <Route path = '/' element = {<AdminLogin />} /> */}
+                </Routes>
+            </div>
 
             <TopBar />
                 <div className = 'containers'>
@@ -35,6 +42,7 @@ function App() {
                         <Routes>
                             <Route exact path = '/' element = {<Homepage />} />
                             {/* <Route path = '/users' element = {<Users />} /> */}
+                            <Route path = '/login' element = {<AdminLogin />} />
                             <Route path = '/adminPage' element = {<AdminPageSetup />} />
                             <Route path = '/guidePage' element = {<GuidePageSetup />} />
                             <Route path = '/touristPage' element = {<TouristPageSetup />} />

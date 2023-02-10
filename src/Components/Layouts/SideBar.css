@@ -43,6 +43,7 @@
 .sideBarListItem:hover{
     background-color: rgba(219, 217, 217, 0.64);
     color: rgb(29, 16, 145);
+    font-weight: bold;
 }
 
 .sideBar a{

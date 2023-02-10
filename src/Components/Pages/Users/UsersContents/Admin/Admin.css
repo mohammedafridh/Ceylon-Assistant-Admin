@@ -179,3 +179,9 @@
     font-weight: 400!important;
     text-align: left!important;
 }
+
+.profilePicture{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}

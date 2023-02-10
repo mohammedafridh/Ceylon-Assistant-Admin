@@ -14,10 +14,17 @@ const AllAdmins = () => {
   const [modalOpened, setModalOpened] = useState(false)
   const [currentItem,setCurrentItem] = useState('')
 
-  const deleteItem = async(itemId)=>{
+  const inactiveItem = async(itemId)=>{
     const item = query(doc(db, 'Admin', itemId));
     await updateDoc(item, {
-      status:'Inactive'
+      status:'inactive'
+    })
+  }
+
+  const activeItem = async(itemId)=>{
+    const item = query(doc(db, 'Admin', itemId));
+    await updateDoc(item, {
+      status:'Active'
     })
   }
 
@@ -31,6 +38,12 @@ const AllAdmins = () => {
     {
       label: "Email Address",
       field: "email",
+      sort: "asc",
+      width: 300,
+    },
+    {
+      label: "Status",
+      field: "status",
       sort: "asc",
       width: 300,
     },
@@ -54,14 +67,16 @@ const AllAdmins = () => {
             ...doc.data(),
           });
         });
-        list = list.filter((admin)=>admin.status === "Active")
+        // list = list.filter((admin)=>admin.status === "Active")
         let rowDataCollection = [];
         list.forEach((item) => {
           const newItem = {
             id: item.id,
             email:item.email,
+            status:item.status,
             actions: <div className="btnHolder">
-              <button onClick = {() => deleteItem(item.id)} className = 'dltBtn' style = {{width:100}}>Delete</button>            
+              <button onClick = {() => inactiveItem(item.id)} className = 'dltBtn' style = {{width:100}}>Inactivate</button>   
+              <button onClick = {() => activeItem(item.id)} className = 'actBtn' style = {{backgroundColor:'#1A73C7',width:100}}>Activate</button>         
             </div>
           };
           rowDataCollection.push(newItem);

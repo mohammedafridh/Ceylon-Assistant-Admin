@@ -45,8 +45,7 @@ const SideBar = () => {
               >
                 {" "}
                 <People /> Users{" "}
-              </NavLink>
-        
+              </NavLink>       
             
               <NavLink
                 to="/bookings"

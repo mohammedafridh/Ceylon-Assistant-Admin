@@ -385,7 +385,7 @@ const AddGuide = () => {
                     <input 
                         type="file" 
                         name = 'profileImg' 
-                        onChange = {(e) => setImage(e, 'TestPassport', setProfileImage)}
+                        onChange = {(e) => setImage(e, 'GuideImages', setProfileImage)}
                         required
                     />
                 </div>
@@ -395,7 +395,7 @@ const AddGuide = () => {
                     <input 
                         type="file" 
                         name = 'coverImg' 
-                        onChange = {(e) => setImage(e, 'TestPassport', setNicImage)}
+                        onChange = {(e) => setImage(e, 'GuideNic', setNicImage)}
                         required
                     />
                 </div>
