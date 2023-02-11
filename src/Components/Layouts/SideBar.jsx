@@ -11,7 +11,8 @@ import {
   Home,
   BookOnline,
   Message, 
-  PersonAdd
+  PersonAdd,
+  Reviews
 } from "@mui/icons-material";
 import { Link, NavLink } from "react-router-dom";
 
@@ -121,9 +122,14 @@ const SideBar = () => {
                 <PersonAdd /> Guide Requests
               </NavLink>
 
-            <li className="sideBarListItem">
-              <Mail /> Mail Subscription
-            </li>
+              <NavLink
+                to="/reviews"
+                className={({ isActive }) =>
+                  isActive ? "sideBarListItem active" : "sideBarListItem"
+                }
+              >
+                <Reviews /> Reviews
+              </NavLink>
           </ul>
         </div>
       </div>

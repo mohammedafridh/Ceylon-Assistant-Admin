@@ -17,6 +17,7 @@ import Login from './Components/Pages/AuthenticationPage/Login';
 import { Toaster } from 'react-hot-toast';
 import { GuideProvider } from './Context/GuidesContext';
 import AdminLogin from './Components/Pages/login/AdminLogin';
+import AllReviews from './Components/Pages/Reviews/AllReviews';
 
 function App() {
     return(
@@ -53,6 +54,7 @@ function App() {
                             <Route path = '/faq' element = {<Faq />} />
                             <Route path = '/messages' element = {<Messages />} />
                             <Route path = '/guideRequests' element = {<GuideRequests />} />
+                            <Route path = '/reviews' element = {<AllReviews />} />
                         </Routes>
                     </div>
                                  

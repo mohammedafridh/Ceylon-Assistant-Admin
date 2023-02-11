@@ -19,10 +19,24 @@ const AllTourists = () => {
     setCurrentItem(item)
   }
 
-  const deleteItem = async(itemId)=>{
+  // const deleteItem = async(itemId)=>{
+  //   const item = query(doc(db, 'Tourist', itemId));
+  //   await updateDoc(item, {
+  //     status:'Inactive'
+  //   })
+  // }
+
+  const inactivateItem = async(itemId)=>{
     const item = query(doc(db, 'Tourist', itemId));
     await updateDoc(item, {
-      status:'Inactive'
+      status:'inactive'
+    })
+  }
+
+  const activateItem = async(itemId)=>{
+    const item = query(doc(db, 'Tourist', itemId));
+    await updateDoc(item, {
+      status:'Active'
     })
   }
 
@@ -76,10 +90,16 @@ const AllTourists = () => {
       width: 230,
     },
     {
+      label: 'Status',
+      field: "status",
+      sort: "asc",
+      width: 230,
+    },
+    {
       label: "Actions",
       field: "actions",
       sort: "asc",
-      width: 250,
+      width: 380,
     },
   ];
 
@@ -95,7 +115,7 @@ const AllTourists = () => {
             ...doc.data(),
           });
         });
-        list = list.filter((tourist)=>tourist.status === "Active")
+        // list = list.filter((tourist)=>tourist.status === "Active")
         let rowDataCollection = [];
         list.forEach((item) => {
           const newItem = {
@@ -107,8 +127,11 @@ const AllTourists = () => {
             contactNumber: item.contactNumber,
             passportNumber: item.passportNumber,
             passportImage: <img src = {item.passPortImage} style={{width:180, height:180, marginLeft:0}} />, 
+            status:item.status,
             actions: <div className="btnHolder">
-              <button onClick = {() => deleteItem(item.id)} className = 'dltBtn' style = {{width:100}}>Delete</button>
+              {/* <button onClick = {() => deleteItem(item.id)} className = 'dltBtn' style = {{width:100}}>Delete</button> */}
+              <button onClick = {() => inactivateItem(item.id)} className = 'dltBtn' style = {{backgroundColor:'#BC0E18',width:100}}>Inactive</button>
+              <button onClick = {() => activateItem(item.id)} className = 'actBtn' style = {{backgroundColor:'#1A73C7',width:100}}>Active</button>
               <button onClick = {() => setModal(item)} className = 'updateBtn' style = {{width:100}}>Update</button>
             </div>
           };

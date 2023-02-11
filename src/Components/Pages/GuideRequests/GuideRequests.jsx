@@ -5,6 +5,8 @@ import { collection, onSnapshot, doc, deleteDoc, setDoc, query, updateDoc } from
 import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import { useUserAuth } from "../../../Context/Context";
 import { toast } from "react-hot-toast";
+import emailjs from '@emailjs/browser';
+import { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY } from '../../../../src/configs/emailkey';
 
 const GuideRequests = () => {
   const [loading, setLoading] = useState(false);
@@ -19,6 +21,7 @@ const GuideRequests = () => {
   const {signUp} = useUserAuth()
 
   const setModal = async (item) => {
+
     try {
         signUp(item.email, item.password)
           .then((data) => {
@@ -50,7 +53,23 @@ const GuideRequests = () => {
             setDoc(addDetails, details)
             .then(async()=>{
               const items = deleteDoc(doc(db, 'guideRequests', item.id));
+
+              const templateParams = {
+                subject: 'Your Request is Approved!',
+                to_name: item.firstName +''+ item.lastName,
+                to_email:item.email,
+                message: 'Your Guide Registration Request is Accepted',
+              };
+        
+              emailjs.send('service_b42ex4l', 'template_d7m6944', templateParams, 'ta7ULFlbVnrfwWRuQ')
+                .then((response) => {
+                  console.log('SUCCESS!', response.status, response.text);
+                }, (err) => {
+                  console.log('FAILED...', err);
+                });
+
               toast.success('Guide Registration Successful')
+              toast.success('Email sent')
             })
           })
           .catch((error) => {
