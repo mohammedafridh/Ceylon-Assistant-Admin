@@ -14,18 +14,18 @@ const AdminLogin = () => {
   const navigate = useNavigate()
   const {logIn, logOut} = useUserAuth()
 
-  // const isAdminActive = admins.find(admin => admin.email === email && admin.status ==='Active')
+  const isAdminActive = admins.find(admin => admin.email === email && admin.status ==='Active')
 
   const loginHandler = async (e)=>{
     e.preventDefault();
     setError('')
         try{
             const isLoggedIn = await logIn(email,password)
-            // if(isLoggedIn && !isAdminActive){
-            //     toast.error('Your account is not active')
-            //     logOut()
-            //     return
-            // }
+            if(isLoggedIn && !isAdminActive){
+                toast.error('Your account is not active')
+                logOut()
+                return
+            }
             navigate('/')
             toast.success('Logged in Successful. Thank You!')
             
@@ -33,7 +33,8 @@ const AdminLogin = () => {
             console.log(error.message)
             error.code === 'auth/invalid-email' && toast.error('Invalid email')
             error.code === 'auth/user-not-found' && toast.error('Admin not found')
-            error.code === 'auth/wrong-password' && toast.error('Incorrect Username or Password')
+            // error.code === 'auth/wrong-password' && toast.error('Incorrect Username or Password')
+            error.code === 'auth/wrong-password' && setError('Incorrect Username or Password')
             setError('Failed to login')
         }
     
@@ -46,6 +47,9 @@ const AdminLogin = () => {
         </div>
             <form className='adminLoginForm' onSubmit = {loginHandler}>
                 <h1>Ceylon Assistant Admin</h1>
+
+                <p style={{ color: error && 'red', fontWeight: 'bold' }}>{error}</p>
+
                 <div className='loginCredentials'>
 
                 <input 
