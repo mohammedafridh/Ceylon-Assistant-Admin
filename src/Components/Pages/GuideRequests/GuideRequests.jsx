@@ -7,6 +7,7 @@ import { useUserAuth } from "../../../Context/Context";
 import { toast } from "react-hot-toast";
 import emailjs from '@emailjs/browser';
 import { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY } from '../../../../src/configs/emailkey';
+import BaseLayout from "../../Layouts/BaseLayout";
 
 const GuideRequests = () => {
   const [loading, setLoading] = useState(false);
@@ -56,7 +57,7 @@ const GuideRequests = () => {
 
               const templateParams = {
                 subject: 'Your Request is Approved!',
-                to_name: item.firstName +''+ item.lastName,
+                to_name: item.firstName +' '+ item.lastName,
                 to_email:item.email,
                 message: 'Your Guide Registration Request is Accepted',
               };
@@ -240,15 +241,12 @@ const GuideRequests = () => {
   }, []);
 
   return (
+    <BaseLayout>
     <div className="allDiscoveries">
         <h1>Guide Requests</h1>
       <MDBDataTable scrollX striped bordered data={tableData} maxHeight="200px"/>
-      {/* <UpdateFaqModal
-        modalOpened={modalOpened}
-        setModalOpened={setModalOpened}
-        data={currentItem}
-      /> */}
     </div>
+    </BaseLayout>
   );
 };
 

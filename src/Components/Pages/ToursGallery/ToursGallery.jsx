@@ -1,13 +1,16 @@
 import React from 'react'
+import BaseLayout from '../../Layouts/BaseLayout'
 import AddTours from './ToursGalleryContents/AddTours'
 import ViewTours from './ToursGalleryContents/ViewTours'
 
 const ToursGallery = () => {
   return (
-    <div className="toursGallery">
-        <AddTours />
-        <ViewTours />
-    </div>
+    <BaseLayout>
+      <div className="toursGallery">
+          <AddTours />
+          <ViewTours />
+      </div>
+    </BaseLayout>
   )
 }
 

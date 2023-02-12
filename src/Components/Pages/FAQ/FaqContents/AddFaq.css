@@ -3,6 +3,8 @@
     background-color: var(--cardColor);
     padding: 2rem;
     width: 95%;
+    box-shadow: 3px 3px 6px 5px #ccc;
+    border-radius: 10px;
 }
 
 .addFaqForm{
@@ -17,7 +19,6 @@
     text-align: center;
     align-items: center;
     justify-content: center;
-    /* box-shadow: 3px 3px 6px 5px #ccc; */
     border-radius: 10px;
     flex: 1;
 }

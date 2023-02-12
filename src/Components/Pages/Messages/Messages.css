@@ -17,6 +17,22 @@
     color: rgb(41, 115, 150);
 }
 
+.msgBtnContainer{
+    display: flex;
+    gap: 1rem;
+}
+
+.delete{
+    width: auto!important;
+    padding: 5px 18px!important;
+}
+
+.delete:hover{
+    width: auto!important;
+    padding: 5px 18px!important;
+    background-color: #900B0B ;
+}
+
 .replyBtn{
     margin-top: 2rem;
     padding: 5px;

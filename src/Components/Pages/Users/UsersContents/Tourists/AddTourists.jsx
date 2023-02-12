@@ -6,7 +6,7 @@ import {doc, setDoc } from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {v4} from 'uuid'
 import SuccessModal from "../../../../Modals/SuccessModal";
-import { Button, FileInput } from '@mantine/core';
+import { toast } from 'react-hot-toast';
 
 const AddTourist = () => {
 
@@ -50,14 +50,14 @@ const AddTourist = () => {
             })
         });
       }
+
       const touristHandler = async (e) => {
-        validatePassword()
+        // validatePassword()
         e.preventDefault();
         setError("");
-        try {
-          if(passwordMatch === false) {
-            return
-          }
+          if(password === confirmPassword) {
+            if(contactNumber.length===10){
+              if(!imgError){
             signUp(email, password)
               .then((data) => {
                 const addDetails = doc(db, "Tourist", data.user.uid);    
@@ -80,24 +80,25 @@ const AddTourist = () => {
                 setEmail('')
                 setPassword('')
                 setConfirmPassword('');
-                setFormStatus("Success")
+                toast.success('Tourist added successfully!')
               })
-              .catch((error) => {
-                setFormStatus("Error")
-                setError(error.message)
-              });
-          } catch (err) {
-            setError(err.message);
-            setFormStatus("Error")
-          }
+            }else{
+              setError('*Select a valid image')
+            }
+            }else{
+              setError('*Contact Number must be 10 characters')
+            }
+            }else{
+              setError('Passwords Do Not Match!')
+            }
     }
 
-    const validatePassword = () => {
-      console.log(passwordMatch, password, confirmPassword)
-      password === confirmPassword
-        ? setPasswordMatch(true)
-        : setPasswordMatch(false);
-    };
+    // const validatePassword = () => {
+    //   console.log(passwordMatch, password, confirmPassword)
+    //   password === confirmPassword
+    //     ? setPasswordMatch(true)
+    //     : setPasswordMatch(false);
+    // };
 
     // const validateContactNumber = () => {
     //   contactNumber === 10
@@ -113,9 +114,12 @@ const AddTourist = () => {
         <form onSubmit={touristHandler} className = 'addUserForm'>
                 
             <h3>Add Tourist</h3>
-            { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
+            {/* { passwordMatch ? '' : <p style = {{color:"red", fontWeight:"bold"}}>* The passwords doesn't Match. Try Again!</p>}
             {numberOk?'' :<p style = {{color:"red", fontWeight:"bold"}}>Enter a 10 Digit Contact Number</p>}
-            {imgError?<p style = {{color:"red", fontWeight:"bold"}}>No valid image file selected</p> : ''}
+            {imgError?<p style = {{color:"red", fontWeight:"bold"}}>No valid image file selected</p> : ''} */}
+
+          <p style={{ color: error && 'red', fontWeight:'bold'}}>{error}</p>
+
             <div>
                     <input 
                         type="text" 
@@ -189,10 +193,11 @@ const AddTourist = () => {
             <div className='userAuthImageContainer'>
                 <div className="authProfile">
                     Profile Image
+                    <img src={profileURL} width={70} height={70} alt="profile" />
                     <input 
                         type="file" 
                         name = 'profileImg' 
-                        onChange = {(e) => setImage(e, 'TestProfile', setProfileURL)}
+                        onChange = {(e) => setImage(e, 'TouristProfile', setProfileURL)}
                         required
                     />
 
@@ -200,10 +205,11 @@ const AddTourist = () => {
             
                 <div className="authProfile">
                   <label>Passport Image</label>
+                  <img src={passportUrl} width={70} height={70} alt="profile" />
                     <input 
                         type="file" 
                         name = 'coverImg' 
-                        onChange = {(e) => setImage(e, 'TestPassport', setPassportUrl)}
+                        onChange = {(e) => setImage(e, 'TouristPassport', setPassportUrl)}
                         required
                     />
                 </div>

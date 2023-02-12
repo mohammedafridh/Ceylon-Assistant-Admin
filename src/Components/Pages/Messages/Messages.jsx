@@ -4,16 +4,29 @@ import { db } from "../../../Firebase";
 import { doc, deleteDoc, onSnapshot, collection } from "firebase/firestore";
 import { Card, Text, Button, Group, Divider, Loader, Center } from "@mantine/core";
 import { toast } from "react-hot-toast";
+import MessageReplyModal from "../../Modals/MessageReplyModal";
+import BaseLayout from "../../Layouts/BaseLayout";
 
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [Loading, setLoading] = useState(false);
   const [error, setError] = useState();
+  const[selectedMessage,setSelectedMessage] = useState('')
+  const [modalOpened,setModalOpened] = useState(false)
 
-  const deleteMessage = async (id) => {
-    await deleteDoc(doc(db, "messages", id));
-    toast.success('Message Noted!')
-  };
+  // const deleteMessage = async (id) => {
+  //   await deleteDoc(doc(db, "messages", id));
+  //   toast.success('Message Noted!')
+  // };
+
+  const sendMessage = (message)=>{
+    setSelectedMessage(message)
+    setModalOpened(true)
+  }
+
+  const rejectMessage = (message)=>{
+    const item = deleteDoc(doc(db, 'messages', message));
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -40,6 +53,7 @@ const Messages = () => {
   }, []);
 
   return (
+    <BaseLayout>
     <div>
       <div className="messages">
         <h1>All Messages</h1>
@@ -62,15 +76,23 @@ const Messages = () => {
                 {message.email}
               </Text>
             </Group>
-            <Button color="green" variant="solid" onClick={() => deleteMessage(message.docId)}>
-              Mark as Noted
-            </Button>
+            {/* <Button color="green" variant="solid" onClick={() => deleteMessage(message.docId)}> */}
+            <div className="msgBtnContainer">
+              <Button color="green" variant="solid" onClick={() => rejectMessage(message.docId)} className='dltBtn delete'>Reject</Button>
+              <Button color="green" variant="solid" onClick={() => sendMessage(message)}>Reply</Button>
+            </div>
+            <MessageReplyModal
+              modalOpened={modalOpened}
+              setModalOpened={setModalOpened}
+              message={selectedMessage}
+            />
           </Card>
         ))}
 
         
       </div>
     </div>
+    </BaseLayout>
   );
 };
 

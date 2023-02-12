@@ -40,3 +40,43 @@
     background: var(--buttonBg);
     transition: all 100ms ease-out;
 }
+
+/* Message Reply Model css */
+
+.replyContainer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+}
+.infoForm>span{
+    width: 100%;
+}
+
+textarea{
+    min-height: 5rem;
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: var(--inputColor);
+    padding: 7px;
+    border-radius: 6px;
+}
+
+.messageBtn{
+    color: white!important;
+    background: #40c057!important;
+    width: auto!important;
+    padding: 5px 10px!important;
+    border-radius: 5px!important;
+}
+
+.messageBtn:hover{
+    color: white!important;
+    background: #48B426!important;
+    width: auto!important;
+    padding: 5px 10px!important;
+    border-radius: 5px!important;
+    transition: 0.5s;
+}
+

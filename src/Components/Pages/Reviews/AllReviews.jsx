@@ -4,6 +4,7 @@ import { db } from "../../../Firebase";
 import { collection, onSnapshot, doc, updateDoc, query,deleteDoc } from "firebase/firestore";
 import { MDBDataTable, MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 import { toast } from "react-hot-toast";
+import BaseLayout from "../../Layouts/BaseLayout";
 
 const AllReviews = () => {
   const [loading, setLoading] = useState(false);
@@ -117,10 +118,12 @@ const AllReviews = () => {
   }, []);
 
   return (
+    <BaseLayout>
     <div className="allDiscoveries">
       <h1>All Reviews</h1>
       <MDBDataTable scrollX striped bordered data={tableData} maxHeight="200px"/>
     </div>
+    </BaseLayout>
   );
 };
 
