@@ -7,7 +7,7 @@ import { useUserAuth } from '../../../Context/Context'
 
 const AdminLogin = () => {
 
-  const {admins} = useGuides
+  const {admins} = useGuides()
   const [email,setEmail] = useState('');
   const[password,setPassword] = useState('')
   const [error,setError] = useState('')

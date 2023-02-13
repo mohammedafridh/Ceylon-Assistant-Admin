@@ -18,6 +18,7 @@ import { Toaster } from "react-hot-toast";
 import { GuideProvider } from "./Context/GuidesContext";
 import AdminLogin from "./Components/Pages/login/AdminLogin";
 import AllReviews from "./Components/Pages/Reviews/AllReviews";
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
       <Toaster />
 
       <Routes>
-        <Route exact path="/" element={<Homepage />} />
+        <Route exact path="/" element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
         {/* <Route path = '/users' element = {<Users />} /> */}
         <Route path = '/login' element = {<AdminLogin />} />
         <Route path="/adminPage" element={<AdminPageSetup />} />

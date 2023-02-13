@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect,useRef} from 'react'
 import '../Admin/Admin.css'
 import { useUserAuth } from '../../../../../Context/Context';
 import {db,storage} from '../../../../../Firebase'
@@ -29,6 +29,7 @@ const AddTourist = () => {
     const {signUp} = useUserAuth();
     const current = new Date();
     const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+    const inputRef = useRef(null)
 
      const setImage = (e, imageFolder, setUrl) => {
         const image = e.target.files[0];
@@ -75,6 +76,7 @@ const AddTourist = () => {
                 setFName('')
                 setLName('')
                 setContactNumber('')
+                setPassportNumber('')
                 setProfileURL('')
                 setPassportUrl('')
                 setEmail('')

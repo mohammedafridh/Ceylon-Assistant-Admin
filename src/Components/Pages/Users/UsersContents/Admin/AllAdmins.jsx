@@ -39,19 +39,19 @@ const AllAdmins = () => {
       label: "Email Address",
       field: "email",
       sort: "asc",
-      width: 300,
+      width: 350,
     },
     {
       label: "Status",
       field: "status",
       sort: "asc",
-      width: 300,
+      width: 150,
     },
     {
       label: "Actions",
       field: "actions",
       sort: "asc",
-      width: 200,
+      width: 250,
     },
   ];
 

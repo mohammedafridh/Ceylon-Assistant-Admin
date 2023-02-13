@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../Admin/Admin.css'
 import { useUserAuth } from '../../../../../Context/Context';
 import { db, storage } from '../../../../../Firebase'
@@ -43,7 +43,6 @@ const AddGuide = () => {
   const current = new Date();
   const addDate = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
   const [languages, setLanguages] = useState('')
-  const inputRef = useRef(null)
 
   //language dropdown data
   // const language = [
@@ -124,7 +123,7 @@ const AddGuide = () => {
     { value: 'Vavuniya', label: 'Vavuniya' },
   ]
 
-  const [district, setDistrict] = useState(districtData.label)
+  const [district, setDistrict] = useState()
   const districtHandler = (e) => {
     console.log(e)
     setDistrict(e.label)
@@ -202,11 +201,11 @@ const AddGuide = () => {
               setContactNumber('')
               setNicNumber('')
               setAddress('')
-              setDistrict([])
-              setType([])
-              setLanguages([])
+              setDistrict('')
+              setType('')
+              setLanguages('')
               setGuideRate('')
-              setVehicleType([])
+              setVehicleType('')
               setModel('')
               setMaxPassengers('')
               setPerKm('')
@@ -215,7 +214,6 @@ const AddGuide = () => {
               setEmail('')
               setPassword('')
               setConfirmPassword("");
-              inputRef.current.value = ''
               toast.success('Guide added Successfully!')
             })
         } else {
@@ -308,7 +306,6 @@ const AddGuide = () => {
             placeholder='Select District'
             onChange={districtHandler}
             className='typeDrop'
-            value = {district}
             required
             />
           </div>
@@ -322,55 +319,35 @@ const AddGuide = () => {
               className='langDrop'
               required
             /> 
-
-            <Select
-              data={typeData}
-              placeholder='Guide Type'
-              onChange={typeHandler}
-              className='guideDrop'
-              value = {type}
-              required
-            />
-
-            <input
-              type="number"
-              className='userInput'
-              onChange={(e) => setGuideRate(e.target.value)}
-              placeholder='Guide Rate Per Day'
-              value={guideRate}
-              required
-              style = {{width:200}}
-            />
           </div>
-
-          {/* <div>
-            <Select
-              data={typeData}
-              placeholder='Guide Type'
-              onChange={typeHandler}
-              className='guideDrop'
-              required
-            />
-
-            <input
-              type="number"
-              className='userInput'
-              onChange={(e) => setGuideRate(e.target.value)}
-              placeholder='Guide Rate Per Day'
-              value={guideRate}
-              required
-            />
-          </div> */}
 
           <div>
             <Select
-              data={carType}
+              data={typeData}
+              placeholder='Guide Type'
+              onChange={typeHandler}
+              className='guideDrop'
+              required
+            />
+
+            <input
+              type="number"
+              className='userInput'
+              onChange={(e) => setGuideRate(e.target.value)}
+              placeholder='Guide Rate Per Day'
+              value={guideRate}
+              required
+            />
+          </div>
+
+          <div>
+            {/* <Select
+              options={carType}
               placeholder='Vehicle Type'
               onChange={vehicleHandler}
               className='typeDrop'
-              value = {vehicleType}
               required
-            /> 
+            /> */}
 
             <input
               type="text"
@@ -444,7 +421,6 @@ const AddGuide = () => {
                 name='profileImg'
                 onChange={(e) => setImage(e, 'GuideProfile', setProfileUrl)}
                 required
-                ref = {inputRef}
               />
 
             </div>
@@ -457,7 +433,6 @@ const AddGuide = () => {
                 name='coverImg'
                 onChange={(e) => setImage(e, 'GuideNic', setNicUrl)}
                 required
-                ref = {inputRef}
               />
             </div>
 
