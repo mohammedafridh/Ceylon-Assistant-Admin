@@ -43,7 +43,10 @@ const AddGuide = () => {
   const current = new Date();
   const addDate = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
   const [languages, setLanguages] = useState('')
-  const inputRef = useRef(null)
+  const [profileImageInputRef, setProfileImageInputRef] = useState()
+  const [nicImageInputRef, setNicImageInputRef] = useState()
+  const profileRef = useRef()
+  const nicRef = useRef()
 
   //language dropdown data
   // const language = [
@@ -89,9 +92,9 @@ const AddGuide = () => {
     { value: 'Site', label: 'Site' }
   ]
 
-  const [type, setType] = useState(typeData.label)
+  const [type, setType] = useState()
   const typeHandler = (e) => {
-    setType(e.label)
+    setType(e)
   }
 
   //district dropdown data
@@ -124,10 +127,10 @@ const AddGuide = () => {
     { value: 'Vavuniya', label: 'Vavuniya' },
   ]
 
-  const [district, setDistrict] = useState(districtData.label)
+  const [district, setDistrict] = useState()
   const districtHandler = (e) => {
     console.log(e)
-    setDistrict(e.label)
+    setDistrict(e)
   }
 
   //car dropdown data
@@ -138,9 +141,9 @@ const AddGuide = () => {
     { value: 'Mini-Jeep', label: 'Mini Jeep' },
   ]
 
-  const [vehicleType, setVehicleType] = useState(carType.label)
+  const [vehicleType, setVehicleType] = useState()
   const vehicleHandler = (e) => {
-    setVehicleType(e.label)
+    setVehicleType(e)
   }
 
   const setImage = (e, imageFolder, setUrl) => {
@@ -165,6 +168,7 @@ const AddGuide = () => {
   }
 
   const guideHandler = async (e) => {
+    console.log({district, type, languages})
     e.preventDefault();
     setError("");
     if (password === confirmPassword) {
@@ -211,11 +215,13 @@ const AddGuide = () => {
               setMaxPassengers('')
               setPerKm('')
               setUrl('')
+              setProfileUrl('')
               setNicUrl('')
               setEmail('')
               setPassword('')
               setConfirmPassword("");
-              inputRef.current.value = ''
+              profileRef.current.value = "";
+              nicRef.current.value = "";
               toast.success('Guide added Successfully!')
             })
         } else {
@@ -235,7 +241,6 @@ const AddGuide = () => {
   //     ? setPasswordMatch(true)
   //     : setPasswordMatch(false);
   // };
-
 
 
   return (
@@ -268,7 +273,7 @@ const AddGuide = () => {
 
           <div>
             <input
-              type="number"
+              type="tel"
               className='userInput'
               onChange={(e) => setContactNumber(e.target.value)}
               placeholder='Contact Number'
@@ -438,26 +443,25 @@ const AddGuide = () => {
           <div className='userAuthImageContainer'>
             <div className="authProfile">
               Profile Image
-              <img src={profileUrl} width={70} height={70} alt="profile" />
+              {profileUrl && <img src={profileUrl} width={70} height={70} alt="profile" />}
               <input
                 type="file"
                 name='profileImg'
                 onChange={(e) => setImage(e, 'GuideProfile', setProfileUrl)}
                 required
-                ref = {inputRef}
+                ref={profileRef}
               />
 
             </div>
-
             <div className="authProfile">
-              <label>Passport Image</label>
-              <img src={nicUrl} width={70} height={70} alt="profile" />
+              <label>NIC Image</label>
+              {nicUrl && <img src={nicUrl} width={70} height={70} alt="profile" />}
               <input
                 type="file"
                 name='coverImg'
                 onChange={(e) => setImage(e, 'GuideNic', setNicUrl)}
                 required
-                ref = {inputRef}
+                ref={nicRef}
               />
             </div>
 

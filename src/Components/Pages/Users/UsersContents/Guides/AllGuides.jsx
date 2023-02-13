@@ -185,7 +185,7 @@ const AllGuides = () => {
             district: item.district,
             guideType: item.guideType,
             guideRate: item.guideRate,
-            languages: item.languages,
+            languages: item.languages.join(', '),
             vehicle: item.vehicleType,  
             vehicleModel:item.model,         
             perKmRate: item.perKmRate,

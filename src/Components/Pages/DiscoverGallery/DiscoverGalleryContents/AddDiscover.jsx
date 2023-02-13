@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useRef} from 'react'
 import './AddDiscover.css'
 import {collection, addDoc} from 'firebase/firestore'
 import {db, storage} from '../../../../Firebase'
@@ -17,33 +17,34 @@ const AddDiscover = () => {
   const [photo,setPhoto] = useState(null)
   const [url,setUrl] = useState(null)
   const [status,setStatus] = useState('active')
+  const[discoveryUrl,setDiscoveryUrl] = useState(null)
   const [error,setError] = useState('')
+  const[imgError,setImgError] = useState(false)
   const current = new Date();
   const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+  const discoverRef = useRef()
 
-  useEffect(() => {
-    const getImageUrl = async () => {
-        const imageRef = ref(storage, `Discovery Images /${photo.name + v4()}`);
-        uploadBytes(imageRef, photo)
-          .then(() => {
-            getDownloadURL(imageRef)
-              .then((url) => {
-                // console.log({ url });
-                setUrl(url);
-              })
-              .catch((err) => {
-                setError(err.message, "error getting the image");
-              });
-          })
-          .catch((err) => {
-            setError(err);
-          });
-      };
-    const imageUrl = async () => {
-      await getImageUrl();
-    };
-    imageUrl();
-  }, [photo]);
+  const setImage = (e, imageFolder, setUrl) => {
+    const image = e.target.files[0];
+    const storageImageRef = ref(storage, `${imageFolder}/${image?.name + v4()}`);
+    if(image === null || image === undefined || image === '') {
+      console.log("No file selected");
+      setImgError(true)
+      return
+    }
+    uploadBytes(storageImageRef, image).then(() => {
+      setImgError(false)
+      getDownloadURL(storageImageRef)
+        .then((url) => {
+          setUrl(url);
+          console.log({ profile: url });
+        })
+        .catch((error) => {
+          console.log({ error });
+        })
+    });
+  }
+
 
   const galleryImageHandler = async (e)=>{
       e.preventDefault();
@@ -54,12 +55,13 @@ const AddDiscover = () => {
   const galleryImage = async ()=>{
     const addDetails = collection(db, 'Discover_Srilanka')
     console.log('abc')
-    await addDoc(addDetails,{destination:destination, nickname: destinationNickname, image: url, description:description, date:date, status:status})
+    await addDoc(addDetails,{destination:destination, nickname: destinationNickname, image: discoveryUrl, description:description, date:date, status:status})
     .then(()=>{
       setDestination('')
       setDestinationNickname('')
-      setPhotoUrl('')
+      setDiscoveryUrl('')
       setDescription('')
+      discoverRef.current.value = "";
       toast.success('Discovery Added Successfully')
     })
   }
@@ -119,12 +121,23 @@ const AddDiscover = () => {
             <div>
               {gallery && 
               <label>Add Image</label> }
+              {gallery?
+              <div>
+              {discoveryUrl &&
+                  <img src={discoveryUrl} width={70} height={70} alt="profile" />}</div> : 
+              
+              <div>
+                {photoUrl&&
+                  <img src={photoUrl} width={70} height={70} alt="profile" />}</div>
+                  }
                 <input 
                     type={imageUrl?'text' : 'file'} 
                     className='infoInput' 
-                    onChange = {(e)=> imageUrl? setPhotoUrl(e.target.value): setPhoto(e.target.files[0])}
+                    onChange = {(e)=> imageUrl? setPhotoUrl(e.target.value): setImage(e, 'DiscoveryImage', setDiscoveryUrl)}
+                    // onChange = {(e) => setImage(e, 'TouristProfile', setProfileURL)}
                     placeholder= {imageUrl && 'Enter Image Url'}
-                    value = {imageUrl? photoUrl: photo}
+                    ref={discoverRef}
+                    // value = {imageUrl? photoUrl: photo}
                 />
             </div>
 

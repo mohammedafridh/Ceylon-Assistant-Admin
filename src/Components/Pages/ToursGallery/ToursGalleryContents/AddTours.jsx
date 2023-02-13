@@ -1,8 +1,8 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect,useRef} from 'react'
 import './AddTours.css'
 import {collection, addDoc, setDoc, doc} from 'firebase/firestore'
 import {db,storage} from '../../../../Firebase'
-import Select from 'react-select'
+import { Select } from '@mantine/core';
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {v4} from 'uuid'
 import { toast } from "react-hot-toast";
@@ -19,6 +19,11 @@ const AddTours = () => {
   const [status,setStatus] = useState('Active')
   const [error,setError] = useState(false)
   const [imgError,setImgError] = useState('')
+  const mainImageRef = useRef()
+  const image1Ref = useRef()
+  const image2Ref = useRef()
+  const image3Ref = useRef()
+  const image4Ref = useRef()
 
 
   const districtData=[
@@ -49,9 +54,9 @@ const AddTours = () => {
     { value: 'Vavuniya', label: 'Vavuniya' },
 ]
 
-const[district,setDistrict] = useState(districtData.label)
+const[district,setDistrict] = useState()
   const districtHandler = (e)=>{
-    setDistrict(e.label)
+    setDistrict(e)
   }
 
   const setImage = (e, imageFolder, setUrl) => {
@@ -78,23 +83,29 @@ const[district,setDistrict] = useState(districtData.label)
   const tourHandler = async(e)=>{
     e.preventDefault()
     try{
-      const addTour = doc(db, "toursGallery", guide)
-      await setDoc(addTour,{guideId:guide, destination:destination, district: district,
+      const addTour = collection(db, "toursGallery")
+      await addDoc(addTour,{guideId:guide, destination:destination, district: district,
       mainImage:mainImage, image1:image1, image2:image2, image3:image3, image4:image4, status:status})
         .then(()=>{
           setGuide('')
           setDestination('')
-          setDistrict(null)
-          setMainImage(null)
-          setImage1(null)
-          setImage2(null)
-          setImage3(null)
-          setImage4(null)
+          setDistrict([])
+          setMainImage('')
+          setImage1('')
+          setImage2('')
+          setImage3('')
+          setImage4('')
+          mainImageRef.current.value = "";
+          image1Ref.current.value = "";
+          image2Ref.current.value = "";
+          image3Ref.current.value = "";
+          image4Ref.current.value = "";
           setError(false)
           toast.success('Tour Added Successfully!')
         })
     }catch(err){
-      toast.err('Please Try Again!')
+      toast.error('Please Try Again!')
+      console.log(err)
     }
 
   }
@@ -126,10 +137,11 @@ const[district,setDistrict] = useState(districtData.label)
 
                 <Select 
                     style = {{width:"17rem", outline:"none", border:'none'}} 
-                    options = {districtData} 
+                    data = {districtData} 
                     placeholder = 'Select District' 
                     onChange={districtHandler}
                     className = 'typeDrop'
+                    value = {district}
                     required
                 />
             </div>
@@ -137,30 +149,41 @@ const[district,setDistrict] = useState(districtData.label)
             <div className="imageContainer">
                 <div className="authProfile">
                   <span>Main Image</span>
+                  {mainImage&&
+                    <img src={mainImage} width={50} height={50} alt="profile" />}
                     <input 
                         type="file" 
                         name = 'coverImg' 
                         onChange = {(e) => setImage(e, 'toursGallery', setMainImage)}
                         required
+                        ref={mainImageRef}
                     />
                 </div>
 
               <div className= 'splitImageContainer'>
                 <div className="authProfile">
                     <span>Image 1</span>
+                    {image1 &&
+                    <img src={image1} width={50} height={50} alt="profile" />}
                       <input 
                           type="file" 
                           name = 'coverImg' 
                           onChange = {(e) => setImage(e, 'toursGallery', setImage1)}
+                          ref={image1Ref}
+                          required
                       />
                 </div>
 
                 <div className="authProfile">
                     <span>Image 2</span>
+                    {image2 &&
+                    <img src={image2} width={50} height={50} alt="profile" />}
                       <input 
                           type="file" 
                           name = 'coverImg' 
                           onChange = {(e) => setImage(e, 'toursGallery', setImage2)}
+                          ref={image2Ref}
+                          required
                       />
                 </div>
               </div>
@@ -168,26 +191,34 @@ const[district,setDistrict] = useState(districtData.label)
               <div className= 'splitImageContainer'>
                 <div className="authProfile">
                     <span>Image 3</span>
+                    {image3 &&
+                    <img src={image3} width={50} height={50} alt="profile" />}
                       <input 
                           type="file" 
                           name = 'coverImg' 
                           onChange = {(e) => setImage(e, 'toursGallery', setImage3)}
+                          ref={image3Ref}
+                          required
                       />
                 </div>
 
                 <div className="authProfile">
                     <span>Image 4</span>
+                    {image4 &&
+                    <img src={image4} width={50} height={50} alt="profile" />}
                       <input 
                           type="file" 
                           name = 'coverImg' 
                           onChange = {(e) => setImage(e, 'toursGallery', setImage4)}
+                          ref={image4Ref}
+                          required
                       />
                 </div>
               </div>
             </div>
 
           <div className='addThingsBtnContainer'>
-              <button type = 'submit' className='addThingsBtn' > Add Tour</button>
+              <button type = 'submit' className='addThingsBtn' >Add Tour</button>
           </div>   
         </form>
       </div>

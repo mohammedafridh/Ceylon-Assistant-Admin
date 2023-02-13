@@ -28,18 +28,18 @@ function App() {
       <Routes>
         <Route exact path="/" element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
         {/* <Route path = '/users' element = {<Users />} /> */}
-        <Route path = '/login' element = {<AdminLogin />} />
-        <Route path="/adminPage" element={<AdminPageSetup />} />
-        <Route path="/guidePage" element={<GuidePageSetup />} />
-        <Route path="/touristPage" element={<TouristPageSetup />} />
-        <Route path="/bookings" element={<Bookings />} />
-        <Route path="/discover" element={<DiscoverGallery />} />
-        <Route path="/addThingsToDo" element={<AddThingsToDo />} />
-        <Route path="/toursGallery" element={<ToursGallery />} />
-        <Route path="/faq" element={<Faq />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/guideRequests" element={<GuideRequests />} />
-        <Route path="/reviews" element={<AllReviews />} />
+        <Route path = '/login' element = {<ProtectedRoute><AdminLogin /></ProtectedRoute>} />
+        <Route path="/adminPage" element={<ProtectedRoute><AdminPageSetup /></ProtectedRoute>} />
+        <Route path="/guidePage" element={<ProtectedRoute><GuidePageSetup /></ProtectedRoute>} />
+        <Route path="/touristPage" element={<ProtectedRoute><TouristPageSetup /></ProtectedRoute>} />
+        <Route path="/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
+        <Route path="/discover" element={<ProtectedRoute><DiscoverGallery /></ProtectedRoute>} />
+        <Route path="/addThingsToDo" element={<ProtectedRoute><AddThingsToDo /></ProtectedRoute>} />
+        <Route path="/toursGallery" element={<ProtectedRoute><ToursGallery /></ProtectedRoute>} />
+        <Route path="/faq" element={<ProtectedRoute><Faq /></ProtectedRoute>} />
+        <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+        <Route path="/guideRequests" element={<ProtectedRoute><GuideRequests /></ProtectedRoute>} />
+        <Route path="/reviews" element={<ProtectedRoute><AllReviews /></ProtectedRoute>} />
       </Routes>
     </GuideProvider>
   );

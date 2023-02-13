@@ -48,7 +48,7 @@ const TopBar = () => {
     },[])
 
     const logOutHandler = async()=>{
-        logOut()
+        await logOut()
         navigate('/login')
     }
 

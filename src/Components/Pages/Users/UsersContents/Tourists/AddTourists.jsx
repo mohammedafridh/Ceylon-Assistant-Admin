@@ -29,7 +29,8 @@ const AddTourist = () => {
     const {signUp} = useUserAuth();
     const current = new Date();
     const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
-    const inputRef = useRef(null)
+    const profileRef = useRef()
+    const passportRef = useRef()
 
      const setImage = (e, imageFolder, setUrl) => {
         const image = e.target.files[0];
@@ -82,6 +83,8 @@ const AddTourist = () => {
                 setEmail('')
                 setPassword('')
                 setConfirmPassword('');
+                profileRef.current.value = "";
+                passportRef.current.value = "";
                 toast.success('Tourist added successfully!')
               })
             }else{
@@ -195,24 +198,26 @@ const AddTourist = () => {
             <div className='userAuthImageContainer'>
                 <div className="authProfile">
                     Profile Image
-                    <img src={profileURL} width={70} height={70} alt="profile" />
+                    {profileURL && <img src={profileURL} width={70} height={70} alt="profile" />}
                     <input 
                         type="file" 
                         name = 'profileImg' 
                         onChange = {(e) => setImage(e, 'TouristProfile', setProfileURL)}
                         required
+                        ref={profileRef}
                     />
 
                 </div>
             
                 <div className="authProfile">
                   <label>Passport Image</label>
-                  <img src={passportUrl} width={70} height={70} alt="profile" />
+                  {passportUrl && <img src={passportUrl} width={70} height={70} alt="profile" />}
                     <input 
                         type="file" 
                         name = 'coverImg' 
                         onChange = {(e) => setImage(e, 'TouristPassport', setPassportUrl)}
                         required
+                        ref={passportRef}
                     />
                 </div>
             </div>

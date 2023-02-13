@@ -214,7 +214,7 @@ const GuideRequests = () => {
             district: item.district,
             guideType: item.guideType,
             guideRate: item.guideRate,
-            languages: item.languages,
+            languages: item.languages.join(', '),
             vehicle: item.vehicleType,           
             perKmRate: item.perKmRate,
             maxPassengers: item.maxPassengers,

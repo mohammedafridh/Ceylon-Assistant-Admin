@@ -1,13 +1,17 @@
-import React from 'react'
-import { Navigate } from 'react-router-dom'
-import { useUserAuth } from '../../Context/Context';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useUserAuth } from "../../Context/Context";
 
 function ProtectedRoute(props) {
-    let {user} = useUserAuth();
-    if(!user){
-        return <Navigate to = '/login' />;
-    }
-    return props.children;
-};
+  let { user } = useUserAuth();
 
-export default ProtectedRoute
+  setTimeout(() => {
+    if (!user) {
+      console.log("user not found");
+      return <Navigate to="/" />;
+    }
+  }, 500);
+  return props.children;
+}
+
+export default ProtectedRoute;
