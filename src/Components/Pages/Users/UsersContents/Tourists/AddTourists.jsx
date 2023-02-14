@@ -7,6 +7,7 @@ import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {v4} from 'uuid'
 import SuccessModal from "../../../../Modals/SuccessModal";
 import { toast } from 'react-hot-toast';
+import loadingGif from '../../../../../assets/loading-gif.gif'
 
 const AddTourist = () => {
 
@@ -23,6 +24,7 @@ const AddTourist = () => {
     const [error, setError] = useState('')
     const[profileURL,setProfileURL] = useState(null)
     const[passportUrl,setPassportUrl] = useState(null)
+    const[loading,setLoading] = useState(false)
     const [formStatus, setFormStatus] = useState('')
     const[imgError,setImgError] = useState(false)
     const[numberOk,setNumberOk] = useState(true)
@@ -60,6 +62,7 @@ const AddTourist = () => {
           if(password === confirmPassword) {
             if(contactNumber.length===10){
               if(!imgError){
+                setLoading(true)
             signUp(email, password)
               .then((data) => {
                 const addDetails = doc(db, "Tourist", data.user.uid);    
@@ -67,6 +70,7 @@ const AddTourist = () => {
                     firstName:fName,
                     lastName:lName,
                     contactNumber: contactNumber,
+                    passportNumber:passportNumber,
                     image: profileURL,
                     passPortImage: passportUrl,
                     email: email,
@@ -85,15 +89,19 @@ const AddTourist = () => {
                 setConfirmPassword('');
                 profileRef.current.value = "";
                 passportRef.current.value = "";
+                setLoading(false)
                 toast.success('Tourist added successfully!')
               })
             }else{
+              setLoading(false)
               setError('*Select a valid image')
             }
             }else{
+              setLoading(false)
               setError('*Contact Number must be 10 characters')
             }
             }else{
+              setLoading(false)
               setError('Passwords Do Not Match!')
             }
     }
@@ -221,9 +229,16 @@ const AddTourist = () => {
                     />
                 </div>
             </div>
+
+            {loading?
+
+            <button type = 'submit' className="button infoButton">
+            <img className='loadingIcon' src={loadingGif} />
+            </button>:
+
             <button type="submit" className="button infoButton">
                  Add Tourist
-            </button>
+            </button>}
         </form>
         
         </div>

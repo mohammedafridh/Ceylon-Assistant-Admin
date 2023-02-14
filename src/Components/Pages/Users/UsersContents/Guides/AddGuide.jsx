@@ -9,6 +9,7 @@ import { v4 } from 'uuid'
 import { Select,MultiSelect } from '@mantine/core';
 import SuccessModal from "../../../../Modals/SuccessModal";
 import { toast } from 'react-hot-toast';
+import loadingGif from '../../../../../assets/loading-gif.gif'
 
 
 const AddGuide = () => {
@@ -23,6 +24,7 @@ const AddGuide = () => {
   const [maxPassengers, setMaxPassengers] = useState('')
   const [perKm, setPerKm] = useState('')
   const [email, setEmail] = useState('')
+  const[loading,setLoading] = useState(false)
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordMatch, setPasswordMatch] = useState(true);
@@ -174,6 +176,7 @@ const AddGuide = () => {
     if (password === confirmPassword) {
       if (contactNumber.length === 10) {
         if (!imgError) {
+          setLoading(true)
           signUp(email, password)
             .then((data) => {
               const addDetails = doc(db, "Guides", data.user.uid);
@@ -222,15 +225,19 @@ const AddGuide = () => {
               setConfirmPassword("");
               profileRef.current.value = "";
               nicRef.current.value = "";
+              setLoading(false)
               toast.success('Guide added Successfully!')
             })
         } else {
           setError('*Image is not valid. Enter a valid one!')
+          setLoading(false)
         }
       } else {
+        setLoading(false)
         setError('*Contact Number must be 10 characters')
       }
     } else {
+      setLoading(false)
       setError('Passwords Do Not Match!')
     }
   }
@@ -466,9 +473,15 @@ const AddGuide = () => {
             </div>
 
           </div>
+
+          {loading?
+          <button type = 'submit' className="button infoButton">
+          <img className='loadingIcon' src={loadingGif} />
+          </button>:
+
           <button type="submit" className="button infoButton">
             Add Guide
-          </button>
+          </button>}
         </form>
       </div>
       <SuccessModal modalOpened={modalOpened} setModalOpened={setModalOpened} />

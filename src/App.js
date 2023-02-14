@@ -28,7 +28,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
         {/* <Route path = '/users' element = {<Users />} /> */}
-        <Route path = '/login' element = {<ProtectedRoute><AdminLogin /></ProtectedRoute>} />
+        <Route path ="/login" element = {<AdminLogin />} />
         <Route path="/adminPage" element={<ProtectedRoute><AdminPageSetup /></ProtectedRoute>} />
         <Route path="/guidePage" element={<ProtectedRoute><GuidePageSetup /></ProtectedRoute>} />
         <Route path="/touristPage" element={<ProtectedRoute><TouristPageSetup /></ProtectedRoute>} />
@@ -40,6 +40,7 @@ function App() {
         <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
         <Route path="/guideRequests" element={<ProtectedRoute><GuideRequests /></ProtectedRoute>} />
         <Route path="/reviews" element={<ProtectedRoute><AllReviews /></ProtectedRoute>} />
+        
       </Routes>
     </GuideProvider>
   );

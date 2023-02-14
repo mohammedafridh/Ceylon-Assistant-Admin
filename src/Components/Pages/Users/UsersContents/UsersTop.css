@@ -1,6 +1,6 @@
 .userActions{
     display: flex;
-    gap: 2.5rem;
+    gap: 1.5rem;
     padding: 10px;
     background-color: var(--cardColor);
     align-items: center;
@@ -10,11 +10,12 @@
 }
 
 .userActions>button{
-    background-color: orange;
+    background-color: #273746 ;
     color: white;
     font-weight: bold;
-    padding: 5px 15px;
+    padding: 10px 15px;
     border-radius: 5px;
     border: none;
     outline: none;
+    width: 8rem;
 }

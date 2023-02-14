@@ -5,6 +5,7 @@ import { db } from "../../../../../Firebase";
 import { doc, setDoc } from "firebase/firestore";
 import SuccessModal from "../../../../Modals/SuccessModal";
 import { toast } from "react-hot-toast";
+import loadingGif from '../../../../../assets/loading-gif.gif'
 
 const AddAdmin = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ const AddAdmin = () => {
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [status, setStatus] = useState("Active");
   const [error, setError] = useState("");
+  const[loading,setLoading] = useState(false)
   const [formStatus, setFormStatus] = useState('')
   const { signUp } = useUserAuth();
   const current = new Date();
@@ -29,6 +31,7 @@ const AddAdmin = () => {
         return
       }
       //if the password's doesn't match this function won't run beyond line 27
+      setLoading(true)
       signUp(email, password)
         .then((data) => {
           const addDetails = doc(db, "Admin", data.user.uid);
@@ -38,18 +41,22 @@ const AddAdmin = () => {
             status: status,
           };
           setDoc(addDetails, details);
+          setLoading(false)
           setEmail("");
           setPassword("");
           setConfirmPassword("");
-          setFormStatus("Success")
+          toast.success("Admin added successfully!")
+          setLoading(false)
         })
         .catch((error) => {
           console.log(error);
          toast.error("Something Went Wrong. Please Try Again!")
+         setLoading(false)
         });
     } catch (err) {
       setError(err.message);
       toast.error("Something Went Wrong. Please Try Again!")
+      setLoading(false)
       console.log(err);
     }
   };
@@ -101,9 +108,14 @@ const AddAdmin = () => {
 
           </div>
 
+        {loading?
+          <button type = 'submit' className="button infoButton">
+            <img className='loadingIcon' src={loadingGif} />
+          </button>:
+
           <button type="submit" className="button infoButton">
             Add Admin
-          </button>
+          </button>}
         </form>
       </div>
       <SuccessModal modalOpened={formStatus === 'Success' ?  true : false} setModalOpened={() => {setFormStatus('')}}/>

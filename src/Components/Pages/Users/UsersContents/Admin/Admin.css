@@ -82,6 +82,13 @@
     margin-top: 1rem;
 }
 
+.addUserForm>button:hover{
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(98.63deg, #f7940b 0%, #ec4314 100%);
+    transition: 0.7s;
+}
+
 .perKm{
     display: flex;
     flex-direction: column;
@@ -184,4 +191,9 @@
     text-align: center;
     align-items: center;
     justify-content: center;
+}
+
+.loadingIcon{
+    width: 25px;
+    height: 25px;
 }

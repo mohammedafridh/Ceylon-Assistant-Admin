@@ -1,16 +1,17 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { useUserAuth } from "../../Context/Context";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ProtectedRoute(props) {
-  let { user } = useUserAuth();
+  let user = localStorage.getItem('user')
+  let navigate = useNavigate();
 
-  setTimeout(() => {
-    if (!user) {
-      console.log("user not found");
-      return <Navigate to="/" />;
+  useEffect(() => {
+    console.log({log: user})
+    if(!user || user === 'null'){
+      navigate("/login")
     }
-  }, 500);
+  }, [user]);
+
   return props.children;
 }
 

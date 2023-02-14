@@ -196,7 +196,7 @@ const AllGuides = () => {
               <button onClick = {() => inactivateItem(item.id)} className = 'dltBtn' style = {{backgroundColor:'#BC0E18',width:100}}>Inactive</button>
               <button onClick = {() => activateItem(item.id)} className = 'actBtn' style = {{backgroundColor:'#1A73C7',width:100}}>Active</button>
               <button onClick = {() => updateGuide(item)} className = 'updateBtn' style = {{backgroundColor:'#013E77',width:100}}>Update</button> 
-              <button onClick = {() => makeBooking(item)} className = 'updateBtn' style = {{backgroundColor:'#2E185E', width:100}}>Book</button> 
+              <button onClick = {() => makeBooking(item)} className = 'updateBtn' style = {{backgroundColor:'#0B134D ', width:100}}>Book</button> 
             </div>
           };
           rowDataCollection.push(newItem);

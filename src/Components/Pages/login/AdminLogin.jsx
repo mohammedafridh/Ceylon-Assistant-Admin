@@ -26,6 +26,7 @@ const AdminLogin = () => {
                 logOut()
                 return
             }
+            localStorage.setItem('user',JSON.stringify(isLoggedIn.user))
             navigate('/')
             toast.success('Logged in Successful. Thank You!')
             

@@ -50,13 +50,14 @@ const TopBar = () => {
     const logOutHandler = async()=>{
         await logOut()
         navigate('/login')
+        localStorage.clear()
     }
 
   return (
     <div className = 'topBar'>
         <div className="topBarWrapper">
             <div className="topLeft">
-                <span className="logo">CeylonAssistant Admin</span>
+                <span className="logo">Ceylon<span>Assistant</span></span>
             </div>
 
             <div className="topRight">
