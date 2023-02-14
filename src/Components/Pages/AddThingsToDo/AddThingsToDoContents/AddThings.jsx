@@ -4,6 +4,7 @@ import {collection, addDoc} from 'firebase/firestore'
 import {db} from '../../../../Firebase'
 import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
+import loadingGif from '../../../../assets/loading-gif.gif'
 
 const AddThings = ({activityNameProp, descriptionProp, imageUrlProp}) => {
 
@@ -13,15 +14,18 @@ const AddThings = ({activityNameProp, descriptionProp, imageUrlProp}) => {
   const [status,setStatus] = useState('active')
   const current = new Date();
   const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+  const[loading,setLoading] = useState(false)
 
   const addThingsHandler = async(e)=>{
       e.preventDefault();
       const addDetails = collection(db, 'ThingsToDoSrilanka')
+      setLoading(true)
         addDoc(addDetails,{Activity:activityName, image: imageUrl, description:description, date: date, status:status})
         .then(()=>{
             setActivityName('')
             setImageUrl('')
             setDescription('')
+            setLoading(false)
             toast.success('Things To Do Sri-Lanka added successfully!')
         })
   }
@@ -62,7 +66,12 @@ const AddThings = ({activityNameProp, descriptionProp, imageUrlProp}) => {
               onChange= {(e)=> setDescription(e.target.value)}></textarea>
 
           <div className='addThingsBtnContainer'>
-              <button className='addThingsBtn' onClick = {addThingsHandler}> Add Things To Do</button>
+      
+        {loading?
+          <button type = 'submit' className='addThingsBtn'>
+            <img className='loadingIcon' src={loadingGif} />
+          </button>:
+              <button className='addThingsBtn' onClick = {addThingsHandler}> Add Things To Do</button>}
           </div>   
         </div>
       </div>

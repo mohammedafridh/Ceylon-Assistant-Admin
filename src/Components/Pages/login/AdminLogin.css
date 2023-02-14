@@ -62,3 +62,12 @@
     cursor: pointer;
     border-radius: 6px;
 }
+
+.adminLoginForm>span{
+    color: #ccc;
+    font-size: 14px;
+}
+
+.resetPassword{
+    cursor: pointer;
+}

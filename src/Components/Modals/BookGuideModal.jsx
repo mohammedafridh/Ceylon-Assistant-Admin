@@ -5,6 +5,7 @@ import {useUserAuth} from '../../Context/Context'
 import {collection, addDoc} from 'firebase/firestore'
 import {db} from '../../Firebase'
 import { toast } from 'react-hot-toast';
+import loadingGif from '../../assets/loading-gif.gif'
 
 function BookGuideModal({modalOpened,setModalOpened,guide}) {
   const theme = useMantineTheme();
@@ -19,6 +20,7 @@ function BookGuideModal({modalOpened,setModalOpened,guide}) {
     const [status,setStatus] = useState('Active')
     const current = new Date();
     const addDate = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+    const[loading,setLoading] = useState(false)
 
     useEffect(()=>{
       setTourGuide(guide.id)
@@ -28,16 +30,19 @@ function BookGuideModal({modalOpened,setModalOpened,guide}) {
     const bookingHandler = async(e)=>{
       e.preventDefault();
       try{
+        setLoading(true)
         const addDetails = collection(db, 'pending_booking')
         await addDoc(addDetails,{guide:guide.id,tourist:tourist, location:tourLocation, destination: destination, startData: startData, 
         endDate:endDate, time: time, status:status})
         .then(()=>{
+          setLoading(false)
           setModalOpened(false)
           toast.success('Booking Successful')
         })
 
       }catch(err){
         err.message('Error!')
+        setLoading(false)
       }
       
     }
@@ -46,8 +51,8 @@ function BookGuideModal({modalOpened,setModalOpened,guide}) {
   return (
     <Modal
       overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
-      overlayOpacity={0.10}
-      overlayBlur={0.5}
+      overlayOpacity={0.40}
+      overlayBlur={0.6}
       size = '27%'
       opened = {modalOpened}
       onClose = {()=>{setModalOpened(false); setTourLocation(''); setDestination('')
@@ -120,7 +125,12 @@ function BookGuideModal({modalOpened,setModalOpened,guide}) {
                     required
                 />
             </div>
-            <button type = 'submit' className="button infoButton">Confirm</button>
+            {loading?
+            <button type = 'submit' className="button infoButton">
+              <img className='loadingIcon' src={loadingGif} />
+            </button>:
+
+            <button type = 'submit' className="button infoButton">Confirm</button>}
         </form>
     </Modal>
   );

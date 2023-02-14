@@ -6,6 +6,8 @@ import { db,storage } from "../../Firebase";
 import {query, doc, updateDoc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {v4} from 'uuid'
+import loadingGif from '../../assets/loading-gif.gif'
+import { toast } from 'react-hot-toast';
 
 function UpdateGuideModal({modalOpened,setModalOpened,data}) {
   const theme = useMantineTheme();
@@ -15,7 +17,7 @@ function UpdateGuideModal({modalOpened,setModalOpened,data}) {
   const [imgError,setImgError] = useState(false)
   const [contactNumber, setContactNumber] = useState(data.contactNumber)
   const [passportNumber, setPassportNumber] = useState(data.passportNumber)
-
+  const[loading,setLoading] = useState(false)
 
   useEffect(()=>{
     setFName(data.firstName)
@@ -46,15 +48,17 @@ function UpdateGuideModal({modalOpened,setModalOpened,data}) {
   }
 
   const updateDetails = async(data)=>{
+    setLoading(true)
     const item = query(doc(db, 'Tourist', data.id));
     await updateDoc(item, {
       firstName:fName,
       lastName:lName,
       contactNumber: contactNumber,
       passportNumber:passportNumber,
-      image:profile
+      image: profile ? profile : data.image,
     }).then(()=>{
-      alert('Details Updated Successfully')
+      setLoading(false)
+      toast.success('Details Updated Successfully')
         setModalOpened(false)
     })
   }
@@ -122,7 +126,7 @@ function UpdateGuideModal({modalOpened,setModalOpened,data}) {
             <span className='profilePicture'>
                 <div className="proUpdate">
                 <span>Profile Image</span>
-                <img src={profile ? profile : data.image} width={250} height={250} alt="profile" />
+                <img src={profile ? profile : data.image} width={200} height={200} alt="profile" />
                 <input
                   type="file"
                   name="coverImg"
@@ -132,10 +136,15 @@ function UpdateGuideModal({modalOpened,setModalOpened,data}) {
                 />
                 </div>
             </span>
+
+            {loading?
+            <button type = 'submit' className="button infoButton">
+              <img className='loadingIcon' src={loadingGif} />
+            </button>:
            
             <button onClick = {()=>updateDetails(data)} className="button infoButton">
                  Update Tourist
-            </button>
+            </button>}
         </div>
         </div>
     </Modal>

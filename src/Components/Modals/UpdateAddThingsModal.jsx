@@ -4,19 +4,24 @@ import '../Pages/AddThingsToDo/AddThingsToDoContents/AddThings.css'
 import { db } from "../../Firebase";
 import {query, doc, updateDoc} from "firebase/firestore";
 import { useEffect } from 'react';
-
+import loadingGif from '../../assets/loading-gif.gif'
+import { toast } from 'react-hot-toast';
 
 function UpdateAddThingsModal({modalOpened,setModalOpened,data}) {
   const theme = useMantineTheme();
   const [activityName,setActivityName] = useState(data.Activity)
   const [description,setDescription] = useState(data.description)
-  console.log({data})
+  const[loading,setLoading] = useState(false)
+
+
   useEffect(()=>{
     setActivityName(data.Activity)
     setDescription(data.description)
   },[data])
+
   const updateDetails = async(data)=>{
     const item = query(doc(db, 'ThingsToDoSrilanka', data.id));
+    setLoading(true)
     await updateDoc(item, {
       Activity: activityName,
       description:description
@@ -24,6 +29,8 @@ function UpdateAddThingsModal({modalOpened,setModalOpened,data}) {
         setActivityName('')
         setDescription('')
         setModalOpened(false)
+        setLoading(false)
+        toast.success('Record Updated Successfully!')
     })
   }
 
@@ -55,7 +62,12 @@ function UpdateAddThingsModal({modalOpened,setModalOpened,data}) {
                     onChange= {(e)=> setDescription(e.target.value)}></textarea>
       
                 <div className='addThingsBtnContainer'>
-                    <button className='addThingsBtn' onClick = {()=>updateDetails(data)}> Update</button>
+                {loading?
+                    <button type = 'submit' className="addThingsBtn">
+                      <img className='loadingIcon' src={loadingGif} />
+                    </button>:
+
+                    <button className='addThingsBtn' onClick = {()=>updateDetails(data)}> Update Add Things</button>}
                 </div>   
               </div>
     </Modal>

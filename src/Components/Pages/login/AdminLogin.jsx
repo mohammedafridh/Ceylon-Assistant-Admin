@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import React, {useState,useRef} from 'react'
 import { useGuides } from '../../../Context/GuidesContext'
 import './AdminLogin.css'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { useUserAuth } from '../../../Context/Context'
+import loadingGif from '../../../assets/loading-gif.gif'
 
 const AdminLogin = () => {
 
@@ -12,7 +13,9 @@ const AdminLogin = () => {
   const[password,setPassword] = useState('')
   const [error,setError] = useState('')
   const navigate = useNavigate()
-  const {logIn, logOut} = useUserAuth()
+  const {logIn, logOut, forgotPassword} = useUserAuth()
+  const emailRef = useRef()
+  const[loading,setLoading] = useState(false)
 
   const isAdminActive = admins.find(admin => admin.email === email && admin.status ==='Active')
 
@@ -20,14 +23,17 @@ const AdminLogin = () => {
     e.preventDefault();
     setError('')
         try{
+          setLoading(true)
             const isLoggedIn = await logIn(email,password)
             if(isLoggedIn && !isAdminActive){
+              setLoading(false)
                 toast.error('Your account is not active')
                 logOut()
                 return
             }
             localStorage.setItem('user',JSON.stringify(isLoggedIn.user))
             navigate('/')
+            setLoading(false)
             toast.success('Logged in Successful. Thank You!')
             
         }catch(error){
@@ -37,8 +43,15 @@ const AdminLogin = () => {
             // error.code === 'auth/wrong-password' && toast.error('Incorrect Username or Password')
             error.code === 'auth/wrong-password' && setError('Incorrect Username or Password')
             setError('Failed to login')
+            setLoading(false)
         }
-    
+}
+
+const forgotPasswordHandler = async()=>{
+  const emailVal = emailRef.current.value;
+  console.log(emailVal)
+  await forgotPassword(emailVal);
+  toast.success('done')
 }
 
   return (
@@ -58,6 +71,7 @@ const AdminLogin = () => {
                   className='userInput' 
                   onChange = {(e)=> setEmail(e.target.value)}
                   placeholder='Email Address'
+                  ref = {emailRef}
                   required
                 />  
 
@@ -70,7 +84,15 @@ const AdminLogin = () => {
               />
 
               </div>
-                <button type = 'submit' className='logBtn'>Log In</button>
+              {loading?
+              <button type = 'submit' className='logBtn'>
+                <img className='loadingIcon' src={loadingGif} />
+              </button>:
+
+              <button type = 'submit' className='logBtn'>Log In</button>}
+
+                <span>Forgot Password? <a onClick={forgotPasswordHandler} className='resetPassword'><u>Reset Password</u></a></span>
+              
             </form>     
     </div>
 

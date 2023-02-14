@@ -6,6 +6,7 @@ import { Select } from '@mantine/core';
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
 import {v4} from 'uuid'
 import { toast } from "react-hot-toast";
+import loadingGif from '../../../../assets/loading-gif.gif'
 
 const AddTours = () => {
 
@@ -24,7 +25,7 @@ const AddTours = () => {
   const image2Ref = useRef()
   const image3Ref = useRef()
   const image4Ref = useRef()
-
+  const[loading,setLoading] = useState(false)
 
   const districtData=[
     { value: 'Hambanthota', label: 'Hambanthota' },
@@ -84,6 +85,7 @@ const[district,setDistrict] = useState()
     e.preventDefault()
     try{
       const addTour = collection(db, "toursGallery")
+      setLoading(true)
       await addDoc(addTour,{guideId:guide, destination:destination, district: district,
       mainImage:mainImage, image1:image1, image2:image2, image3:image3, image4:image4, status:status})
         .then(()=>{
@@ -101,6 +103,7 @@ const[district,setDistrict] = useState()
           image3Ref.current.value = "";
           image4Ref.current.value = "";
           setError(false)
+          setLoading(false)
           toast.success('Tour Added Successfully!')
         })
     }catch(err){
@@ -218,7 +221,12 @@ const[district,setDistrict] = useState()
             </div>
 
           <div className='addThingsBtnContainer'>
-              <button type = 'submit' className='addThingsBtn' >Add Tour</button>
+          {loading?
+              <button type = 'submit' className="addThingsBtn">
+                <img className='loadingIcon' src={loadingGif} />
+              </button>:
+
+              <button type = 'submit' className='addThingsBtn' >Add Tour To Gallery</button>}
           </div>   
         </form>
       </div>

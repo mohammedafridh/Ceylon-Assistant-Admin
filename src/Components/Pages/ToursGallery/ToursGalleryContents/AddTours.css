@@ -42,17 +42,23 @@
 
 
 .addThingsForm>button{
-    width: 8rem;
-    height: 2.5rem;
+    padding: 7px 15px;
     align-self: flex-end;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     border: none;
-    border-radius: 0.5rem;
+    border-radius: 6px;
     background: var(--buttonBg);
     transition: all 100ms ease-out;
+}
+
+.addThingsForm>button{
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(98.63deg, #f7940b 0%, #ec4314 100%);
+    transition: 0.7s;
 }
 
 .mantine-1ajyf09{

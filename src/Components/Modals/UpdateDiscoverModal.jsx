@@ -7,6 +7,7 @@ import { v4 } from "uuid";
 import {collection, addDoc} from 'firebase/firestore'
 import {query, doc, updateDoc} from "firebase/firestore";
 import { toast } from "react-hot-toast";
+import loadingGif from '../../assets/loading-gif.gif'
 
 function UpdateDiscoverModal({modalOpened,setModalOpened,data}) {
   const theme = useMantineTheme();
@@ -20,6 +21,7 @@ function UpdateDiscoverModal({modalOpened,setModalOpened,data}) {
   const [url,setUrl] = useState(null)
   const [status,setStatus] = useState('active')
   const [error,setError] = useState('')
+  const[loading,setLoading] = useState(false)
 
   useEffect(()=>{
     setDestination(data.destination)
@@ -80,12 +82,14 @@ function UpdateDiscoverModal({modalOpened,setModalOpened,data}) {
 
   const urlImage = async ()=>{
     const item = query(doc(db, 'Discover_Srilanka', data.id));
+    setLoading(true)
     await updateDoc(item, {
       destination:destination,
       nickname:destinationNickname,
       description:description,
       image:photoUrl
     }).then(()=>{
+        setLoading(false)
         setModalOpened(false)
         toast.success('Discovery Updated Successfully!')
     })
@@ -150,7 +154,11 @@ function UpdateDiscoverModal({modalOpened,setModalOpened,data}) {
         onChange= {(e)=> setDescription(e.target.value)}></textarea>
 
     <div className='discoverBtnContainer'>
-        <button className='discoverBtn' onClick = {()=>urlImage()}>Update Discovery</button>
+        {loading?
+        <button type = 'submit' className="discoverBtn">
+          <img className='loadingIcon' src={loadingGif} />
+        </button>:
+        <button className='discoverBtn' onClick = {()=>urlImage()}>Update Discovery</button>}
     </div>   
   </div>
 </div>

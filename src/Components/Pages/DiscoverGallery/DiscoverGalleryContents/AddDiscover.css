@@ -83,11 +83,28 @@
     margin-bottom: 0.5rem;
 }
 
+.discoverBtnContainer{
+    align-items: flex-end;
+    justify-content: flex-end;
+    text-align: right;
+}
+
 .discoverBtn{
-    padding: 5px 10px;
-    border-radius: 6px;
-    outline: none;
-    border: none;
-    background-color: orangered;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: white;
+    border: none;
+    border-radius: 6px;
+    background: var(--buttonBg);
+    transition: all 100ms ease-out;
+    padding: 8px 15px;
+    align-self: flex-end;
+}
+
+.discoverBtn:hover{
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(98.63deg, #f7940b 0%, #ec4314 100%);
+    transition: 0.7s;
 }
