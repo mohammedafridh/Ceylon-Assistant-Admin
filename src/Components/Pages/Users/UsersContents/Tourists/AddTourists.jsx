@@ -92,6 +92,10 @@ const AddTourist = () => {
                 setLoading(false)
                 toast.success('Tourist added successfully!')
               })
+              .catch((error) => {
+                setLoading(false)
+                error.code === 'auth/email-already-in-use' && toast.error('*Email Already Taken. Please Try Another!')
+              })
             }else{
               setLoading(false)
               setError('*Select a valid image')

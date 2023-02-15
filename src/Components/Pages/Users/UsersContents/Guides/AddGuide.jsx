@@ -228,6 +228,10 @@ const AddGuide = () => {
               setLoading(false)
               toast.success('Guide added Successfully!')
             })
+            .catch((error) => {
+              setLoading(false)
+              error.code === 'auth/email-already-in-use' && toast.error('*Email Already Taken. Please Try Another!')
+            })
         } else {
           setError('*Image is not valid. Enter a valid one!')
           setLoading(false)

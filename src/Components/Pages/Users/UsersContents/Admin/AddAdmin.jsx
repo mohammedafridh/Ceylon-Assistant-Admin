@@ -49,6 +49,10 @@ const AddAdmin = () => {
           setLoading(false)
         })
         .catch((error) => {
+          setLoading(false)
+          error.code === 'auth/email-already-in-use' && toast.error('*Email Already Taken. Please Try Another!')
+        })
+        .catch((error) => {
           console.log(error);
          toast.error("Something Went Wrong. Please Try Again!")
          setLoading(false)
