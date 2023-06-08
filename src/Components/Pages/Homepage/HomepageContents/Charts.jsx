@@ -47,7 +47,7 @@ const Charts = () => {
         console.log(monthData.filter((item) => item === true).length);
         return {
           ...data,
-          activeTour: monthData ? monthData.filter((item) => item === true).length : 0,
+          activeTours: monthData ? monthData.filter((item) => item === true).length : 0,
         };
       });
       setUpdatedChartData(updatedChartData);
@@ -65,7 +65,7 @@ const Charts = () => {
         <ResponsiveContainer width="100%" aspect = {4/1}>
             <LineChart data = {updatedChartData}>
                 <XAxis dataKey='name' stroke = 'blue' interval="preserveStartEnd"/>
-                <Line type = 'monotone' dataKey= 'activeTour' stroke = 'blue' />
+                <Line type = 'monotone' dataKey= 'activeTours' stroke = 'blue' />
                 <Tooltip />
                 <CartesianGrid />
             </LineChart>

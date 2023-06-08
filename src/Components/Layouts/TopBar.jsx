@@ -49,7 +49,7 @@ const TopBar = () => {
 
     const logOutHandler = async()=>{
         await logOut()
-        navigate('/login')
+        navigate('/')
         localStorage.clear()
     }
 

@@ -26,9 +26,9 @@ function App() {
       <Toaster />
 
       <Routes>
-        <Route exact path="/" element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
+        <Route exact path="/home" element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
         {/* <Route path = '/users' element = {<Users />} /> */}
-        <Route path ="/login" element = {<AdminLogin />} />
+        <Route path ="/" element = {<AdminLogin />} />
         <Route path="/adminPage" element={<ProtectedRoute><AdminPageSetup /></ProtectedRoute>} />
         <Route path="/guidePage" element={<ProtectedRoute><GuidePageSetup /></ProtectedRoute>} />
         <Route path="/touristPage" element={<ProtectedRoute><TouristPageSetup /></ProtectedRoute>} />

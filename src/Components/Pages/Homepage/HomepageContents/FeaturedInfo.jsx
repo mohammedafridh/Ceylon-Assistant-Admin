@@ -99,9 +99,9 @@ const FeaturedInfo = () => {
     const comparedTourists = currentMonthtourist.length - previousMonthTourists.length;
 
     const compareTouristDifference = () => {
-        if (comparedTourists > 0) {
+        if (currentMonthtourist.length > previousMonthTourists.length) {
             return <ArrowUpward className="featuringIcon positive" />
-        } else if (comparedTourists < 0) {
+        } else if (currentMonthtourist.length < previousMonthTourists.length) {
             return <ArrowDownward className="featuringIcon" />
         } else {
             return <ArrowDownward className="featuringIcon" />

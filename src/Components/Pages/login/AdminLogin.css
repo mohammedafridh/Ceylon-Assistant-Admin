@@ -16,7 +16,9 @@
 .loginSection img{
     height: 250px;
     width: 250px;
-    margin: 10px;
+    margin: 30px 10px 10px 10px;
+    align-items: center;
+    justify-content: center;
 }
 
 .adminLoginForm{

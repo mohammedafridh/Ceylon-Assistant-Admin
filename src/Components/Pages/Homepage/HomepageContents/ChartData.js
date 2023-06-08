@@ -37,26 +37,26 @@ export const chartData = [
   {
     key: 7,
     name: "August",
-    activeTour: 3690,
+    activeTour: 0,
   },
   {
     key: 8,
     name: "September",
-    activeTour: 3990,
+    activeTour: 0,
   },
   {
     key: 9,
     name: "Oct",
-    activeTour: 4490,
+    activeTour: 0,
   },
   {
     key: 10,
     name: "Nov",
-    activeTour: 3790,
+    activeTour: 0,
   },
   {
     key: 11,
     name: "Dec",
-    activeTour: 5490,
+    activeTour: 0,
   },
 ];

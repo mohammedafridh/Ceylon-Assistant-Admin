@@ -24,7 +24,7 @@ const SideBar = () => {
           <h3>Dashboard</h3>
           <ul className="sideBarList">
            
-              <NavLink to="/" className={({ isActive }) =>
+              <NavLink to="/home" className={({ isActive }) =>
                   isActive ? "sideBarListItem active" : "sideBarListItem"
                 } end>
                 <Home />

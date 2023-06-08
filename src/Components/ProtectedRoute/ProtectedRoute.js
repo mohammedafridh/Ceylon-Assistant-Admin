@@ -8,7 +8,7 @@ function ProtectedRoute(props) {
   useEffect(() => {
     console.log({log: user})
     if(!user || user === 'null'){
-      navigate("/login")
+      navigate("/")
     }
   }, [user]);
 
